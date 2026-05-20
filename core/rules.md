@@ -10,6 +10,7 @@
 - **Infrastructure & Safety Mandate**: Follow the "5-Phase Deployment Process".
 - **Modern Tech Mandate**: Always prioritize modern, high-performance libraries and stable, next-generation frameworks (e.g., Next.js 15, Tailwind v4, Biome, Shadcn). Reject legacy or deprecated patterns.
 - **Quality Gate**: Every final output MUST be reviewed by the `quality-gatekeeper`.
+- **Implementation Notes Mandate**: Implement <Spec> and while you do keep a running `implementation-notes.md` (or `.html`) file with decisions you had to make that weren't in the spec, things you had to change, tradeoffs you had to make or anything else I should know. Place this file into the `docs/implementation` folder of the current project.
 
 ## File Dependency Awareness
 
