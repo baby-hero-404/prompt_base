@@ -12,3 +12,11 @@ test:
 # Regenerate registry.min.json from all SKILL.md files
 registry:
 	@python3 scripts/generate_registry.py
+
+# Install/Update locally to ~/.gemini
+install:
+	@echo "Installing to ~/.gemini..."
+	@mkdir -p ~/.gemini
+	@cp -r ./* ~/.gemini/
+	@bash ~/.gemini/scripts/cleanup.sh
+	@echo "Install complete."

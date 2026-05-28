@@ -18,11 +18,11 @@ Then remove development-only files (scripts, docs, Makefile, README, .git, etc.)
 bash ~/.gemini/scripts/cleanup.sh
 ```
 
-> If `~/.gemini` already exists, merge manually:
+> If the project is already cloned locally or `~/.gemini` exists, you can install/update it directly using make:
 > ```bash
-> git clone https://github.com/sunshine12396/prompt_base ~/prompt_base_tmp
-> cp -r ~/prompt_base_tmp/* ~/.gemini/ && rm -rf ~/prompt_base_tmp
-> bash ~/.gemini/scripts/cleanup.sh
+> git clone https://github.com/sunshine12396/prompt_base
+> cd prompt_base
+> make install
 > ```
 
 After cleanup, only the runtime essentials remain in `~/.gemini`:
