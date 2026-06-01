@@ -35,15 +35,18 @@ Eliminate redundant project scanning across AI sessions by maintaining a set of 
 
 ## 2. Context File Structure
 
-All project memory files live in the `docs/` directory at the repository root.
+All project memory files live in the `docs/ai/` directory, separated from human-facing documentation to avoid mixing concerns.
 
 ```
-docs/
-├── AI_PROJECT_CONTEXT.md    # Project overview & architecture summary
-├── PROJECT_INDEX.md         # File map — where everything lives
-├── CODING_PATTERNS.md       # Established code patterns & conventions
-├── TASK_STATUS.md           # Current task progress & notes
-└── PHASE_PLAN.md            # Roadmap phases & milestones (optional)
+docs/ai/
+├── context/                     # Project identity & discovery
+│   ├── AI_PROJECT_CONTEXT.md    # Project overview & architecture summary
+│   └── PROJECT_INDEX.md         # File map — where everything lives
+├── patterns/                    # Code conventions & standards
+│   └── CODING_PATTERNS.md      # Established code patterns & conventions
+└── progress/                    # Task tracking & roadmap
+    ├── TASK_STATUS.md           # Current task progress & notes
+    └── PHASE_PLAN.md           # Roadmap phases & milestones (optional)
 ```
 
 ### 2.1 `AI_PROJECT_CONTEXT.md` — Project Overview
@@ -214,10 +217,10 @@ For phased projects, tracks the overall roadmap and milestone boundaries.
 Every new AI session **MUST** begin with this bootstrap sequence:
 
 ```
-1. Read docs/AI_PROJECT_CONTEXT.md
-2. Read docs/PROJECT_INDEX.md
-3. Read docs/TASK_STATUS.md
-4. Read docs/CODING_PATTERNS.md (if touching code)
+1. Read docs/ai/context/AI_PROJECT_CONTEXT.md
+2. Read docs/ai/context/PROJECT_INDEX.md
+3. Read docs/ai/progress/TASK_STATUS.md
+4. Read docs/ai/patterns/CODING_PATTERNS.md (if touching code)
 5. Do NOT scan the whole repository unless a needed file is missing from the index
 ```
 
@@ -227,10 +230,10 @@ Use this as the internal session bootstrap directive:
 
 ```
 Before coding, read the project memory files:
-1. docs/AI_PROJECT_CONTEXT.md — understand the project
-2. docs/PROJECT_INDEX.md — know where files live
-3. docs/TASK_STATUS.md — know current progress
-4. docs/CODING_PATTERNS.md — follow established patterns
+1. docs/ai/context/AI_PROJECT_CONTEXT.md — understand the project
+2. docs/ai/context/PROJECT_INDEX.md — know where files live
+3. docs/ai/progress/TASK_STATUS.md — know current progress
+4. docs/ai/patterns/CODING_PATTERNS.md — follow established patterns
 
 Do not rescan the whole project unless required.
 Follow existing patterns exactly.
@@ -313,27 +316,27 @@ If context files don't exist:
 ## 7. Quick Reference
 
 ```
-┌─────────────────────────────────────────────────────┐
-│              SESSION BOOTSTRAP FLOW                  │
-│                                                      │
-│  New Session                                         │
-│      │                                               │
-│      ▼                                               │
-│  Read AI_PROJECT_CONTEXT.md  ← What is this project? │
-│      │                                               │
-│      ▼                                               │
-│  Read PROJECT_INDEX.md       ← Where are things?     │
-│      │                                               │
-│      ▼                                               │
-│  Read TASK_STATUS.md         ← What's the state?     │
-│      │                                               │
-│      ▼                                               │
-│  Read CODING_PATTERNS.md     ← How do we code here?  │
-│      │                                               │
-│      ▼                                               │
-│  START WORK (no full scan needed)                    │
-│      │                                               │
-│      ▼                                               │
-│  FINISH → Update context files                       │
-└─────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│                  SESSION BOOTSTRAP FLOW                     │
+│                                                            │
+│  New Session                                               │
+│      │                                                     │
+│      ▼                                                     │
+│  Read ai/context/AI_PROJECT_CONTEXT.md   ← What is this?  │
+│      │                                                     │
+│      ▼                                                     │
+│  Read ai/context/PROJECT_INDEX.md        ← Where?          │
+│      │                                                     │
+│      ▼                                                     │
+│  Read ai/progress/TASK_STATUS.md         ← Status?         │
+│      │                                                     │
+│      ▼                                                     │
+│  Read ai/patterns/CODING_PATTERNS.md     ← Patterns?       │
+│      │                                                     │
+│      ▼                                                     │
+│  START WORK (no full scan needed)                          │
+│      │                                                     │
+│      ▼                                                     │
+│  FINISH → Update context files in docs/ai/                 │
+└────────────────────────────────────────────────────────────┘
 ```
