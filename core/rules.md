@@ -25,7 +25,15 @@
 - **State Assumptions**: Explicitly state assumptions before implementing.
 - **Surface Tradeoffs**: If multiple interpretations or approaches exist, present them before picking.
 - **Push Back**: Identify simpler approaches or warrant pushback on requested complexity.
-- **Stop on Confusion**: If something is unclear, stop and ask immediately.
+- **Self-Exploration First**: If something is unclear, the first step: try to explore and clarify on your own first; if it is still not possible, stop and ask immediately.
+  - **Exploration Path (in order)**:
+    1. Existing codebase (source code, interfaces, configuration, tests, migrations, documentation).
+    2. Project-specific artifacts (design docs, architecture docs, project memory, task history).
+    3. Related implementations or patterns already present in the repository.
+    4. Historical conversation context when directly relevant.
+    5. External documentation or web search only when the answer cannot reasonably be derived from the project itself.
+  - **Reporting Progress**: If escalation is required, provide a concise summary of: what was investigated, which files/modules were reviewed, conclusions reached, remaining ambiguity, and why a user decision is required.
+  - **Limits**: Explore enough to identify existing patterns and likely intent. Do not make speculative architectural decisions, modify business logic on assumptions, or implement behavior when multiple valid interpretations exist. Stop and ask when decisions affect architecture, security, business rules, data models, API contracts, or user experience.
 
 ## ✂️ Surgical Changes & Adjacent Integrity
 
