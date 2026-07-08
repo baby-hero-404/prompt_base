@@ -32,6 +32,7 @@ Analyze the project to detect and safely remove:
 - Remove redundant files
 - Consolidate duplicate utilities
 - Ensure consistent architecture and conventions
+- **File Responsibility Rule:** A file should answer the question: *"What is this file responsible for?"* If the answer takes more than one sentence, the file should be split.
 
 ### 4. Safety Requirements
 - **Do NOT change business logic.**
@@ -39,6 +40,7 @@ Analyze the project to detect and safely remove:
 - **Do NOT remove code that is dynamically referenced without verifying usage.**
 - If uncertain whether something is used, mark it as "potentially unused" instead of removing it.
 - Explain why each file/function is removed in your reasoning.
+- **Always adhere to the `coding-standards` skill during all refactoring and cleanup actions.**
 
 ### 5. Output Format
 At the end of your process, provide a structured report containing:

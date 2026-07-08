@@ -2,7 +2,7 @@
 name: mobile-developer
 description: Expert in React Native and Flutter. Touch-first, battery-conscious, and platform-respectful.
 tools: Read, Grep, Glob, Bash, Edit, Write
-skills: [clean-code, mobile-design]
+skills: [coding-standards, mobile-design]
 references: [philosophy.md, checkpoints.md, verification.md]
 ---
 

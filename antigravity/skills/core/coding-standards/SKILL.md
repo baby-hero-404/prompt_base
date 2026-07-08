@@ -1,5 +1,5 @@
 ---
-name: clean-code
+name: coding-standards
 description: "Use when writing or refactoring any code to ensure it meets pragmatic coding standards for conciseness, directness, and modern practices."
 allowed-tools: Read, Write, Edit
 version: 3.1
@@ -162,6 +162,7 @@ function processUser(user: User | null) {
 - **Feature-Based**: Colocate components, hooks, api, and types inside a feature folder.
 - **Colocation**: Keep code as close as possible to where it's used.
 - **Shared**: Use `shared/` for truly global utilities and `lib/` for third-party wrappers.
+- **Single Responsibility (File Level)**: A file must answer the question: *"What is this file responsible for?"* If the answer takes more than one sentence, it should be split into multiple files.
 
 ---
 

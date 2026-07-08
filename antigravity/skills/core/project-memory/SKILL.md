@@ -308,7 +308,7 @@ If context files don't exist:
 | `context-management` | Project memory files are the primary MVC (Minimal Viable Context) source |
 | `plan-writing` | Plans reference `TASK_STATUS.md` for current state |
 | `architecture` | `AI_PROJECT_CONTEXT.md` feeds architectural decisions |
-| `clean-code` | `CODING_PATTERNS.md` enforces consistency |
+| `coding-standards` | `CODING_PATTERNS.md` enforces consistency |
 | `verification-before-completion` | Must verify context files are updated before claiming completion |
 
 ---

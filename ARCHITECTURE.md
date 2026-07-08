@@ -115,7 +115,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 | Skill                | Description               |
 | -------------------- | ------------------------- |
-| `clean-code`         | Coding standards          |
+| `coding-standards`         | Coding standards          |
 | `brainstorming`      | Socratic discovery        |
 | `plan-writing`       | Task breakdown            |
 | `architecture`       | System design             |

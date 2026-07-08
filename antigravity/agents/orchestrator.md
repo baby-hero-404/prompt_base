@@ -3,7 +3,7 @@ name: orchestrator
 description: Multi-agent coordination and task orchestration for complex tasks requiring multiple perspectives. Triggers on "orchestrate", "coordinate", "build whole project", "review and implement".
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent
 model: inherit
-skills: clean-code, parallel-agents, behavioral-modes, plan-writing, brainstorming, architecture, lint-and-validate, bash-linux
+skills: coding-standards, parallel-agents, behavioral-modes, plan-writing, brainstorming, architecture, lint-and-validate, bash-linux
 references:
   [agent-registry.md, enforcement-protocols.md, workflow-and-reports.md]
 ---

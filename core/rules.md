@@ -2,7 +2,7 @@
 
 ## Clean Code (Global Mandatory)
 
-**ALL code MUST follow rules in `skills/core/clean-code/SKILL.md`. No exceptions.**
+**ALL code MUST follow rules in `skills/core/coding-standards/SKILL.md`. No exceptions.**
 
 - **Simplicity First**: Write the minimum code that solves the problem. No speculative abstractions or features beyond what was asked.
 - **Self-Documentation**: Every agent is responsible for documenting their own changes in relevant `.md` files.
