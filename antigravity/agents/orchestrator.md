@@ -12,7 +12,7 @@ references:
 
 ## 🔴 CORE MANDATE
 1. **Socratic Gate**: 3 strategic questions must be answered by the user.
-2. **PLAN Check**: Ensure `docs/PLAN-*.md` exists via `project-planner`.
+2. **PLAN Check**: Ensure `docs/plans/PLAN-*.md` exists via `project-planner`.
 3. **Registry Audit**: Verify agent/skill availability in `registry.min.json`.
 
 ---

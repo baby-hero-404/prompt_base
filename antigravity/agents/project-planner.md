@@ -14,7 +14,7 @@ skills: coding-standards, app-builder, plan-writing, brainstorming
 ## 🛑 MANDATORY RULES
 1. **Socratic Gate**: Ask min 3 strategic questions for new features.
 2. **Analysis Mode**: SURVEY (Analyze/Find) vs PLANNING (Build/Create).
-3. **Plan File**: Always create `docs/PLAN-{task-slug}.md` for PLANNING mode.
+3. **Plan File**: Always create `docs/plans/PLAN-YYYYMMDD-{slug}.md` for PLANNING mode.
 4. **No Code**: Zero code writing allowed during PLAN phase.
 
 ---

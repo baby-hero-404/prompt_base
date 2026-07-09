@@ -25,18 +25,19 @@ Use the `project-planner` agent with this context:
 CONTEXT:
 - User Request: $ARGUMENTS
 - Mode: PLANNING ONLY (no code)
-- Output: docs/PLAN-{task-slug}.md (dynamic naming)
+- Output: docs/plans/PLAN-YYYYMMDD-{slug}.md (dynamic naming)
 
 NAMING RULES:
 1. Extract 2-3 key words from request
 2. Lowercase, hyphen-separated
 3. Max 30 characters
-4. Example: "e-commerce cart" → PLAN-ecommerce-cart.md
+4. YYYYMMDD represents the current date (e.g. 20260709)
+5. Example: "e-commerce cart" → docs/plans/PLAN-20260709-ecommerce-cart.md
 
 RULES:
 1. Follow project-planner.md Phase -1 (Context Check)
 2. Follow project-planner.md Phase 0 (Socratic Gate)
-3. Create PLAN-{slug}.md with task breakdown
+3. Create PLAN-YYYYMMDD-{slug}.md under docs/plans/ with task breakdown
 4. DO NOT write any code files
 5. REPORT the exact file name created
 ```
@@ -47,7 +48,7 @@ RULES:
 
 | Deliverable | Location |
 |-------------|----------|
-| Project Plan | `docs/PLAN-{task-slug}.md` |
+| Project Plan | `docs/plans/PLAN-YYYYMMDD-{slug}.md` |
 | Task Breakdown | Inside plan file |
 | Agent Assignments | Inside plan file |
 | Verification Checklist | Phase X in plan file |
@@ -58,7 +59,7 @@ RULES:
 
 Tell user:
 ```
-[OK] Plan created: docs/PLAN-{slug}.md
+[OK] Plan created: docs/plans/PLAN-YYYYMMDD-{slug}.md
 
 Next steps:
 - Review the plan
@@ -72,11 +73,11 @@ Next steps:
 
 | Request | Plan File |
 |---------|-----------|
-| `/plan e-commerce site with cart` | `docs/PLAN-ecommerce-cart.md` |
-| `/plan mobile app for fitness` | `docs/PLAN-fitness-app.md` |
-| `/plan add dark mode feature` | `docs/PLAN-dark-mode.md` |
-| `/plan fix authentication bug` | `docs/PLAN-auth-fix.md` |
-| `/plan SaaS dashboard` | `docs/PLAN-saas-dashboard.md` |
+| `/plan e-commerce site with cart` | `docs/plans/PLAN-20260709-ecommerce-cart.md` |
+| `/plan mobile app for fitness` | `docs/plans/PLAN-20260709-fitness-app.md` |
+| `/plan add dark mode feature` | `docs/plans/PLAN-20260709-dark-mode.md` |
+| `/plan fix authentication bug` | `docs/plans/PLAN-20260709-auth-fix.md` |
+| `/plan SaaS dashboard` | `docs/plans/PLAN-20260709-saas-dashboard.md` |
 
 ---
 

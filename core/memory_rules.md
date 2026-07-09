@@ -12,7 +12,7 @@ To prevent rules from bleeding into each other, the AI MUST manage its memory us
 | `SLOT_APP` | Business Logic, API, Backend, TypeScript Expert, Python Patterns. |
 | `SLOT_OPS` | Docker, DevOps, CI/CD, Security, Cloud Infra. |
 | `SLOT_QA`  | Unit Testing, E2E, Quality Gates, Debugging logs. |
-| `SLOT_MAP` | Registry, Architecture, docs/PLAN-*.md (Permanently Fixed). |
+| `SLOT_MAP` | Registry, Architecture, docs/plans/PLAN-*.md (Permanently Fixed). |
 
 ---
 
@@ -28,7 +28,7 @@ To prevent rules from bleeding into each other, the AI MUST manage its memory us
 
 ## 🧹 General Memory Rules
 1. **No Repeats**: Do not repeat full file contents. Use diffs and line-index references.
-2. **Artifact Truth**: Rely on `docs/PLAN-*.md` for state, not chat history.
+1. **Artifact Truth**: Rely on `docs/plans/PLAN-*.md` for state, not chat history.
 3. **History Summarization**: If history > 15 turns, stop and provide a "Context Snapshot".
 4. **JIT Reading**: Use `grep_search` or `view_file` with `StartLine/EndLine` to read only relevant snippets. Never read >500 lines unless creating a core index.
 5. **Registry Lookup**: Do not read `registry.min.json` in full more than once per session. Use `grep_search` to find specific agent/skill paths by ID.

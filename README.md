@@ -9,7 +9,7 @@ Prompt Base is a modular AI development framework designed to run **globally** f
 Clone this repository into `~/.gemini` so the `GEMINI.md` file is picked up automatically:
 
 ```bash
-git clone https://github.com/sunshine12396/prompt_base ~/.gemini
+git clone https://github.com/baby-hero-404/prompt_base ~/.gemini
 ```
 
 Then remove development-only files (scripts, docs, Makefile, README, .git, etc.):
@@ -20,7 +20,7 @@ bash ~/.gemini/scripts/cleanup.sh
 
 > If the project is already cloned locally or `~/.gemini` exists, you can install/update it directly using make:
 > ```bash
-> git clone https://github.com/sunshine12396/prompt_base
+> git clone https://github.com/baby-hero-404/prompt_base
 > cd prompt_base
 > make install
 > ```
@@ -108,7 +108,7 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | Command | Description | When to Use |
 |---------|-------------|-------------|
 | `/brainstorm [topic]` | Structured exploration with 3+ approaches, pros/cons, effort estimates | Exploring options before committing |
-| `/plan [task]` | Socratic discovery → technical blueprint at `docs/PLAN-*.md` | Before any complex feature (**no code**) |
+| `/plan [task]` | Socratic discovery → technical blueprint at `docs/plans/PLAN-*.md` | Before any complex feature (**no code**) |
 | `/create [feature]` | Full-stack implementation via coordinated expert agents | Building new features or prototypes |
 | `/enhance [feature]` | Iterative improvement with dependency management | Adding modules to existing code |
 | `/test [file/feature]` | Unit/integration tests (AAA pattern), coverage checks | Ensuring code reliability |
@@ -137,9 +137,22 @@ A high-level design intelligence library for building premium interfaces:
 ## 🛠️ Framework Features
 
 - **14 Specialist Agents**: Role-based AI personas (Frontend, Backend, Security, etc.).
-- **40+ Skills**: JIT knowledge modules (React, Go, SQL, UX, etc.).
+- **50+ Skills**: JIT knowledge modules (React, Go, SQL, UX, etc.).
 - **⚡ Token Efficiency**: Optimized "Lean Agent Profiles" and JIT Knowledge Loading to minimize cost and maximize reasoning precision.
 - **🛡️ Socratic Gate**: Mandatory clarification protocol for complex tasks to ensure intent alignment before coding.
+- **🚦 Recommended Flows**: Structured operational pipelines tailored to task complexity (see [Scenario Flows](ARCHITECTURE.md#%F0%9F%9A%A6-recommended-developer-flows-by-scenario)).
+
+---
+
+## 🧠 Creating Your Own Skills (Quick Guide)
+
+Skills are modular knowledge packages that the AI loads on-demand based on user intent.
+
+1. **Create Directory:** `antigravity/skills/<category>/<your-skill-name>` (Categories: `core`, `tech`, `process`, `custom`).
+2. **Add `SKILL.md`:** Must contain YAML frontmatter with a keyword-rich `description` (used by the AI to auto-trigger the skill). Keep the content concise: use tables and code snippets instead of verbose text.
+3. **Register & Validate:** Add it to `registry.min.json` and validate using `make audit`.
+
+👉 For full instructions, templates, and best practices, refer to the detailed [**Skills Guide**](docs/skills-guide.md).
 
 ---
 

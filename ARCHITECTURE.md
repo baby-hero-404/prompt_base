@@ -8,7 +8,7 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It 
 |-----------|-------|---------|
 | **Rules** | 1 file | Persistent behavior (`GEMINI.md`) |
 | **Workflows** | 14 | On-demand slash command procedures |
-| **Skills** | 40+ | Auto-triggered knowledge modules |
+| **Skills** | 50+ | Auto-triggered knowledge modules |
 | **Agents** | 14 | Specialist AI personas |
 
 ---
@@ -133,15 +133,15 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | **Mobile**  | `mobile-design`                                                                     |
 | **Other**   | `database-design`, `docker-expert`, `game-development`, `ux-ui-pro-max`, `mcp-builder`, `jupyter-notebooks` |
 
-### Process (16+)
+### Process (27)
 
 | Category    | Skills                                                                              |
 | ----------- | ----------------------------------------------------------------------------------- |
-| **Testing** | `testing-patterns`, `tdd-workflow`, `webapp-testing`, `lint-and-validate`           |
+| **Testing** | `testing-patterns`, `tdd-workflow`, `webapp-testing`, `lint-and-validate`, `verification-before-completion` |
 | **Security**| `vulnerability-scanner`, `red-team-tactics`, `red-teaming`                           |
 | **Growth**  | `seo-fundamentals`, `geo-fundamentals`                                              |
 | **Ops**     | `deployment-procedures`, `server-management`, `bash-linux`, `powershell-windows`    |
-| **Meta**    | `code-review-checklist`, `documentation-templates`, `review-pre-commit-git`, `i18n-localization` |
+| **Meta & Dev**| `code-review-checklist`, `documentation-templates`, `review-pre-commit-git`, `i18n-localization`, `openspec-authoring`, `subagent-driven-development`, `receiving-code-review`, `codebase-cleanup`, `readme-generator`, `code-graph-analysis`, `performance-profiling`, `frontend-design`, `systematic-debugging` |
 
 ---
 
@@ -166,12 +166,90 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 ---
 
+## 🚦 Recommended Flows by Use Case
+
+Choose the right command pipeline based on what you need to accomplish. Each flow is designed to keep context lean and results precise.
+
+### Quick Fix (Low Complexity)
+
+> **Use when:** Fixing a known bug, typo, or making a small isolated change.
+
+```
+Describe the fix → Edit directly → /test
+```
+
+No plan or spec needed. The agent applies the Socratic Gate lightly (confirms understanding), makes surgical edits, and runs tests.
+
+### New Feature or Refactoring (Medium–High Complexity)
+
+> **Use when:** Adding a new module, refactoring existing architecture, or implementing a multi-file change.
+
+```
+/plan → [openspec-authoring] → /create or /enhance → /review
+```
+
+1. `/plan` generates a high-level roadmap (`docs/plans/PLAN-YYYYMMDD-{slug}.md`) with phases and agent assignments.
+2. The `openspec-authoring` skill decomposes the approved plan into 4 specification files (`docs/openspecs/{task}/`: proposal, specs, design, tasks).
+3. `/create` or `/enhance` implements the tasks defined in the spec set.
+4. `/review` performs a pre-commit quality check before merging.
+
+### New Application (High Complexity)
+
+> **Use when:** Building a project from scratch (e.g., SaaS dashboard, e-commerce app).
+
+```
+/brainstorm → /plan → /ux-ui-pro → [openspec-authoring] → /create
+```
+
+1. `/brainstorm` explores approaches, tech stack options, and trade-offs.
+2. `/plan` maps out the architecture and milestones.
+3. `/ux-ui-pro` generates a professional design system and UI foundation.
+4. `openspec-authoring` writes the execution contract (the 4 spec files).
+5. `/create` scaffolds and implements the full application with multi-agent coordination.
+
+### Debugging & Troubleshooting (Variable Complexity)
+
+> **Use when:** Investigating errors, crashes, or unexpected behavior.
+
+```
+/debug → /test → Fix → /review
+```
+
+1. `/debug` activates systematic investigation: gathers error context, forms hypotheses, tests each one.
+2. `/test` creates a reproducing test case to confirm root cause.
+3. The agent applies a surgical fix and explains the root cause.
+4. `/review` validates the fix before commit.
+
+### Pre-Commit Quality Gate
+
+> **Use when:** About to commit or push changes. Works at any complexity level.
+
+```
+/review
+```
+
+Runs the `review-pre-commit-git` skill to audit staged changes against coding standards, test coverage, and security checklist.
+
+### Extending Prompt Base Itself
+
+> **Use when:** Adding new skills, agents, or workflows to this framework.
+
+```
+Create SKILL.md → Register in registry.min.json → make audit
+```
+
+1. Create the skill directory and `SKILL.md` following the [Skills Guide](docs/skills-guide.md).
+2. Add the entry to `registry.min.json`.
+3. Run `make audit` to validate structural consistency across the framework.
+
+---
+
 ## 📊 Statistics
 
 | Metric              | Value |
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
-| **Total Skills**    | 41+   |
+| **Total Skills**    | 54    |
 | **Total Workflows** | 14    |
 
 ---

@@ -2,7 +2,7 @@
 
 | Agent | Domain & Focus | Mandatory When? |
 |-------|----------------|-----------------|
-| `project-planner` | Plan files, task breakdown (docs/PLAN-*.md) | **Step 0** (No plan = No work) |
+| `project-planner` | Plan files, task breakdown (`docs/plans/PLAN-*.md`) | **Step 0** (No plan = No work) |
 | `security-auditor` | Security, Auth, OWASP, Vulnerabilities | Touching auth or sensitive data |
 | `backend-specialist` | Node.js, API, Server logic, DB queries | Working on server-side |
 | `frontend-specialist` | React, Next.js, UI, Styles, Components | Working on web UI |
