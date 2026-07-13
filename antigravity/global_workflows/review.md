@@ -1,5 +1,5 @@
 ---
-description: Perform a pre-commit code review on staged changes using the review-pre-commit-git skill.
+description: Perform a pre-commit code review on staged changes using the verification-before-completion skill.
 ---
 
 # /review - Pre-Commit Code Review
@@ -25,9 +25,9 @@ Analyze staged changes (`git diff --staged`) against coding standards, security 
     - Capture output.
 
 3.  **Execute Review**
-    - **Activate Skill**: `review-pre-commit-git` (skills/process/review-pre-commit-git)
+    - **Activate Skill**: `verification-before-completion` (skills/process/verification-before-completion)
     - **Input**: The captured diff content.
-    - **Instruction**: "Perform a formal pre-commit review of these changes following the review-pre-commit-git protocol."
+    - **Instruction**: "Perform a formal pre-commit review of these changes following the verification-before-completion pre-commit protocol."
 
 4.  **Output Report**
     - Present findings in the standardized format defined by the skill.
@@ -50,5 +50,5 @@ def run_workflow():
 
     # 3. Review
     # Prompt the LLM with the diff and the skill context
-    return llm.invoke(tool="review-pre-commit-git", input=diff_content)
+    return llm.invoke(tool="verification-before-completion", input=diff_content)
 ```

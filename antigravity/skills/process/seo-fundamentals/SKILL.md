@@ -1,6 +1,6 @@
 ---
 name: seo-fundamentals
-description: "Use when auditing or improving SEO, E-E-A-T factors, Core Web Vitals, or Google algorithm compliance."
+description: "Use when auditing or improving TRADITIONAL Google SEO, E-E-A-T factors, Core Web Vitals, or Google algorithm compliance. For AI search engines (ChatGPT/Perplexity), use geo-fundamentals instead."
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -99,6 +99,8 @@ allowed-tools: Read, Glob, Grep
 | Add original insights | Copy without value |
 | Expert review | Skip fact-checking |
 | Follow E-E-A-T | Keyword stuffing |
+
+> **Note:** If the primary goal is ranking in AI search engines (ChatGPT, Perplexity) rather than just traditional Google search, you MUST use the `geo-fundamentals` skill for Generative Engine Optimization.
 
 ---
 

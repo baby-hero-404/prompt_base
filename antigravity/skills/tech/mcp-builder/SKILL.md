@@ -42,8 +42,9 @@ my-mcp-server/
 
 | Type | Use |
 |------|-----|
-| **Stdio** | Local, CLI-based |
-| **SSE** | Web-based, streaming |
+| **Stdio** | Local, CLI-based (typical for Claude Desktop) |
+| **Streamable HTTP** | Modern web-based (Recommended over SSE) |
+| **SSE (Server-Sent Events)** | *Superseded*. Still relevant for legacy servers. |
 | **WebSocket** | Real-time, bidirectional |
 
 ---
@@ -139,13 +140,20 @@ my-mcp-server/
 
 ## 8. Configuration
 
-### Claude Desktop Config
+### Authentication (2025 Revision)
+
+The modern MCP specification standardizes on **OAuth 2.1** for remote server authentication.
+- Implement standard OAuth 2.1 Authorization Code flow for external user auth.
+- Use Bearer tokens for subsequent Streamable HTTP/WebSocket requests.
+- Claude Desktop Config auth is largely meant for *local* testing or basic static tokens, not for production remote setups.
+
+### Claude Desktop Config (Local/Basic)
 
 | Field | Purpose |
 |-------|---------|
 | command | Executable to run |
 | args | Command arguments |
-| env | Environment variables |
+| env | Environment variables (e.g., static API keys) |
 
 ---
 

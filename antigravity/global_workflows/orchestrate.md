@@ -174,8 +174,8 @@ Use the project-planner agent to create PLAN.md:
 ### Step 4: Verification (MANDATORY)
 The LAST agent must run appropriate verification scripts:
 ```bash
-python scripts/security_scan.py .
-python scripts/lint_runner.py .
+python tools/security_scan.py .
+python tools/lint_runner.py .
 ```
 
 ### Step 5: Synthesize Results

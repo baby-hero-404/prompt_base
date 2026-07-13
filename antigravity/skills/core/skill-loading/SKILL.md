@@ -17,7 +17,7 @@ You are responsible for keeping the context window lean while ensuring the AI ha
 
 - **Primary Load**: View the `SKILL.md` file of the most relevant skill(s).
 - **Dependency Check**: Check the YAML frontmatter of the loaded `SKILL.md`. If a `skills:` list exists, load those dependencies recursively.
-- **Selective Reading**: If a skill directory contains multiple `.md` files (e.g., `frontend-design`), read the main `SKILL.md` first to see which sub-files are REQUIRED vs OPTIONAL.
+- **Selective Reading**: If a skill directory contains multiple `.md` files (e.g., `ux-ui-pro-max`), read the main `SKILL.md` first to see which sub-files are REQUIRED vs OPTIONAL.
 
 ### 3. Execution Phase
 

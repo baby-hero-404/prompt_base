@@ -6,11 +6,11 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 # Subagent-Driven Development
 
-Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
+Execute plan by dispatching a fresh subagent per task, and enforcing the two-stage review using the `verification-before-completion` skill.
 
 **Why subagents:** Delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused. They should never inherit your session's context — you construct exactly what they need.
 
-**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
+**Core principle:** Fresh subagent per task + `verification-before-completion` = high quality, fast iteration
 
 ## When to Use
 
@@ -30,11 +30,9 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 2. FOR EACH TASK:
    a. Dispatch implementer subagent (with full task text + context)
    b. Handle implementer status (DONE / BLOCKED / NEEDS_CONTEXT)
-   c. Dispatch spec reviewer subagent → verify code matches spec
-   d. If spec issues → implementer fixes → re-review
-   e. Dispatch code quality reviewer subagent
-   f. If quality issues → implementer fixes → re-review
-   g. Mark task complete
+   c. Trigger `verification-before-completion` (two-stage spec/quality review)
+   d. If verification fails → implementer fixes → re-verify
+   e. Mark task complete
 3. After all tasks → final code review of entire implementation
 4. Finish development branch
 ```

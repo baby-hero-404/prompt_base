@@ -10,14 +10,14 @@ Every project interaction in Prompt Base is governed by three component types, v
 
 | Type | Target | Behavior | Activation |
 |---|---|---|---|
-| **1. Rules** | `GEMINI.md` | Persistent logic & governance | Always Active |
+| **1. Rules** | `GEMINI.md` / `CLAUDE.md` | Persistent logic & governance | Always Active |
 | **2. Workflows** | `antigravity/global_workflows/*.md` | Multi-step procedural logic | On-Demand (`/slash`) |
 | **3. Skills** | `antigravity/skills/*/SKILL.md` | Specialized domain knowledge | Auto-Triggered (JIT) |
 
 ---
 
 ## 1. Rules (Tier 0 Logic)
-**File:** `~/.gemini/GEMINI.md`
+**File:** `~/.gemini/GEMINI.md` (or `~/.claude/CLAUDE.md`)
 
 Rules are the "constitution" of the framework. They are injected into the system prompt of every single conversation, regardless of the task.
 
@@ -90,7 +90,7 @@ To prevent "Context Bleed" (where old instructions confuse the AI on new tasks),
 
 ```mermaid
 graph TD
-    A[GEMINI.md Rules] -->|Govern| B[User Request]
+    A[GEMINI.md / CLAUDE.md Rules] -->|Govern| B[User Request]
     B -->|Trigger /| C[Workflow Execution]
     B -->|Keyword Match| D[Skill Discovery]
     C -->|Invokes| D
@@ -102,4 +102,4 @@ graph TD
 ## 🎯 Summary for Developers
 - **Writing a New Feature?** Start with a **Workflow** to define the steps.
 - **Adding Domain Knowledge?** Create a **Skill** with a rich description.
-- **Changing Framework Behavior?** Update the **Rules** in `GEMINI.md`.
+- **Changing Framework Behavior?** Update the **Rules** in `GEMINI.md` / `CLAUDE.md`.

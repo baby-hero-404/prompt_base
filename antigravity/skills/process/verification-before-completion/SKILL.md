@@ -2,6 +2,7 @@
 name: verification-before-completion
 description: "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+references: [two-stage-review.md, pre-commit-template.md]
 ---
 
 # Verification Before Completion
@@ -11,6 +12,12 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 Claiming work is complete without verification is dishonesty, not efficiency.
 
 **Core principle:** Evidence before claims, always.
+
+## Code Review & Pre-Commit Verification
+
+This skill encompasses both personal verification and formal code reviews:
+- If you are conducting or requesting a formal peer/subagent review, refer to `references/two-stage-review.md`.
+- If you are performing a final pre-commit check on staged changes, refer to `references/pre-commit-template.md` for the mandatory OK/Not-OK structure.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 

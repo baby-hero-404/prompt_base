@@ -61,10 +61,17 @@ Every game follows this cycle:
 | **Observer/Events** | Decoupling systems (UI listens to PlayerHP events) |
 | **ECS** | Massive scale (thousands of entities) |
 | **Command** | Replay systems, undo/redo, input abstraction |
+| **LLM / AI Agent** | Dynamic NPC dialogue, procedural narrative generation |
 
 ---
 
-## 4. Optimization Strategy
+## 4. LLM / AI-Agent Integration
+- **Interplay with State Machine:** Don't let an LLM run the physics or raw movement loop. Use the LLM to output a high-level **State** (e.g., `State: Fleeing`, `State: Conversing`) and let the deterministic State Machine or BT (Behavior Tree) execute the actual pathfinding and animation.
+- **Async Execution:** LLM calls take seconds. Decouple them from the core loop using background threads or async coroutines. Show UI indicators (NPC "thinking") while waiting.
+
+---
+
+## 5. Optimization Strategy
 
 1. **Profile First**: Never guess. Use the engine profiler.
 2. **Algo Fixes**: O(n^2) loops are the first killer.
@@ -72,7 +79,7 @@ Every game follows this cycle:
 4. **Memory**: Object pool everything spawned frequently.
 5. **Physics**: Simplify colliders (Sphere > Box > Mesh).
 
-## 5. Anti-Patterns
+## 6. Anti-Patterns
 
 - **Optimize Prematurely**: "I need ECS for my Pong game." (No you don't).
 - **Polish Before Fun**: Spending weeks on art before the core loop is fun.

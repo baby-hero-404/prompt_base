@@ -6,7 +6,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 # Next.js Best Practices
 
-> Principles for Next.js App Router development.
+> **Target Version: Next.js 15+**
+> Principles for modern Next.js App Router development.
 
 ---
 
@@ -42,9 +43,9 @@ Does it need...?
 
 | Pattern | Use |
 |---------|-----|
-| **Default** | Static (cached at build) |
-| **Revalidate** | ISR (time-based refresh) |
-| **No-store** | Dynamic (every request) |
+| **Default (Next 15+)** | Dynamic (Uncached by default, every request) |
+| **Cached (`force-cache`)** | Static (cached at build) |
+| **Revalidate** | ISR (time-based refresh using `next.revalidate`) |
 
 ### Data Flow
 
@@ -113,6 +114,10 @@ Does it need...?
 - Route-based code splitting (automatic)
 - Analyze with bundle analyzer
 
+### Turbopack & Rendering
+- **Turbopack:** Use `next dev --turbo` for significantly faster local dev.
+- **Partial Prerendering (PPR):** Wrap dynamic components in `<Suspense>` so the static shell can be served instantly while dynamic parts stream in.
+
 ---
 
 ## 6. Metadata
@@ -139,9 +144,9 @@ Does it need...?
 
 | Layer | Control |
 |-------|---------|
-| Request | fetch options |
-| Data | revalidate/tags |
-| Full route | route config |
+| Request | `fetch` options (uncached by default in Next 15) |
+| Data | `use cache` directive, `revalidateTag` |
+| Full route | Route segment config (`export const dynamic`) |
 
 ### Revalidation
 

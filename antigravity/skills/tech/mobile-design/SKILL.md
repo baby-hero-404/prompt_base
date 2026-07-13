@@ -2,7 +2,7 @@
 name: mobile-design
 description: "Use when designing or building React Native, Flutter, or native mobile apps, focusing on touch interactions and platform conventions."
 allowed-tools: Read, Glob, Grep, Bash
-references: [mobile-design-thinking.md, touch-psychology.md, performance-universal.md, performance-react-native.md, performance-flutter.md, mobile-backend.md, mobile-testing.md, mobile-debugging.md, mobile-navigation.md, mobile-typography.md, mobile-color-system.md, decision-trees.md, ios-design-system.md, ios-patterns-and-components.md, android-material-3.md, android-patterns-and-components.md]
+references: [mobile-design-thinking.md, touch-psychology.md, performance-universal.md, performance-react-native.md, performance-flutter.md, mobile-backend.md, mobile-testing.md, mobile-debugging.md, mobile-navigation.md, mobile-typography.md, mobile-color-system.md, decision-trees.md, ios-design-system.md, ios-patterns-and-components.md, android-material-3.md, android-patterns-and-components.md, spatial-and-voice.md]
 ---
 
 # Mobile Design System
@@ -23,6 +23,7 @@ references: [mobile-design-thinking.md, touch-psychology.md, performance-univers
 | `references/touch-psychology.md` | Touch targets, gestures, thumb zone design. |
 | `references/performance-universal.md` | General battery, network, and memory optimization. |
 | `references/decision-trees.md` | Framework, state management, or storage selection. |
+| `references/spatial-and-voice.md` | Spatial computing (visionOS/XR) or conversational AI / Voice UI. |
 
 ### 2. Implementation & Platform
 | Reference File | When to Load |
@@ -51,7 +52,7 @@ references: [mobile-design-thinking.md, touch-psychology.md, performance-univers
 
 | Aspect | Mandatory Question |
 |--------|--------------------|
-| **Platform** | "iOS, Android, or both?" |
+| **Platform** | "iOS, Android, visionOS/XR, or cross-platform?" |
 | **Framework** | "React Native, Flutter, or native (Swift/Kotlin)?" |
 | **State** | "Zustand, Redux, Riverpod, or BLoC?" |
 

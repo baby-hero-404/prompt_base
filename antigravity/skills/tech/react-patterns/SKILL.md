@@ -16,10 +16,14 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 | Type | Use | State |
 |------|-----|-------|
-| **Server** | Data fetching, static | None |
-| **Client** | Interactivity | useState, effects |
+| **Server** | Default. Fetch data, access DB, pass serializable props. | None (Server side) |
+| **Client** | Add `use client`. Interactivity, DOM access, React hooks. | useState, effects |
 | **Presentational** | UI display | Props only |
 | **Container** | Logic/state | Heavy state |
+
+### Server vs. Client Decision Rule
+- **Default to Server Components**.
+- Only add `'use client'` when you need: interactivity (onClick), React state (useState), browser APIs (window), or custom hooks depending on state/effects.
 
 ### Design Rules
 
@@ -80,10 +84,33 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 | **useOptimistic** | Optimistic UI updates |
 | **use** | Read resources in render |
 
+### React Server Components (RSC) & Server Actions
+
+- **RSC (Server Components):** The default in modern React. They never ship JS to the client, can safely access backend resources (DBs, file systems), and pass serializable data as props to Client Components. Use them for *fetching and rendering*.
+- **Server Actions:** The modern way to mutate data. They are async functions executed on the server but callable directly from Client Components (e.g., `<form action={myServerAction}>`). They eliminate the need for manual API routes for form submissions.
+  ```tsx
+  // Server Action Example
+  async function updateUser(formData: FormData) {
+    'use server';
+    const name = formData.get('name');
+    await db.users.update({ name });
+  }
+  // Client usage: <form action={updateUser}>
+  ```
+- **Concurrent Rendering:** React can interrupt rendering to handle higher-priority updates (like typing). Use `useTransition` to mark non-urgent state updates, keeping the UI responsive during heavy renders or data fetching.
+  ```tsx
+  const [isPending, startTransition] = useTransition();
+  const updateTab = (tab) => {
+    startTransition(() => {
+      setTab(tab); // Non-urgent update
+    });
+  };
+  ```
+
 ### Compiler Benefits
 
-- Automatic memoization
-- Less manual useMemo/useCallback
+- Automatic memoization (React Compiler)
+- Less manual `useMemo`/`useCallback`
 - Focus on pure components
 
 ---
@@ -207,7 +234,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Mandatory Quality Check:
 ```bash
-python scripts/lint_runner.py .
+python tools/lint_runner.py .
 ```
 
 ---

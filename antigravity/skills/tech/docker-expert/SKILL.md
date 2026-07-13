@@ -4,7 +4,7 @@ description: "Use when configuring containerization, writing Dockerfiles, optimi
 category: devops
 displayName: Docker Expert
 color: blue
-references: [dockerfile-best-practices.md, security-and-hardening.md, compose-orchestration.md, checklists-and-diagnostics.md]
+references: [dockerfile-best-practices.md, security-and-hardening.md, compose-orchestration.md, checklists-and-diagnostics.md, runtimes-and-alternatives.md]
 ---
 
 # Docker Expert
@@ -39,6 +39,10 @@ Refer to **`references/compose-orchestration.md`**.
 ### 4. Review & Troubleshooting
 Refer to **`references/checklists-and-diagnostics.md`**.
 - Review checklist, diagnostics commands, and fixing common issues.
+
+### 5. Modern Runtimes
+Refer to **`references/runtimes-and-alternatives.md`**.
+- Traditional Docker vs WASM containers vs microVMs (Firecracker).
 
 ---
 

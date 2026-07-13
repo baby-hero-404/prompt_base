@@ -206,7 +206,7 @@ The AI should automatically detect the appropriate mode based on:
 
 ---
 
-## Multi-Agent Collaboration Patterns (2025)
+## Multi-Agent Collaboration Patterns
 
 Modern architectures optimized for agent-to-agent collaboration:
 
@@ -223,10 +223,6 @@ Cyclic mode transitions for high-complexity tasks:
 
 ### 3. 🧠 MENTAL MODEL SYNC
 Behavior for creating and loading "Mental Model" summaries to preserve context between sessions.
-
----
-
-## Combining Modes
 
 ---
 

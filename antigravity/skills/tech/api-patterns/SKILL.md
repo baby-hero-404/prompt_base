@@ -19,7 +19,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 | File | Description | When to Read |
 |------|-------------|--------------|
-| `api-style.md` | REST vs GraphQL vs tRPC decision tree | Choosing API type |
+| `api-style.md` | REST, GraphQL, tRPC, Server Actions, AI Streaming | Choosing API type |
 | `rest.md` | Resource naming, HTTP methods, status codes | Designing REST API |
 | `response.md` | Envelope pattern, error format, pagination | Response structure |
 | `graphql.md` | Schema design, when to use, security | Considering GraphQL |
@@ -77,5 +77,5 @@ Before designing an API:
 
 | Script | Purpose | Command |
 |--------|---------|---------|
-| `scripts/api_validator.py` | API endpoint validation | `python scripts/api_validator.py <project_path>` |
+| `tools/api_validator.py` | API endpoint validation | `python tools/api_validator.py <project_path>` |
 

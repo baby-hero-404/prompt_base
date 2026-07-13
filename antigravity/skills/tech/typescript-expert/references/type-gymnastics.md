@@ -36,13 +36,20 @@ type PropEventSource<Type> = {
 
 ## 3. Type Inference & Safety
 
-### `satisfies` Operator (TS 5.0+)
+### `satisfies` Operator
 Preserves literal types while ensuring they meet a specific interface.
 ```typescript
 const config = {
   api: "https://api.example.com",
   timeout: 5000
 } satisfies Record<string, string | number>;
+```
+
+### Inferred Type Predicates (TS 5.5+)
+Functions returning booleans now automatically infer type predicates, reducing manual `is T` casting.
+```typescript
+const isString = (x: unknown) => typeof x === "string";
+const strs = ["a", 1, "b"].filter(isString); // inferred as string[] in TS 5.5+
 ```
 
 ### Const Assertions

@@ -52,25 +52,25 @@ priority: CRITICAL
 
 ## 4. Modern Tech Mandate (Priority Stack)
 
-> **RULE**: Always prioritize modern, high-performance libraries and stable, next-generation frameworks. Avoid legacy patterns (e.g., use Next.js 15 over CRA, Tailwind v4 over CSS-in-JS).
+> **RULE**: Prioritize modern, high-performance libraries and stable, next-generation frameworks. Consider trade-offs before defaulting to older patterns (e.g., weigh Next.js 15 App Router vs legacy CRA, Tailwind v4 vs CSS-in-JS).
 
 ### 4.1 Frontend Preferred
 | Category | Preferred | Avoid |
 |----------|-----------|-------|
-| **Framework** | Next.js 15+ (App Router) | Create React App |
+| **Framework** | Next.js 15+ (App Router) | Create React App (Deprecated) |
 | **Styling** | Tailwind CSS v4 | CSS Modules, Styled-Comp |
-| **State** | TanStack Query + Zustand | Redux (legacy) |
-| **Animation** | Framer Motion | GSAP (unless complex) |
-| **Components** | shadcn/ui + Radix | MUI, Ant Design |
+| **State** | TanStack Query + Zustand | Redux (unless already heavily used) |
+| **Animation** | Framer Motion | GSAP (unless complex timeline needed) |
+| **Components** | shadcn/ui + Radix | MUI, Ant Design (can be heavy) |
 
 ### 4.2 Backend & Data Preferred
 | Category | Preferred | Avoid |
 |----------|-----------|-------|
-| **Runtime** | Bun, Node.js 22+ | Node < 20 |
-| **Framework** | Hono, Fastify | Express |
+| **Runtime** | Bun, Deno 2.x, Node.js 22+ | Node < 22 |
+| **Framework** | Hono, Fastify | Express (if starting fresh; fine for legacy) |
 | **Validation** | Zod | Joi, Yup |
-| **ORM** | Drizzle | Prisma (if speed-critical), TypeORM |
-| **SQL** | Neon, Turso | Local-only SQLite |
+| **ORM** | Drizzle | Prisma (fine if Rust engine overhead is acceptable), TypeORM |
+| **SQL** | Neon, Turso | Local-only SQLite (if scale/edge is needed) |
 
 ---
 

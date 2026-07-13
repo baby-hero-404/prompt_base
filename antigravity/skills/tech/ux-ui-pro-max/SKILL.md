@@ -330,6 +330,25 @@ python3 skills/tech/ux-ui-pro-max/scripts/search.py "fintech crypto" --design-sy
 
 ---
 
+## ⛔ FORBIDDEN AI DEFAULTS (ANTI-SAFE HARBOR)
+
+- ❌ Bento Grids (unless truly complex data).
+- ❌ Hero Split (Left/Right) as default.
+- ❌ Mesh/Aurora Gradients.
+- ❌ Simple Glassmorphism.
+- ❌ Deep Cyan / Fintech Blue as "safe" escape.
+- ❌ Generic Copy (Empower, Elevate, Seamless).
+
+---
+
+## 🎨 Design Principles
+
+1. **60-30-10 Rule**: 60% Background, 30% Structure, 10% Accent.
+2. **8-Point Grid**: All spacing in multiples of 8 (4, 8, 16, 24...).
+3. **Psychology First**: Apply Hick's, Fitts', and Miller's laws before aesthetics.
+
+---
+
 ## Common Rules for Professional UI
 
 These are frequently overlooked issues that make UI look unprofessional:

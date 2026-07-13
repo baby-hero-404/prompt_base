@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: "Use when designing database schemas, creating indexing strategies, selecting an ORM, or modeling relationships."
+description: "Use when designing database schemas, creating indexing strategies, selecting an ORM, modeling relationships, or designing Vector DBs / RAG architectures."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -20,6 +20,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 | `indexing.md` | Index types, composite indexes | Performance tuning |
 | `optimization.md` | N+1, EXPLAIN ANALYZE | Query optimization |
 | `migrations.md` | Safe migrations, serverless DBs | Schema changes |
+| `vector-dbs.md` | pgvector, Pinecone, Milvus, RAG modeling | AI & Embeddings |
 
 ---
 
