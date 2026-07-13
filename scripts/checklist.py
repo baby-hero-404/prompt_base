@@ -104,8 +104,14 @@ def check_structure():
                     
                     # Check for SKILL.md
                     if os.path.isdir(skill_path):
-                        if not os.path.exists(os.path.join(skill_path, "SKILL.md")):
+                        skill_md_path = os.path.join(skill_path, "SKILL.md")
+                        if not os.path.exists(skill_md_path):
                             issues.append(f"❌ Skill directory missing SKILL.md ({cat}): {skill_path}")
+                        else:
+                            with open(skill_md_path, "r", encoding="utf-8") as smd:
+                                line_count = sum(1 for _ in smd)
+                                if line_count > 175:
+                                    issues.append(f"⚠️ SKILL.md exceeds 175 lines ({line_count} lines) in {skill_path}. Recommend moving details into a references/ subdirectory read on demand.")
     
     # Check for Orphans
     skill_categories = ["core", "tech", "process", "custom"]

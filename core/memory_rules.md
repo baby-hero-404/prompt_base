@@ -3,6 +3,18 @@
 ## 🎯 Intent
 Prevent "token bloat" and maintain reasoning precision by enforcing a strictly modular context window.
 
+## 🤖 Automated Long-Term Tier (Hook-Enforced)
+Long-term memory — architectural decisions and session rollups — is handled automatically by the context memory engine's `PreCompact`/`UserPromptSubmit` hooks when installed (`make memory-setup`; see `project-memory` skill, Section 0, and `docs/openspecs/context-memory-engine-2026/`). To get a decision captured, emit:
+
+```
+<adr title="Short decision title">
+  <decision>What was decided.</decision>
+  <rationale>Why, including rejected alternatives.</rationale>
+</adr>
+```
+
+This is **enforcement, not advisory**: the hooks run whether or not the agent remembers to prune. Everything below — the Slot Protocol and General Memory Rules — governs in-session context hygiene at all times, and is also the **complete fallback** when hooks are disabled or not installed for a project: without hooks, long-term memory reverts to whatever the agent manually captures in `docs/ai/` via the discipline below.
+
 ## 📥 Slot Management (QUOTA: 1 per Slot)
 To prevent rules from bleeding into each other, the AI MUST manage its memory using these "Slots":
 

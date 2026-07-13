@@ -10,6 +10,9 @@ __pycache__/
 # Temporary folders
 .pb_tmp/
 
+# Context memory engine (derived index, rebuildable via `make memory-rebuild`)
+.ai-memory/
+
 # OS files
 .DS_Store
 Thumbs.db

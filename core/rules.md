@@ -43,7 +43,7 @@
 
 ## System Map Read
 
-> 🔴 **MANDATORY**: Read `ARCHITECTURE.md` and `registry.min.json` at session start.
+> 🔴 **MANDATORY**: Grep `registry.min.json` by trigger keyword when selecting a skill. Read `ARCHITECTURE.md` by section only when needed for the task. Do not read the entire files upfront.
 
 **Path Awareness:**
 

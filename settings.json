@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_compact.py\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_recall.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

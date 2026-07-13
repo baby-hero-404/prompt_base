@@ -1,0 +1,5 @@
+# Context memory engine (opt-in, installed into an isolated venv by `make memory-setup`
+# — never into the user's global Python; see docs/openspecs/context-memory-engine-2026).
+# Without these, tools/memory_engine.py degrades to FTS5 keyword search automatically.
+fastembed==0.8.0
+sqlite-vec==0.1.9
