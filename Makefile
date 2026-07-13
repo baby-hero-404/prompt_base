@@ -14,9 +14,25 @@ registry:
 	@python3 scripts/generate_registry.py
 
 # Install/Update locally to ~/.gemini
-install:
+install-gemini:
 	@echo "Installing to ~/.gemini..."
 	@mkdir -p ~/.gemini
+	@rm -rf ~/.gemini/core ~/.gemini/antigravity/agents ~/.gemini/antigravity/skills ~/.gemini/antigravity/global_workflows
 	@cp -r ./* ~/.gemini/
-	@bash ~/.gemini/scripts/cleanup.sh
-	@echo "Install complete."
+	@rm -f ~/.gemini/CLAUDE.md
+	@bash ~/.gemini/scripts/cleanup.sh ~/.gemini
+	@echo "Gemini Install complete."
+
+# Install/Update locally to ~/.claude
+install-claude:
+	@echo "Installing to ~/.claude..."
+	@mkdir -p ~/.claude/skills
+	@rm -rf ~/.claude/core ~/.claude/antigravity/agents ~/.claude/antigravity/skills ~/.claude/antigravity/global_workflows
+	@cp -r ./* ~/.claude/
+	@rm -f ~/.claude/GEMINI.md
+	@find ~/.claude/antigravity/skills -mindepth 2 -maxdepth 2 -type d -exec ln -snf {} ~/.claude/skills/ \;
+	@bash ~/.claude/scripts/cleanup.sh ~/.claude
+	@echo "Claude Install complete."
+
+# Install for both
+install: install-gemini install-claude

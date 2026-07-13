@@ -6,7 +6,7 @@ Prompt Base is a modular AI development framework designed to run **globally** f
 
 ### Installation (Global — All Workspaces)
 
-Clone this repository into `~/.gemini` so the `GEMINI.md` file is picked up automatically:
+Clone this repository into `~/.gemini` so the `GEMINI.md` (or `CLAUDE.md`) file is picked up automatically (or symlink them to your workspace roots):
 
 ```bash
 git clone https://github.com/baby-hero-404/prompt_base ~/.gemini
@@ -18,11 +18,13 @@ Then remove development-only files (scripts, docs, Makefile, README, .git, etc.)
 bash ~/.gemini/scripts/cleanup.sh
 ```
 
-> If the project is already cloned locally or `~/.gemini` exists, you can install/update it directly using make:
+> If the project is already cloned locally or `~/.gemini` (or `~/.claude`) exists, you can install/update it directly using make:
 > ```bash
 > git clone https://github.com/baby-hero-404/prompt_base
 > cd prompt_base
-> make install
+> make install-gemini  # Install to ~/.gemini
+> make install-claude  # Install to ~/.claude
+> make install         # Install to both
 > ```
 
 After cleanup, only the runtime essentials remain in `~/.gemini`:

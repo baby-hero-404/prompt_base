@@ -18,9 +18,9 @@ echo "📁 Root: $ROOT"
 echo ""
 
 # ── Verify this is actually a Prompt Base installation ──
-if [[ ! -f "$ROOT/GEMINI.md" ]] || [[ ! -f "$ROOT/registry.min.json" ]]; then
+if [[ ! -f "$ROOT/GEMINI.md" && ! -f "$ROOT/CLAUDE.md" ]] || [[ ! -f "$ROOT/registry.min.json" ]]; then
     echo "❌ Error: $ROOT does not look like a Prompt Base installation."
-    echo "   Missing GEMINI.md or registry.min.json"
+    echo "   Missing GEMINI.md, CLAUDE.md, or registry.min.json"
     exit 1
 fi
 
@@ -73,7 +73,7 @@ echo "   Removed: $removed items"
 echo "   Skipped: $skipped (not found)"
 echo ""
 echo "📦 Remaining (runtime essentials):"
-echo "   GEMINI.md              ← Rules (always active)"
+echo "   GEMINI.md / CLAUDE.md  ← Rules (always active)"
 echo "   ARCHITECTURE.md        ← System map"
 echo "   registry.min.json      ← Skill discovery"
 echo "   core/                  ← Core logic"
