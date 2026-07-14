@@ -1,5 +1,6 @@
 import json
 import os
+os.environ["PB_LOCAL_MEMORY"] = "1"
 import subprocess
 import sys
 import tempfile

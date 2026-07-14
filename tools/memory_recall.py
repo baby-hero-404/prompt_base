@@ -26,7 +26,7 @@ SENTINEL_NAME = "last_recall_session"
 
 
 def _sentinel_path(root: str) -> Path:
-    return Path(root) / ".ai-memory" / SENTINEL_NAME
+    return me.get_memory_dir(root) / SENTINEL_NAME
 
 
 def _already_served(root: str, session_id) -> bool:

@@ -3,6 +3,8 @@ transcript from a repo SUBDIRECTORY, then memory_recall.py with a related
 first prompt, and confirm the relevant memory pointer is surfaced from the
 root-level DB (not scattered under the subdirectory)."""
 
+import os
+os.environ["PB_LOCAL_MEMORY"] = "1"
 import json
 import subprocess
 import sys

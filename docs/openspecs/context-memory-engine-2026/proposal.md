@@ -16,12 +16,12 @@ This proposal upgrades `project-memory` from *passive markdown files* into an **
 - **Storage:** local vector DB via **`sqlite-vec`** (a single-file SQLite extension — no server, fits the per-project + hook model).
 - **Embeddings:** **local ONNX model by default** (`fastembed`, offline, no API key) to preserve this framework's self-contained ethos; an external embedding API is an opt-in fallback via env var.
 - **Trigger:** **Claude Code hooks** — `PreCompact` compresses+embeds before the harness compacts; `SessionStart` recalls relevant memories.
-- **Location:** **per-project**, in `.ai-memory/` at the repo root (gitignored).
+- **Location:** **global**, under `~/.claude/prompt_base_memory/{project_name}-{project_hash}/` (can be overridden to local `.ai-memory/` at the repo root by setting `PB_LOCAL_MEMORY=1`).
 
 ## The philosophy bridge (important)
 The existing memory system deliberately chose **git-versioned, PR-reviewable markdown**. A binary vector DB would break that. This proposal keeps the property by splitting **source of truth** from **index**:
 - **Source of truth = markdown**, git-tracked: ADRs in `docs/ai/adr/` and rollup summaries in `docs/ai/archive/`. Still human-readable and reviewable in PRs.
-- **Index = `.ai-memory/memory.db`**, gitignored and **fully rebuildable** from that markdown via `make memory-rebuild`. It is a cache, never the only copy of anything.
+- **Index = `memory.db`** (stored globally, or local `.ai-memory/` if `PB_LOCAL_MEMORY=1`), fully rebuildable from that markdown via `make memory-rebuild`. It is a cache, never the only copy of anything.
 
 ## What Changes
 

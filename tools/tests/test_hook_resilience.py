@@ -12,6 +12,8 @@ future `pip install` into this environment fails loudly instead of silently
 making these tests stop covering what they claim to cover.
 """
 
+import os
+os.environ["PB_LOCAL_MEMORY"] = "1"
 import json
 import subprocess
 import sys

@@ -1,4 +1,5 @@
 import os
+os.environ["PB_LOCAL_MEMORY"] = "1"
 import sqlite3
 import subprocess
 import sys

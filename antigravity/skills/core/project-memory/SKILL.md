@@ -30,7 +30,7 @@ The context files in `docs/ai/` below are this project's **current-state** memor
 |-------|----------|------------|
 | Decision records (source of truth, git-tracked) | `docs/ai/adr/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, from `<adr>` tags you emit |
 | Session rollups (source of truth, git-tracked) | `docs/ai/archive/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, heuristic, every compaction |
-| Derived index (gitignored, disposable) | `.ai-memory/memory.db` | Both hooks; rebuild anytime with `make memory-rebuild` |
+| Derived index (disposable, stored globally) | `~/.claude/prompt_base_memory/{project_name}-{hash}/` (or `.ai-memory/` if `PB_LOCAL_MEMORY=1`) | Both hooks; rebuild anytime with `make memory-rebuild` |
 
 **To get a decision captured**, emit this exact tag when you make (or the user confirms) an architecturally significant choice — the `PreCompact` hook extracts it by strict regex, not heuristic guessing, so the tag must match verbatim:
 

@@ -25,6 +25,26 @@ ROOT_MARKERS = ("CLAUDE.md", "GEMINI.md", "ARCHITECTURE.md")
 # Claude Code hook_event_name values this engine knows how to normalize.
 CLAUDE_EVENTS = ("PreCompact", "SessionStart", "UserPromptSubmit")
 
+
+def get_memory_dir(root: str) -> Path:
+    """Resolve the storage directory for context memory database and logs.
+    Defaults to global user directory ~/.claude/prompt_base_memory/{project_name}-{project_hash}
+    to avoid polluting the project repository. Falls back to local project-root/.ai-memory
+    if PB_LOCAL_MEMORY env var is set to '1'."""
+    if os.environ.get("PB_LOCAL_MEMORY") == "1":
+        return Path(root) / ".ai-memory"
+
+    base_dir = os.environ.get("PB_GLOBAL_MEMORY_DIR")
+    if base_dir:
+        base_path = Path(base_dir).resolve()
+    else:
+        base_path = Path("~/.claude/prompt_base_memory").expanduser()
+
+    abs_root = str(Path(root).resolve())
+    project_hash = hashlib.sha256(abs_root.encode("utf-8")).hexdigest()[:16]
+    folder_name = f"{Path(abs_root).name}-{project_hash}"
+    return base_path / folder_name
+
 SECRET_PATTERNS = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),                     # OpenAI/Anthropic-style keys
     re.compile(r"AKIA[0-9A-Z]{16}"),                         # AWS access key id
@@ -70,7 +90,7 @@ def resolve_project_root(cwd: str) -> str:
 
 
 def memory_db_path(root: str) -> str:
-    return str(Path(root) / ".ai-memory" / "memory.db")
+    return str(get_memory_dir(root) / "memory.db")
 
 
 def adr_dir(root: str) -> str:
@@ -125,7 +145,7 @@ def _now_iso() -> str:
 
 def _log(root: str, message: str) -> None:
     try:
-        mem_dir = Path(root) / ".ai-memory"
+        mem_dir = get_memory_dir(root)
         mem_dir.mkdir(parents=True, exist_ok=True)
         with open(mem_dir / "engine.log", "a", encoding="utf-8") as f:
             f.write(f"{_now_iso()} {message}\n")
@@ -164,7 +184,7 @@ def _serialize_vec(vector) -> bytes:
 # ---- schema ----
 
 def connect(root: str) -> sqlite3.Connection:
-    mem_dir = Path(root) / ".ai-memory"
+    mem_dir = get_memory_dir(root)
     mem_dir.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(mem_dir / "memory.db"))
     conn.row_factory = sqlite3.Row
