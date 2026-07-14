@@ -89,3 +89,7 @@ memory-init:
 # Rebuild the derived index from docs/ai/adr/ + docs/ai/archive/ markdown.
 memory-rebuild:
 	@python3 tools/memory_rebuild.py --root .
+
+clone-references: ## Clone external test/skill references
+	@echo "==> Cloning external references..."
+	bash scripts/clone_references.sh
