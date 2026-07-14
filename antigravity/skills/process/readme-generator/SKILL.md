@@ -1,5 +1,7 @@
 ---
+name: readme-generator
 description: "Use when automatically generating a complete and professional README.md by analyzing repository configurations."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # README Generator Skill

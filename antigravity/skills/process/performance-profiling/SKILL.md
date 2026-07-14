@@ -14,7 +14,9 @@ allowed-tools: Read, Glob, Grep, Bash
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
+<!-- contract:ignore -->
 | `scripts/lighthouse_audit.py` | Lighthouse performance audit | `python scripts/lighthouse_audit.py https://example.com` |
+<!-- /contract:ignore -->
 
 ---
 

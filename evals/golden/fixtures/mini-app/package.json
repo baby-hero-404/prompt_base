@@ -1,0 +1,9 @@
+{
+  "name": "mini-app",
+  "version": "1.0.0",
+  "description": "Tiny fixture app used by explore-codebase golden evals.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}

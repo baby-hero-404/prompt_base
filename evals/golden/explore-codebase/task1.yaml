@@ -1,0 +1,9 @@
+prompt: "Read 'mini-app/src/cache.js' and 'mini-app/src/config.js' and tell me what the top hidden gem is. Do not read any other files."
+
+rubric:
+  - name: "Evidence"
+    weight: 2
+    description: "Are hidden gems backed by specific file paths and line numbers?"
+  - name: "Format"
+    weight: 1
+    description: "Does the output follow the report template?"

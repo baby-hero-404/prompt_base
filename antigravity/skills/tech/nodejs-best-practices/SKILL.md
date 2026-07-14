@@ -1,6 +1,6 @@
 ---
 name: nodejs-best-practices
-description: "Use when writing Node.js server code, selecting backend frameworks, or implementing async patterns and security."
+description: "Use when writing Node.js server code, selecting backend frameworks, or implementing async patterns and security. Triggers on node.js, express, backend."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

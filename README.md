@@ -150,9 +150,11 @@ A high-level design intelligence library for building premium interfaces:
 
 Skills are modular knowledge packages that the AI loads on-demand based on user intent.
 
-1. **Create Directory:** `antigravity/skills/<category>/<your-skill-name>` (Categories: `core`, `tech`, `process`, `custom`).
-2. **Add `SKILL.md`:** Must contain YAML frontmatter with a keyword-rich `description` (used by the AI to auto-trigger the skill). Keep the content concise: use tables and code snippets instead of verbose text.
-3. **Register & Validate:** Add it to `registry.min.json` and validate using `make audit`.
+1. **Scaffold:** Run `python scripts/create_skill.py <your-skill-name>` to auto-generate the directory, template, and register it.
+2. **Edit:** Add your knowledge, tables, and code snippets to the generated `SKILL.md`.
+3. **Verify:** Run `make skill-check SKILL=<name>` to pass the 3-Tier Quality Gates (Lint, Trigger Precision, Contract Check).
+4. **Evaluate (Optional):** Run `make skill-eval SKILL=<name>` to run an LLM-as-judge regression test if your skill has `eval: required`. 
+   *(Note: requires `GEMINI_API_KEY` in your `.env` file. You can also override the default model by setting `GEMINI_MODEL="gemini-2.0-flash"`).*
 
 👉 For full instructions, templates, and best practices, refer to the detailed [**Skills Guide**](docs/skills-guide.md).
 
@@ -164,9 +166,12 @@ Skills are modular knowledge packages that the AI loads on-demand based on user 
 - [Component Guide](docs/components.md) - Understanding Rules, Workflows, and the Skill loading protocol.
 - [Governance (GEMINI.md)](GEMINI.md) - Operational rules and request classification logic.
 - [Skills Guide](docs/skills-guide.md) - Detailed guide on building and customizing your own skills.
+- [Quality Gates Summary](docs/quality-gates-summary.md) - Overview of all testing and verification pipelines.
 
 ---
 
 ## 🙏 Acknowledgments
 
 This framework's rigorous process execution, strict behavioral gates, and core workflow skills (including TDD, systematic debugging, planning, and multi-agent coordination) are heavily inspired by and adapted from the [obra/superpowers](https://github.com/obra/superpowers) methodology.
+
+The "Token-Efficient Output" rules (terse speak without losing context), "Auto-Clarity Overrides", and our "JIT v2" Section-level skill loading protocol were directly adapted from the excellent token compression concepts in **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)**.

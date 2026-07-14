@@ -1,6 +1,6 @@
 ---
 name: tailwind-patterns
-description: "Use when writing Tailwind CSS v4 configurations, using container queries, or structuring design tokens."
+description: "Use when writing Tailwind CSS v4 configurations, using container queries, or structuring design tokens. Triggers on tailwind, css, styling."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

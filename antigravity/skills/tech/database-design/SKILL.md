@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: "Use when designing database schemas, creating indexing strategies, selecting an ORM, modeling relationships, or designing Vector DBs / RAG architectures."
+description: "Use when designing database schemas, creating indexing strategies, selecting an ORM, modeling relationships, or designing Vector DBs / RAG architectures. Triggers on database schema, sql, orm."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

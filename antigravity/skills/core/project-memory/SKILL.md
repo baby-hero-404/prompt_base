@@ -1,6 +1,6 @@
 ---
 name: project-memory
-description: "Use when loading or managing persistent project-level context from global memory, including automated long-term memory (ADR capture/recall) via the context memory engine."
+description: "Use when loading or managing persistent project-level context from global memory, including automated long-term memory (ADR capture/recall) via the context memory engine. Triggers on memory, adr capture."
 triggers:
   - session-start
   - "project"

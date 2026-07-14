@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: "Use when writing or running web application E2E tests, Playwright scripts, or performing deep audits."
+description: "Use when writing or running web application E2E tests, Playwright scripts, or performing deep audits. Triggers on e2e, playwright, testing."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -14,9 +14,11 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
+<!-- contract:ignore -->
 | `scripts/playwright_runner.py` | Basic browser test | `python scripts/playwright_runner.py https://example.com` |
 | | With screenshot | `python scripts/playwright_runner.py <url> --screenshot` |
 | | Accessibility check | `python scripts/playwright_runner.py <url> --a11y` |
+<!-- /contract:ignore -->
 
 **Requires:** `pip install playwright && playwright install chromium`
 

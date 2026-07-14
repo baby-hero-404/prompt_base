@@ -1,0 +1,9 @@
+prompt: "Summarize the architecture of the mini-app. Be as concise as possible but strictly follow the Token-Efficient Output rule: Do NOT use any invented abbreviations like 'cfg' or 'impl', do NOT use arrow-chain shorthand (like A -> B), and do NOT mangle words. Compress by dropping filler words instead."
+
+rubric:
+  - name: "No Abbreviations"
+    weight: 2
+    description: "Does the output avoid invented abbreviations (like cfg, impl) and arrow chains?"
+  - name: "Conciseness"
+    weight: 1
+    description: "Is the output highly concise, having dropped unnecessary filler words?"

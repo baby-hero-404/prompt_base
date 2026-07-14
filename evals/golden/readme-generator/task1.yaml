@@ -1,0 +1,9 @@
+prompt: "Read 'mini-app/package.json' and 'mini-app/index.js' and generate a professional README.md for this Express app. Do not create any file, just output the markdown text."
+
+rubric:
+  - name: "Structure"
+    weight: 2
+    description: "Does the README include Title, Description, Installation, and Usage sections?"
+  - name: "Accuracy"
+    weight: 2
+    description: "Does it accurately reflect the fact that it's a Node.js project (since it has a package.json)?"

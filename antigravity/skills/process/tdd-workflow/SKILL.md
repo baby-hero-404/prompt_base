@@ -1,6 +1,6 @@
 ---
 name: tdd-workflow
-description: "Use when implementing any feature or bugfix, before writing implementation code."
+description: "Use when implementing any feature or bugfix, before writing implementation code. Triggers on tdd, test driven."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

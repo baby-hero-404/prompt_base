@@ -1,6 +1,6 @@
 ---
 name: typescript-expert
-description: "Use when writing TypeScript code, implementing complex types, configuring monorepos, or setting up TS tooling."
+description: "Use when writing TypeScript code, implementing complex types, configuring monorepos, or setting up TS tooling. Triggers on typescript, types, tsconfig."
 category: framework
 displayName: TypeScript
 color: blue

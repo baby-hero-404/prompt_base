@@ -1,6 +1,6 @@
 ---
 name: docker-expert
-description: "Use when configuring containerization, writing Dockerfiles, optimizing images, or orchestrating via Compose."
+description: "Use when configuring containerization, writing Dockerfiles, optimizing images, or orchestrating via Compose. Triggers on docker, compose, container."
 category: devops
 displayName: Docker Expert
 color: blue

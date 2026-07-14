@@ -1,0 +1,15 @@
+You are an expert judge evaluating two outputs for the same task.
+Compare Old Version and New Version based on the following rubric:
+
+{rubric}
+
+Old Version:
+{old_res}
+
+New Version:
+{new_res}
+
+Score the new version relative to the old version.
+Output only a JSON object like:
+{"score": 0, "reasoning": "...", "status": "SAME"}
+status can be WORSE (score < 0), SAME (score == 0), BETTER (score > 0).

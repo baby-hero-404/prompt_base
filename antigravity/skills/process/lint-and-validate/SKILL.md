@@ -1,6 +1,6 @@
 ---
 name: lint-and-validate
-description: "Use after modifying code to run automatic quality control, linting, formatting, or static analysis checks."
+description: "Use when you have modified code to run automatic quality control, linting, formatting, or static analysis checks. Triggers on lint, validate, format, check."
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -38,8 +38,10 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Scripts
 
+<!-- contract:ignore -->
 | Script | Purpose | Command |
 |--------|---------|---------|
 | `tools/lint_runner.py` | Unified lint check | `python tools/lint_runner.py <project_path>` |
 | `tools/type_coverage.py` | Type coverage analysis | `python tools/type_coverage.py <project_path>` |
+<!-- /contract:ignore -->
 

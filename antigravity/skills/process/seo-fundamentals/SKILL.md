@@ -1,6 +1,6 @@
 ---
 name: seo-fundamentals
-description: "Use when auditing or improving TRADITIONAL Google SEO, E-E-A-T factors, Core Web Vitals, or Google algorithm compliance. For AI search engines (ChatGPT/Perplexity), use geo-fundamentals instead."
+description: "Use when auditing or improving TRADITIONAL Google SEO, E-E-A-T factors, Core Web Vitals, or Google algorithm compliance. For AI search engines (ChatGPT/Perplexity), use geo-fundamentals instead. Triggers on seo, core web vitals."
 allowed-tools: Read, Glob, Grep
 ---
 

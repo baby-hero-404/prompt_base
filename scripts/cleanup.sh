@@ -27,30 +27,8 @@ fi
 # ── Files & directories to remove ──
 # These are development-only and NOT needed at runtime.
 
-DEV_ITEMS=(
-    # Developer documentation
-    "docs"              # Developer guides (skills-guide, etc.)
-
-    # Project metadata (not needed after install)
-    "README.md"         # Project README
-    ".gitignore"        # Git ignore rules
-    ".git"              # Git history
-    "Makefile"          # Dev build targets
-)
-
 removed=0
 skipped=0
-
-for item in "${DEV_ITEMS[@]}"; do
-    target="$ROOT/$item"
-    if [[ -e "$target" ]]; then
-        rm -rf "$target"
-        echo "  🗑️  Removed: $item"
-        removed=$((removed + 1))
-    else
-        skipped=$((skipped + 1))
-    fi
-done
 
 # ── Clean any __pycache__ directories ──
 pycache_count=$(find "$ROOT" -type d -name "__pycache__" 2>/dev/null | wc -l)
@@ -59,12 +37,7 @@ if [[ "$pycache_count" -gt 0 ]]; then
     echo "  🗑️  Removed: $pycache_count __pycache__ dir(s)"
 fi
 
-# ── Remove scripts/ directory LAST (this script lives here!) ──
-if [[ -d "$ROOT/scripts" ]]; then
-    rm -rf "$ROOT/scripts"
-    echo "  🗑️  Removed: scripts"
-    removed=$((removed + 1))
-fi
+
 
 # ── Summary ──
 echo ""

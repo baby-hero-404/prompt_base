@@ -1,6 +1,6 @@
 ---
 name: react-patterns
-description: "Use when building React applications, working with Hooks, composing components, or optimizing React performance."
+description: "Use when building React applications, working with Hooks, composing components, or optimizing React performance. Triggers on react, hooks, components."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

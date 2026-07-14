@@ -1,6 +1,6 @@
 ---
 name: architecture
-description: "Use when analyzing system design, evaluating trade-offs, making architectural decisions, or documenting ADRs."
+description: "Use when analyzing system design, evaluating trade-offs, making architectural decisions, or documenting ADRs. Triggers on architecture, system design, adr."
 allowed-tools: Read, Glob, Grep
 ---
 

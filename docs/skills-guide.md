@@ -180,29 +180,32 @@ python3 scripts/generate_registry.py
 
 If your skill introduces a **new category** or changes the skill count significantly, update the skills table in `ARCHITECTURE.md`.
 
-### Step 7: Validate
+### Step 7: Validate (Quality Gates)
 
-Run the audit to verify everything is wired up correctly:
-
-```bash
-# Run the full audit
-make audit
-
-# Or run directly
-python3 scripts/checklist.py .
-```
-
-The audit checks for:
-- ✅ Skill directory exists at the path specified in registry
-- ✅ `SKILL.md` file exists in the skill directory
-- ✅ `description` field is not empty
-- ✅ No orphaned skills (directories with SKILL.md not in registry)
-
-Run the integration test:
+Run the quality check pipeline to verify your skill:
 
 ```bash
-make test
+make skill-check SKILL=skill-name
 ```
+
+This automatically runs:
+- **Tier 1 (Linter)**: Validates frontmatter, description, and formatting.
+- **Tier 2 (Trigger Test)**: Tests trigger keyword precision and recall.
+- **Tier 0 (Contract Check)**: Validates all repo paths, CLIs, tools, and referenced skills.
+
+### Step 8: Golden Eval (Optional)
+
+If your skill has `eval: required` in its frontmatter, `skill-check` will prompt you to run an evaluation:
+
+```bash
+make skill-eval SKILL=skill-name
+```
+This compares the `HEAD` version vs your changes against predefined golden tasks using an LLM Judge. 
+> **Configuration**: This test runs a live LLM evaluation loop. It requires a `GEMINI_API_KEY` to be defined in your `.env` file at the root of the project. By default, it uses `gemini-2.0-flash`, but you can customize this by setting `GEMINI_MODEL="your-preferred-model"` in the `.env` file.
+
+### Step 9: Merge and Journal
+
+If changes are successful and verified, merge them. Record any significant evaluation outcomes or rollbacks in `docs/reports/skill-feedback.md`.
 
 ---
 

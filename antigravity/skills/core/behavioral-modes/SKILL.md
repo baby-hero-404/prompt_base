@@ -9,6 +9,8 @@ allowed-tools: Read, Glob, Grep
 ## Purpose
 This skill defines distinct behavioral modes that optimize AI performance for specific tasks. Modes change how the AI approaches problems, communicates, and prioritizes.
 
+**Auto-Clarity Override:** The Auto-Clarity Override (from the system prompt) applies to EVERY mode/persona defined here. Automatically drop any concise or terse persona requirements for security warnings, destructive/irreversible actions, or ambiguous multi-step sequences.
+
 ---
 
 ## Available Modes

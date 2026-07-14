@@ -1,10 +1,13 @@
 # Report: Token Reduction Opportunities for Prompt Base
 
-> Revised 2026-07-13. The original draft of this report borrowed ideas from the
+> Revised 2026-07-14. The original draft of this report borrowed ideas from the
 > "Awesome LLM Token Reduction" list without checking them against this
-> project's architecture; several of its premises were wrong. This revision
-> keeps only what applies to `prompt_base` as it actually exists, and records
-> why the rejected ideas were rejected so future sessions don't re-propose them.
+> project's architecture; several of its premises were wrong. The 2026-07-13
+> revision fixed that, but two of its own recommendations (P2, P3) turned out
+> to already be implemented by the *same commit* (`b58e467`) that introduced
+> this report — the report's action items just weren't updated to reflect it.
+> This revision corrects that: verified-open items and already-done items are
+> now separated, and the stale claims are marked so they aren't re-proposed.
 
 ## 1. Overview and Current State
 
@@ -50,52 +53,60 @@ session** — which this repo controls 100%.
 
 ## 4. Recommended Enhancements (prioritized by ROI)
 
-### P1 — Eliminate the `CLAUDE.md` double-load (high impact, trivial effort)
+### P1 — Eliminate the `CLAUDE.md` double-load (high impact, trivial effort) — OPEN
 
-When working inside this repo, **two identical copies** of the framework rules
-are loaded into context every request: the installed `~/.claude/CLAUDE.md` and
-the repo's own checked-in `CLAUDE.md`. That is the single largest recurring
-token cost the project controls, and no micro-optimization can offset paying
-it twice.
+Verified 2026-07-14: `diff CLAUDE.md ~/.claude/CLAUDE.md` returns no
+differences. When working inside this repo, **two identical copies** of the
+framework rules are loaded into context every request: the installed
+`~/.claude/CLAUDE.md` and the repo's own checked-in `CLAUDE.md`. That is the
+single largest recurring token cost the project controls, and no
+micro-optimization can offset paying it twice.
 
 **Action:** replace the repo's `CLAUDE.md` with a thin pointer (a few lines:
 "this repo is the source of the framework; the active rules are the installed
 `~/.claude/CLAUDE.md`"). The full content remains authored here and shipped by
 `make install-claude`.
 
-### P2 — Replace mandatory session-start full reads with lazy loading
+### P2 — Replace mandatory session-start full reads with lazy loading — ALREADY IMPLEMENTED
 
-`CLAUDE.md` TIER 0 currently mandates: *"Read `ARCHITECTURE.md` and
-`registry.min.json` at session start"* — a large fixed cost paid even for
-trivial questions. It also directly contradicts `core/memory_rules.md` rule 5,
-which forbids reading the full registry and prescribes `grep` lookups instead.
-The costlier rule wins because it sits at TIER 0.
+**Correction:** this was already done, in the same commit (`b58e467`) that
+introduced this report. `core/rules.md:46` and `CLAUDE.md`'s "System Map Read"
+section both read: *"Grep `registry.min.json` by trigger keyword when
+selecting a skill. Read `ARCHITECTURE.md` by section only when needed for the
+task. Do not read the entire files upfront."* This is the lazy form and no
+longer contradicts `core/memory_rules.md` rule 5. No further action needed —
+kept here only so it isn't re-proposed.
 
-**Action:** rewrite the TIER 0 rule to the lazy form (grep the registry by
-trigger keyword when selecting a skill; read `ARCHITECTURE.md` by section when
-needed). This applies the framework's own Progressive Disclosure principle to
-the framework itself.
+### P3 — Enforce a SKILL.md size budget via `checklist.py` — ALREADY IMPLEMENTED
 
-### P3 — Enforce a SKILL.md size budget via `checklist.py` (enforced, not advisory)
+**Correction:** also already done in commit `b58e467`. `scripts/checklist.py`
+lines 112-114 already warn when a `SKILL.md` exceeds 175 lines, recommending
+the move to a `references/` subdirectory — the enforcement mechanism this
+item asked for already exists.
 
-Skills load whole on trigger; some have grown large (`project-memory` is
-~380 lines). The project already has an enforcement mechanism — `make audit` /
-`scripts/checklist.py` — so a size check fits the established pattern:
-warn when a `SKILL.md` exceeds a threshold (e.g. 150 lines) and recommend
-moving detail into a `references/` subdirectory read on demand.
+The supporting claim was also wrong: `project-memory/SKILL.md` is **140
+lines**, not "~380" — it doesn't even approach the existing 175-line
+threshold. No further action needed — kept here only so it isn't re-proposed.
 
-### P4 — Terse mode for autonomous loops (low effort, modest impact)
+### P4 — Terse mode for autonomous loops (low effort, modest impact) — OPEN
 
-Add a terse/minimal-output mode to `behavioral-modes/SKILL.md` for sub-agent
-loops with no user interaction: no conversational filler, single-sentence
-status only. Note `core/memory_rules.md` rule 7 ("No Meta-Chat") already
-covers half of this — this is an incremental extension, not a new pillar.
-Impact is bounded because output style is also governed by the host harness.
+Verified 2026-07-14: `behavioral-modes/SKILL.md` has no dedicated
+terse/autonomous mode — only a mention of dropping "concise or terse persona
+requirements" for safety overrides. Add a terse/minimal-output mode for
+sub-agent loops with no user interaction: no conversational filler,
+single-sentence status only. `core/memory_rules.md` rule 7 ("No Meta-Chat")
+already covers half of this — this is an incremental extension, not a new
+pillar. Impact is bounded because output style is also governed by the host
+harness.
 
 ## 5. Conclusion
 
 The original draft looked for savings at a layer this project cannot touch
 (harness tool traffic) while missing the waste in the layer it fully controls
 (its own always-on context). The memory engine already solved the macro
-problem; the remaining wins are P1 and P2 — both are single-file markdown
-edits, measurable by counting tokens before and after, with zero runtime risk.
+problem, and the 2026-07-13 revision already fixed the lazy-loading rule (P2)
+and added the size-budget check (P3) in the same commit — both are done. The
+one remaining high-ROI item is **P1** (drop the duplicate `CLAUDE.md`), plus
+the low-effort **P4** (terse autonomous-loop mode). Both are single-file
+markdown edits, measurable by counting tokens before and after, with zero
+runtime risk.

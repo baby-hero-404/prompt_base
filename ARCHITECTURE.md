@@ -86,6 +86,16 @@ All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.
 
 ---
 
+## 📦 Installation & Distribution (Manifest Flow)
+
+Prompt Base is installed globally to `~/.gemini` and `~/.claude` using a strict, manifest-driven flow to prevent workspace clutter:
+
+1. **`install.manifest.json`**: Defines the targets, inclusion globs (`*`), and strict exclusions (`docs/`, `scripts/`, `.git*`, `Makefile`, etc.).
+2. **`scripts/install_manifest.py`**: A zero-dependency Python script that reads the manifest and performs a filtered file copy. It safely overwrites read-only destinations and prunes excluded files during traversal.
+3. **`make install`**: Triggers the python script for all targets and runs post-install assertions to guarantee `registry.min.json` and core directories were copied successfully.
+
+---
+
 ## 📚 The "Librarian" Pattern
 
 Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain dormant until activated.
@@ -274,3 +284,14 @@ Create SKILL.md → Register in registry.min.json → make audit
 | Discovery   | `orchestrator`        | Orchestration  |
 | Efficiency  | `orchestrator`        | Orchestration  |
 | Quality     | `test-engineer`       | Quality        |
+
+## Skill Quality Gates
+
+Prompt Base implements a 5-Tier Verification Pipeline for skills:
+1. **Tier 1 (Linter)**: Syntax and metadata validation (`scripts/skill_lint.py`)
+2. **Tier 2 (Trigger)**: Precision/Recall testing for keyword triggers (`scripts/trigger_test.py`)
+3. **Tier 0 (Contract)**: Static analysis for path/tool/skill references (`scripts/skill_contract.py`)
+4. **Tier 3 (Golden Eval)**: LLM-as-judge regression testing (`scripts/golden_eval.py`)
+5. **Tier 4 (Journal)**: Human-in-the-loop rollback tracking (`docs/reports/skill-feedback.md`)
+
+Workflow: Edit -> `make skill-check` -> `make skill-eval` -> Merge -> Journal.

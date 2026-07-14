@@ -30,7 +30,7 @@ priority: CRITICAL
 ## 2. Design Rules
 
 - **High-Level Config**: Keep configurable data at high levels (constants, env, config files).
-- **Polymorphism**: Prefer polymorphism to `if/else` or `switch/case` for behavior selection.
+- **Polymorphism**: Prefer polymorphism to 'if/else' or 'switch/case' for behavior selection.
 - **Async/Threading**: Separate multi-threading or async orchestration code from business logic.
 - **Dependency Injection**: Use DI to decouple classes from their direct dependencies.
 - **Law of Demeter**: A class should know only its direct dependencies (don't reach through objects).

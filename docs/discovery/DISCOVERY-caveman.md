@@ -40,9 +40,13 @@ graph TD
 3. **The "Auto-Clarity" Escape Hatch**
    The prompt instructs the AI to automatically drop the "caveman" persona for security warnings, destructive actions (e.g., `DROP TABLE`), or complex multi-step sequences where omitted conjunctions could cause dangerous ambiguity. 
 
+4. **Token-Savings Evaluation Framework (Evals)**
+   Instead of just testing code logic, the project measures the actual efficacy of skills using a control-arm approach. It runs identical prompts under three conditions (`__baseline__`, `__terse__`, and `<skill>`) using real LLM calls and saves the outputs as snapshots (`snapshots/results.json`). It then uses `tiktoken` to count and compare output tokens. This isolates the true token savings of the skill versus simply asking the AI to "be concise".
+
 ## Most Valuable Files (Hidden Gems)
 1. `skills/caveman/SKILL.md` — **Why:** A masterclass in advanced prompt engineering. It demonstrates how to enforce strict behavioral constraints, handle multi-lingual inputs ("compress style, not language"), and optimize for BPE tokenizers.
 2. `src/hooks/caveman-activate.js` — **Why:** Showcases how to build resilient CLI hooks that gracefully handle missing files, inject dynamic context, and interact with the host CLI's UI (via statusline flag files).
+3. `evals/README.md` & `evals/llm_run.py` — **Why:** An elegant, pragmatic framework for empirically proving token compression rates without conflating the skill's performance with base LLM conciseness.
 
 ## Top 10 Things Worth Learning
 | # | Concept | File | Why Useful | Difficulty | Order |
@@ -74,6 +78,7 @@ graph TD
 ## Anti-Patterns / Improvements
 - **Brittle Integration Logic:** The installer relies on specific structural assumptions about 30+ different agents. If Cursor or Windsurf changes their internal directory structure, the installer breaks. *Lesson: Abstract agent detection into a configuration-driven registry rather than hardcoded logic.*
 - **Global State Pollution:** Writing flag files like `.caveman-active` to `~/.claude` is pragmatic but relies on global state. *Lesson: Prefer passing state via environment variables or standardized MCP contexts when available.*
+- **Missing Fidelity Checks in Evals:** The evaluation framework measures token reduction perfectly, but doesn't test if the AI hallucinated or dropped crucial technical details to achieve that brevity. *Lesson: Efficiency evals should pair token-counting with an LLM-as-judge to score the accuracy (fidelity) of the compressed output.*
 
 ## Overall Evaluation
 | Architecture | Maintainability | Scalability | Clean Code | Learning Value |

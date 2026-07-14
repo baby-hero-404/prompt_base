@@ -1,6 +1,6 @@
 ---
 name: api-patterns
-description: "Use when designing APIs, selecting between REST/GraphQL/tRPC, or defining response formats, versioning, and pagination."
+description: "Use when designing APIs, selecting between REST/GraphQL/tRPC, or defining response formats, versioning, and pagination. Triggers on api design, graphql, rest."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -75,7 +75,9 @@ Before designing an API:
 
 ## Script
 
+<!-- contract:ignore -->
 | Script | Purpose | Command |
 |--------|---------|---------|
 | `tools/api_validator.py` | API endpoint validation | `python tools/api_validator.py <project_path>` |
+<!-- /contract:ignore -->
 

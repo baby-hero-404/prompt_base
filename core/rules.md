@@ -57,3 +57,4 @@
 - **MVC (Minimal Viable Context)**: Unload skills immediately after use.
 - **No Conversational Bloat**: Do not ask "The user wants X?" or apologize for errors. State the action and execute.
 - **Diffs over Full Writes**: When editing, only output the necessary changes.
+- **Token-Efficient Output**: Ban invented abbreviations (e.g. `cfg`, `impl`) and arrow chains (`->`). Compress stylistic filler, not actual words. Never compress or translate the user's spoken language.

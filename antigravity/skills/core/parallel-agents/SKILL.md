@@ -1,6 +1,6 @@
 ---
 name: parallel-agents
-description: "Use when facing 2+ independent tasks that can be worked on concurrently without shared state or sequential dependencies."
+description: "Use when facing 2+ independent tasks that can be worked on concurrently without shared state or sequential dependencies. Triggers on parallel, concurrent tasks."
 allowed-tools: Read, Glob, Grep
 ---
 

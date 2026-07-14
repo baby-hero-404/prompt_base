@@ -11,12 +11,53 @@ test:
 
 # Regenerate registry.min.json from all SKILL.md files
 registry:
+	@python3 scripts/skill_lint.py --pre-gen
 	@python3 scripts/generate_registry.py
+	@python3 scripts/skill_lint.py
 
 # Scaffold a new skill: make new-skill NAME=my-skill CATEGORY=tech DESCRIPTION="..."
 CATEGORY ?= custom
 new-skill:
 	@python3 scripts/create_skill.py "$(NAME)" --category "$(CATEGORY)" --description "$(DESCRIPTION)"
+
+# Run skill gates
+skill-check:
+	@if [ -z "$(SKILL)" ]; then \
+		echo "Running Tier 1 (Lint) for all skills..."; \
+		python3 scripts/skill_lint.py; \
+		echo "Running Tier 2 (Trigger Test)..."; \
+		python3 scripts/trigger_test.py; \
+		echo "Running Tier 0 (Contract)..."; \
+		python3 scripts/skill_contract.py; \
+	else \
+		echo "Running Tier 1 (Lint) for $(SKILL)..."; \
+		python3 scripts/skill_lint.py; \
+		echo "Running Tier 2 (Trigger Test)..."; \
+		python3 scripts/trigger_test.py; \
+		echo "Running Tier 0 (Contract)..."; \
+		python3 scripts/skill_contract.py; \
+		echo "Please run make skill-eval SKILL=$(SKILL) if eval: required."; \
+	fi
+
+skill-eval:
+	@if [ -z "$(SKILL)" ]; then echo "SKILL required"; exit 1; fi
+	@if [ -n "$(PROMPT)" ]; then \
+		python3 scripts/golden_eval.py $(SKILL) --prompt "$(PROMPT)"; \
+	else \
+		python3 scripts/golden_eval.py $(SKILL); \
+	fi
+
+eval-all:
+	@echo "Running evaluation for all skills in evals/golden/..."
+	@for skill_dir in evals/golden/*/; do \
+		skill_name=$$(basename "$$skill_dir"); \
+		if [ "$$skill_name" != "fixtures" ]; then \
+			echo "======================================"; \
+			echo "Evaluating $$skill_name"; \
+			echo "======================================"; \
+			python3 scripts/golden_eval.py "$$skill_name" || exit 1; \
+		fi \
+	done
 
 # Install/Update locally to ~/.gemini
 # NOTE: context-memory-engine hooks are intentionally NOT registered here.
@@ -29,10 +70,10 @@ install-gemini:
 	@mkdir -p ~/.gemini
 	@rm -rf ~/.gemini/core ~/.gemini/tools ~/.gemini/antigravity/agents ~/.gemini/antigravity/skills ~/.gemini/antigravity/global_workflows
 	@if [ -f ~/.gemini/settings.json ]; then cp ~/.gemini/settings.json ~/.gemini/.pb_settings_backup.json; fi
-	@cp -r ./* ~/.gemini/
+	@python3 scripts/install_manifest.py ~/.gemini
 	@if [ -f ~/.gemini/.pb_settings_backup.json ]; then mv ~/.gemini/.pb_settings_backup.json ~/.gemini/settings.json; else rm -f ~/.gemini/settings.json; fi
 	@rm -f ~/.gemini/CLAUDE.md
-	@bash ~/.gemini/scripts/cleanup.sh ~/.gemini
+	@bash scripts/cleanup.sh ~/.gemini
 	@echo "NOTE: context-memory-engine hooks are NOT registered for Gemini yet (adapter unverified, Task 3.4)."
 	@echo "      Use 'make memory-rebuild' + degraded/FTS5 recall manually until that lands."
 	@echo "Gemini Install complete."
@@ -47,7 +88,7 @@ install-claude:
 	@mkdir -p ~/.claude/skills ~/.claude/commands
 	@rm -rf ~/.claude/core ~/.claude/tools ~/.claude/antigravity/agents ~/.claude/antigravity/skills ~/.claude/antigravity/global_workflows
 	@if [ -f ~/.claude/settings.json ]; then cp ~/.claude/settings.json ~/.claude/.pb_settings_backup.json; fi
-	@cp -r ./* ~/.claude/
+	@python3 scripts/install_manifest.py ~/.claude
 	@if [ -f ~/.claude/.pb_settings_backup.json ]; then mv ~/.claude/.pb_settings_backup.json ~/.claude/settings.json; else rm -f ~/.claude/settings.json; fi
 	@python3 scripts/install_settings.py --source settings.json --dest ~/.claude/settings.json
 	@rm -f ~/.claude/GEMINI.md
@@ -55,7 +96,7 @@ install-claude:
 	@find ~/.claude/commands -maxdepth 1 -type l ! -exec test -e {} \; -delete
 	@find ~/.claude/antigravity/skills -mindepth 2 -maxdepth 2 -type d -exec ln -snf {} ~/.claude/skills/ \;
 	@find ~/.claude/antigravity/global_workflows -maxdepth 1 -name "*.md" -exec ln -snf {} ~/.claude/commands/ \;
-	@bash ~/.claude/scripts/cleanup.sh ~/.claude
+	@bash scripts/cleanup.sh ~/.claude
 	@echo "Claude Install complete."
 
 # Install for both

@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "Use before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: "Use when brainstorming before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation. Triggers on brainstorm, creative ideas."
 allowed-tools: Read, Glob, Grep
 ---
 

@@ -1,0 +1,19 @@
+{
+  "targets": [
+    "~/.claude",
+    "~/.gemini"
+  ],
+  "includes": [
+    "*"
+  ],
+  "excludes": [
+    "references/",
+    ".git*",
+    "docs/",
+    "scripts/",
+    "__pycache__/",
+    "Makefile",
+    "README.md",
+    "*.pyc"
+  ]
+}

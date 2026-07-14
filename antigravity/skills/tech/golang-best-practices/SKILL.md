@@ -33,8 +33,8 @@ Go is built for concurrency. Use these patterns to build resilient systems:
 | **Worker Pool** | Limiting resource usage (CPU/DB) | `chan T` + `sync.WaitGroup` |
 | **Bailout** | First response wins | `select` + `context` |
 | **Pipeline** | Stream processing | `chan T` stages |
-| **Error Groups** | Parallel tasks where one fail cancels all | `golang.org/x/sync/errgroup` |
-| **Rate Limiting** | Preventing service abuse | `time.Ticker` or `x/time/rate` |
+| **Error Groups** | Parallel tasks where one fail cancels all | 'golang.org/x/sync/errgroup' |
+| **Rate Limiting** | Preventing service abuse | `time.Ticker` or 'x/time/rate' |
 
 ---
 
@@ -52,7 +52,7 @@ Go is built for concurrency. Use these patterns to build resilient systems:
 ## 4. Modern Go Features (v1.23+)
 
 ### Generics (Type Parameters)
-Use only when logic is identical across types (e.g., `Map/Filter` on slices, generic cache).
+Use only when logic is identical across types (e.g., 'Map/Filter' on slices, generic cache).
 ```go
 func Map[T, U any](s []T, f func(T) U) []U {
     res := make([]U, len(s))
