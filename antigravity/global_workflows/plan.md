@@ -10,6 +10,7 @@ $ARGUMENTS
 
 ## 🔴 CRITICAL RULES
 
+0. **OpenSpec Precedence Check** - If `docs/openspecs/<task>/` already exists for this task (or a spec set will be authored next), write the roadmap into that set (`proposal.md`/`tasks.md`) instead of creating a PLAN file. Never maintain both.
 1. **NO CODE WRITING** - This command creates plan file only
 2. **Use project-planner agent** - NOT Claude Code's native Plan subagent
 3. **Socratic Gate** - Ask clarifying questions before planning

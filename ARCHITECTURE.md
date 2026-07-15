@@ -198,9 +198,9 @@ No plan or spec needed. The agent applies the Socratic Gate lightly (confirms un
 /plan → [openspec-authoring] → /create or /enhance → /review
 ```
 
-1. `/plan` generates a high-level roadmap (`docs/plans/PLAN-YYYYMMDD-{slug}.md`) with phases and agent assignments.
-2. The `openspec-authoring` skill decomposes the approved plan into 4 specification files (`docs/openspecs/{task}/`: proposal, specs, design, tasks).
-3. `/create` or `/enhance` implements the tasks defined in the spec set.
+1. `/plan` runs Socratic discovery and drafts the high-level roadmap (phases, agent assignments).
+2. The `openspec-authoring` skill decomposes the approved roadmap into 4 specification files (`docs/openspecs/{task}/`: proposal, specs, design, tasks). The roadmap content lands in `proposal.md`/`tasks.md` — **no separate `docs/plans/PLAN-*.md` is kept** (Plan Artifact Precedence: the OpenSpec set IS the plan; the plan file is only the fallback when no spec set is authored).
+3. `/create` or `/enhance` implements the tasks defined in the spec set, tracking state via `tasks.md` checkboxes.
 4. `/review` performs a pre-commit quality check before merging.
 
 ### New Application (High Complexity)

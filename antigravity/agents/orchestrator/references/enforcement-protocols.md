@@ -6,7 +6,7 @@
 
 | Check | Tool / Verification | Action if Failed |
 |-------|---------------------|------------------|
-| **PLAN.md exists?** | `ls docs/plans/PLAN-*.md` | Use `project-planner` first. |
+| **Plan artifact exists?** | `ls docs/openspecs/*/tasks.md docs/plans/PLAN-*.md` (OpenSpec set takes precedence) | Use `project-planner` first. |
 | **Project Type?** | WEB / MOBILE / BACKEND | Determine via analyzer or ask. |
 | **Agent Routing?** | Check matrix in `agent-registry.md` | Re-route to valid agents. |
 | **Socratic Gate?** | 3 strategic questions answered | Ask questions before code. |

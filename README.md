@@ -110,7 +110,7 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | Command | Description | When to Use |
 |---------|-------------|-------------|
 | `/brainstorm [topic]` | Structured exploration with 3+ approaches, pros/cons, effort estimates | Exploring options before committing |
-| `/plan [task]` | Socratic discovery → technical blueprint at `docs/plans/PLAN-*.md` | Before any complex feature (**no code**) |
+| `/plan [task]` | Socratic discovery → technical blueprint (into the task's OpenSpec set if one exists, else `docs/plans/PLAN-*.md`) | Before any complex feature (**no code**) |
 | `/create [feature]` | Full-stack implementation via coordinated expert agents | Building new features or prototypes |
 | `/enhance [feature]` | Iterative improvement with dependency management | Adding modules to existing code |
 | `/test [file/feature]` | Unit/integration tests (AAA pattern), coverage checks | Ensuring code reliability |

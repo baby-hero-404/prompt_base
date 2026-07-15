@@ -26,7 +26,7 @@ You MUST complete these items in order:
 2. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 3. **Propose 2-3 approaches** — with trade-offs and your recommendation
 4. **Present design** — in sections scaled to complexity, get user approval after each section
-5. **Write design doc** — save to `docs/plans/PLAN-YYYYMMDD-{slug}.md` and commit
+5. **Write design doc** — if an OpenSpec set exists for the task (`docs/openspecs/<task>/`), save the design into its `design.md`; otherwise save to `docs/plans/PLAN-YYYYMMDD-{slug}.md`. Commit either way.
 6. **Spec self-review** — check for placeholders, contradictions, ambiguity, scope
 7. **User reviews written spec** — ask user to review before proceeding
 8. **Transition to implementation** — invoke plan-writing skill

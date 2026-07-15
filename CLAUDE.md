@@ -60,9 +60,11 @@ Intent Analysis → Consult {FRAMEWORK_ROOT}/registry.min.json
 | **QUESTION**     | "what is", "how does", "explain"                    | TIER 0 only                    | Text Response                |
 | **SURVEY/INTEL** | "analyze", "list files", "overview"                 | TIER 0 + Explorer              | Session Intel (No File)      |
 | **SIMPLE CODE**  | "fix", "add", "change" (single file)                | TIER 0 + TIER 1 (lite)         | Inline Edit                  |
-| **COMPLEX CODE** | "build", "create", "implement", "refactor"          | TIER 0 + TIER 1 (full) + Agent | **docs/plans/PLAN-\*.md Required** |
-| **DESIGN/UI**    | "design", "UI", "page", "dashboard"                 | TIER 0 + TIER 1 + Agent        | **docs/plans/PLAN-\*.md Required** |
+| **COMPLEX CODE** | "build", "create", "implement", "refactor"          | TIER 0 + TIER 1 (full) + Agent | **Plan artifact Required** (see Precedence) |
+| **DESIGN/UI**    | "design", "UI", "page", "dashboard"                 | TIER 0 + TIER 1 + Agent        | **Plan artifact Required** (see Precedence) |
 | **SLASH CMD**    | /brainstorm, /create, /debug, /deploy, /enhance, /orchestrate, /plan, /status, /test, /init-context, /deep-solve, /restructure, /review, /ux-ui-pro | Command-specific flow | Variable |
+
+> 📌 **Plan Artifact Precedence**: If an OpenSpec set exists for the task (`docs/openspecs/<task>/`), it **IS** the plan — put implementation detail in its `design.md`/`tasks.md` and track state via `tasks.md` checkboxes. Do **NOT** create a parallel `docs/plans/PLAN-*.md`. The plan file `docs/plans/PLAN-YYYYMMDD-{slug}.md` is the **fallback** for complex work without a spec set. Never maintain both for the same task.
 
 ---
 

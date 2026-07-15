@@ -9,6 +9,8 @@ priority: HIGH
 
 > **Single Source of Truth**: An OpenSpec set is the authoritative contract between human intent and agent execution. The Coder Agent reads Specs — not raw descriptions.
 
+> 📌 **Plan Artifact Precedence**: A complete OpenSpec set **satisfies** the COMPLEX CODE plan requirement (see `core/classifier.md`). Do NOT create a parallel `docs/plans/PLAN-*.md` for the same task — implementation detail (data structures, test code, exact commands) belongs in `design.md`/`tasks.md`, and execution state is tracked via `tasks.md` checkboxes. If `tasks.md` feels too high-level to code from, enrich it in place instead of writing a separate plan.
+
 ---
 
 ## 1. Directory Convention
