@@ -14,7 +14,7 @@ import os
 import time
 
 DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.1-flash-lite")
-MAX_TOOL_TURNS = 6
+MAX_TOOL_TURNS = 10
 
 # Global counter to track API calls
 llm_call_count = 0
