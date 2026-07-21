@@ -25,6 +25,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 | **Learning-oriented output** | Everything converges into ranked concepts, a reading order, and a roadmap the user can follow. |
 | **Transfer-oriented output** | The most valuable deliverable is the **Applied Takeaways** section: each idea mapped onto the user's current project with a concrete implementation sketch (which table, which module, which library) — not generic advice. |
 | **Read-only mission** | Discovery never modifies the target project. The only artifact written is the report. |
+| **Progressive disclosure** | Always explain a concept in plain, non-technical language first — what it is and why it matters — before naming files, functions, or implementation details. A reader unfamiliar with the project must be able to follow the report's opening before hitting any jargon. |
 
 ## 2. The 12 Analysis Perspectives
 
@@ -66,15 +67,19 @@ Whenever you find a piece of code that is particularly elegant, **stop and expla
 ### Phase 3: Teach (produce the report)
 - **Prefer the Artifacts system when available** — it renders rich markdown (Mermaid diagrams, tables) and keeps the target project untouched. Otherwise write to `docs/discovery/DISCOVERY-<project-name>.md`, or to the scratchpad / inline for small projects or when the target repo shouldn't gain files.
 - Use the template below. For large projects, expand "Top 10" to "Top 20 Things Worth Learning".
-- **Digest mode:** when the user wants a quick research pass rather than a full report ("tóm tắt", "quick look", "có gì hay", "áp dụng được gì"), output only four sections: **Best Features → Applied Takeaways for <current project> → Architecture & Key Paths → Main Flow (mermaid)**. Depth of evidence stays the same; only coverage shrinks.
+- **Digest mode:** when the user wants a quick research pass rather than a full report ("tóm tắt", "quick look", "có gì hay", "áp dụng được gì"), output only five sections: **TL;DR → Best Features → Applied Takeaways for <current project> → Architecture & Key Paths → Main Flow (mermaid)**. Depth of evidence stays the same; only coverage shrinks.
 
 ## 4. Report Template
 
 ```markdown
 # Project Discovery Report — <name>
 
-## High Level
-<what it is, stack, size, maturity — 5 lines max>
+## TL;DR
+<Plain, non-technical language. What problem does this project solve, and how, in 2-3 sentences? No jargon, no acronyms, no file paths — a newcomer should understand this before reading anything else.>
+
+## Technical Overview
+- **Stack:** <languages, frameworks, key infra>
+- **Scale/Maturity:** <size, age, production status>
 
 ## Best Features
 <3–5 standout capabilities with design analysis and any measured results; file refs>
@@ -135,3 +140,4 @@ Whenever you find a piece of code that is particularly elegant, **stop and expla
 | Modify or "fix" the target project during discovery. | Stay read-only; improvements go in the Anti-Patterns section. |
 | Give generic takeaways ("you could use RRF too"). | Map every takeaway onto the current project's real stack: name the table, module, or library to change. |
 | Skip scoring or the roadmap when the project is small. | Deliver all 12 perspectives in full-report mode — scale depth, not coverage (digest mode is the sanctioned shortcut). |
+| Open with dense jargon (attestation schemes, gate names, framework-specific terms) before the reader knows what the project is. | Lead every section with a plain-language TL;DR of the concept, then drop into file names and implementation detail. |

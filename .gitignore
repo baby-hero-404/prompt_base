@@ -24,3 +24,5 @@ Thumbs.db
 references/*
 
 .tmp/*
+.tokensave
+.claude/*

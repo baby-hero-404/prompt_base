@@ -30,6 +30,21 @@ FUNCTION_DECLARATIONS = [
         },
     },
     {
+        "name": "read_files",
+        "description": "Read the full contents of MULTIPLE files at once. Always prefer this over read_file when you need to examine more than one file to save tool turns.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "paths": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of file paths relative to the workspace root."
+                }
+            },
+            "required": ["paths"],
+        },
+    },
+    {
         "name": "list_files",
         "description": "List files under a directory in the workspace, recursively.",
         "parameters": {
@@ -189,6 +204,23 @@ def execute_tool(name, args, workspace):
                 return f"ERROR: file not found: {args.get('path')}"
             return p.read_text(errors="replace")[:20000]
 
+        if name == "read_files":
+            paths = args.get("paths", [])
+            if not isinstance(paths, list):
+                return "ERROR: 'paths' must be a list of strings."
+            results = []
+            for path in paths:
+                try:
+                    p = _safe_path(workspace, path)
+                    if not p.is_file():
+                        results.append(f"=== File: {path} ===\nERROR: file not found\n")
+                    else:
+                        content = p.read_text(errors="replace")[:20000]
+                        results.append(f"=== File: {path} ===\n{content}\n")
+                except ValueError as e:
+                    results.append(f"=== File: {path} ===\nERROR: {e}\n")
+            return "\n".join(results)
+
         if name == "list_files":
             base = _safe_path(workspace, args.get("path", "."))
             if not base.exists():
@@ -312,6 +344,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run golden evaluation for a skill.")
     parser.add_argument("skill_name", help="Name of the skill to evaluate")
     parser.add_argument("--prompt", help="Inline prompt to test without needing a task.yaml", default=None)
+    parser.add_argument("--fast", action="store_true", help="Skip baseline and old version to save API calls")
     args = parser.parse_args()
 
     skill_name = args.skill_name
@@ -381,17 +414,21 @@ def main():
             rubric = task['rubric']
             judge_model = task.get('judge_model') or DEFAULT_MODEL
 
-            print(f"  - Running agent with BASELINE (no skill)...", flush=True)
-            baseline_res, base_in, base_out = run_agent(prompt, workspace, root_dir, skill_content="", prefix="baseline_")
-            if baseline_res.startswith("ERROR:"):
-                print(f"\n[FATAL ERROR] {baseline_res}\nEvaluation aborted to save quota.", flush=True)
-                sys.exit(1)
+            if not args.fast:
+                print(f"  - Running agent with BASELINE (no skill)...", flush=True)
+                baseline_res, base_in, base_out = run_agent(prompt, workspace, root_dir, skill_content="", prefix="baseline_")
+                if baseline_res.startswith("ERROR:"):
+                    print(f"\n[FATAL ERROR] {baseline_res}\nEvaluation aborted to save quota.", flush=True)
+                    sys.exit(1)
 
-            print(f"  - Running agent with OLD version (from git HEAD)...", flush=True)
-            old_res, old_in, old_out = run_agent(prompt, workspace, root_dir, old_content, prefix="old_")
-            if old_res.startswith("ERROR:"):
-                print(f"\n[FATAL ERROR] {old_res}\nEvaluation aborted to save quota.", flush=True)
-                sys.exit(1)
+                print(f"  - Running agent with OLD version (from git HEAD)...", flush=True)
+                old_res, old_in, old_out = run_agent(prompt, workspace, root_dir, old_content, prefix="old_")
+                if old_res.startswith("ERROR:"):
+                    print(f"\n[FATAL ERROR] {old_res}\nEvaluation aborted to save quota.", flush=True)
+                    sys.exit(1)
+            else:
+                baseline_res, base_in, base_out = "Skipped in fast mode.", 0, 0
+                old_res, old_in, old_out = "Skipped in fast mode.", 0, 0
             
             print(f"  - Running agent with NEW version (local changes)...", flush=True)
             new_res, new_in, new_out = run_agent(prompt, workspace, root_dir, new_content, prefix="new_")
@@ -399,14 +436,18 @@ def main():
                 print(f"\n[FATAL ERROR] {new_res}\nEvaluation aborted to save quota.", flush=True)
                 sys.exit(1)
 
-            print(f"  - Judging results (Old vs New)...", flush=True)
-            judge = judge_results(old_res, new_res, rubric, judge_model, root_dir, prefix="judge_old_new_")
-            if judge.get('reasoning', '').startswith("Judge call failed:"):
-                print(f"\n[FATAL ERROR] {judge.get('reasoning')}\nEvaluation aborted to save quota.", flush=True)
-                sys.exit(1)
+            if not args.fast:
+                print(f"  - Judging results (Old vs New)...", flush=True)
+                judge = judge_results(old_res, new_res, rubric, judge_model, root_dir, prefix="judge_old_new_")
+                if judge.get('reasoning', '').startswith("Judge call failed:"):
+                    print(f"\n[FATAL ERROR] {judge.get('reasoning')}\nEvaluation aborted to save quota.", flush=True)
+                    sys.exit(1)
 
-            print(f"  - Judging results (Baseline vs New)...", flush=True)
-            judge_base = judge_results(baseline_res, new_res, rubric, judge_model, root_dir, prefix="judge_base_new_")
+                print(f"  - Judging results (Baseline vs New)...", flush=True)
+                judge_base = judge_results(baseline_res, new_res, rubric, judge_model, root_dir, prefix="judge_base_new_")
+            else:
+                judge = {"score": 0, "status": "SAME", "reasoning": "Skipped in fast mode."}
+                judge_base = {"score": 0, "status": "SAME", "reasoning": "Skipped in fast mode."}
 
             status = judge.get('status', 'SAME')
             if status == 'WORSE':

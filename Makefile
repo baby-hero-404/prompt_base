@@ -134,3 +134,6 @@ memory-rebuild:
 clone-references: ## Clone external test/skill references
 	@echo "==> Cloning external references..."
 	bash scripts/clone_references.sh
+
+test-explore-codebase:
+	@$(MAKE) skill-eval SKILL=explore-codebase
