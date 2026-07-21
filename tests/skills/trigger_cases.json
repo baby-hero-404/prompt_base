@@ -1,58 +1,233 @@
 [
-  {"prompt": "explore codebase to see what I can learn", "expect": ["explore-codebase"]},
-  {"prompt": "discover project architecture", "expect": ["explore-codebase", "architecture"]},
-  
-  {"prompt": "write an openspec proposal for this feature", "expect": ["openspec-authoring"]},
-  {"prompt": "create a design doc", "expect": ["openspec-authoring"]},
-  
-  {"prompt": "let's brainstorm some ideas", "expect": ["brainstorming"]},
-  {"prompt": "help me with some creative ideas", "expect": ["brainstorming"]},
-  
-  {"prompt": "lint the code", "expect": ["lint-and-validate"]},
-  {"prompt": "format everything", "expect": ["lint-and-validate"]},
-  
-  {"prompt": "what is the system design?", "expect": ["architecture"]},
-  {"prompt": "let's document the adr", "expect": ["architecture"]},
-  
-  {"prompt": "run concurrent tasks", "expect": ["parallel-agents"]},
-  {"prompt": "execute this in parallel", "expect": ["parallel-agents"]},
-  
-  {"prompt": "capture this into project memory", "expect": ["project-memory"]},
-  {"prompt": "store this in memory", "expect": ["project-memory"]},
-  
-  {"prompt": "design a rest api", "expect": ["api-patterns"]},
-  {"prompt": "use graphql", "expect": ["api-patterns"]},
-  
-  {"prompt": "design database schema", "expect": ["database-design"]},
-  {"prompt": "use an orm", "expect": ["database-design"]},
-  
-  {"prompt": "setup docker compose", "expect": ["docker-expert"]},
-  {"prompt": "build a container", "expect": ["docker-expert"]},
-  
-  {"prompt": "node.js backend setup", "expect": ["nodejs-best-practices"]},
-  {"prompt": "create express server", "expect": ["nodejs-best-practices"]},
-  
-  {"prompt": "build react components", "expect": ["react-patterns"]},
-  {"prompt": "use react hooks", "expect": ["react-patterns"]},
-  
-  {"prompt": "add tailwind styling", "expect": ["tailwind-patterns"]},
-  {"prompt": "use css grid", "expect": ["tailwind-patterns"]},
-  
-  {"prompt": "configure tsconfig", "expect": ["typescript-expert"]},
-  {"prompt": "add typescript types", "expect": ["typescript-expert"]},
-  
-  {"prompt": "optimize seo", "expect": ["seo-fundamentals"]},
-  {"prompt": "improve core web vitals", "expect": ["seo-fundamentals"]},
-  
-  {"prompt": "use test driven development", "expect": ["tdd-workflow"]},
-  {"prompt": "start tdd", "expect": ["tdd-workflow"]},
-  
-  {"prompt": "run e2e playwright", "expect": ["webapp-testing"]},
-  {"prompt": "do e2e testing", "expect": ["webapp-testing"]},
-  
-  {"prompt": "hello how are you", "expect": []},
-  {"prompt": "what time is it", "expect": []},
-  {"prompt": "explain quantum computing", "expect": []},
-  {"prompt": "who won the game last night", "expect": []},
-  {"prompt": "how to boil an egg", "expect": []}
+  {
+    "prompt": "explore codebase to see what I can learn",
+    "expect": [
+      "explore-codebase"
+    ]
+  },
+  {
+    "prompt": "discover project architecture",
+    "expect": [
+      "explore-codebase",
+      "architecture"
+    ]
+  },
+  {
+    "prompt": "write an openspec proposal for this feature",
+    "expect": [
+      "openspec-authoring"
+    ]
+  },
+  {
+    "prompt": "create a design doc",
+    "expect": [
+      "openspec-authoring"
+    ]
+  },
+  {
+    "prompt": "let's brainstorm some ideas",
+    "expect": [
+      "brainstorming"
+    ]
+  },
+  {
+    "prompt": "help me with some creative ideas",
+    "expect": [
+      "brainstorming"
+    ]
+  },
+  {
+    "prompt": "lint the code",
+    "expect": [
+      "lint-and-validate"
+    ]
+  },
+  {
+    "prompt": "format everything",
+    "expect": [
+      "lint-and-validate"
+    ]
+  },
+  {
+    "prompt": "what is the system design?",
+    "expect": [
+      "architecture"
+    ]
+  },
+  {
+    "prompt": "let's document the adr",
+    "expect": [
+      "architecture"
+    ]
+  },
+  {
+    "prompt": "run concurrent tasks",
+    "expect": [
+      "parallel-agents"
+    ]
+  },
+  {
+    "prompt": "execute this in parallel",
+    "expect": [
+      "parallel-agents"
+    ]
+  },
+  {
+    "prompt": "capture this into project memory",
+    "expect": [
+      "project-memory"
+    ]
+  },
+  {
+    "prompt": "store this in memory",
+    "expect": [
+      "project-memory"
+    ]
+  },
+  {
+    "prompt": "design a rest api",
+    "expect": [
+      "api-patterns"
+    ]
+  },
+  {
+    "prompt": "use graphql",
+    "expect": [
+      "api-patterns"
+    ]
+  },
+  {
+    "prompt": "design database schema",
+    "expect": [
+      "database-design"
+    ]
+  },
+  {
+    "prompt": "use an orm",
+    "expect": [
+      "database-design"
+    ]
+  },
+  {
+    "prompt": "setup docker compose",
+    "expect": [
+      "docker-expert"
+    ]
+  },
+  {
+    "prompt": "build a container",
+    "expect": [
+      "docker-expert"
+    ]
+  },
+  {
+    "prompt": "node.js backend setup",
+    "expect": [
+      "nodejs-best-practices"
+    ]
+  },
+  {
+    "prompt": "create express server",
+    "expect": [
+      "nodejs-best-practices"
+    ]
+  },
+  {
+    "prompt": "build react components",
+    "expect": [
+      "react-patterns"
+    ]
+  },
+  {
+    "prompt": "use react hooks",
+    "expect": [
+      "react-patterns"
+    ]
+  },
+  {
+    "prompt": "add tailwind styling",
+    "expect": [
+      "tailwind-patterns"
+    ]
+  },
+  {
+    "prompt": "use css grid",
+    "expect": [
+      "tailwind-patterns"
+    ]
+  },
+  {
+    "prompt": "configure tsconfig",
+    "expect": [
+      "typescript-expert"
+    ]
+  },
+  {
+    "prompt": "add typescript types",
+    "expect": [
+      "typescript-expert"
+    ]
+  },
+  {
+    "prompt": "optimize seo",
+    "expect": [
+      "seo-fundamentals"
+    ]
+  },
+  {
+    "prompt": "improve core web vitals",
+    "expect": [
+      "seo-fundamentals"
+    ]
+  },
+  {
+    "prompt": "use test driven development",
+    "expect": [
+      "tdd-workflow"
+    ]
+  },
+  {
+    "prompt": "start tdd",
+    "expect": [
+      "tdd-workflow"
+    ]
+  },
+  {
+    "prompt": "run e2e playwright",
+    "expect": [
+      "webapp-testing"
+    ]
+  },
+  {
+    "prompt": "do e2e testing",
+    "expect": [
+      "webapp-testing"
+    ]
+  },
+  {
+    "prompt": "hello how are you",
+    "expect": []
+  },
+  {
+    "prompt": "what time is it",
+    "expect": []
+  },
+  {
+    "prompt": "explain quantum computing",
+    "expect": []
+  },
+  {
+    "prompt": "who won the game last night",
+    "expect": []
+  },
+  {
+    "prompt": "how to boil an egg",
+    "expect": []
+  },
+  {
+    "prompt": "optimize shell command context using rtk",
+    "expect": [
+      "rtk-token-killer"
+    ]
+  }
 ]

@@ -175,3 +175,18 @@ Skills are modular knowledge packages that the AI loads on-demand based on user 
 This framework's rigorous process execution, strict behavioral gates, and core workflow skills (including TDD, systematic debugging, planning, and multi-agent coordination) are heavily inspired by and adapted from the [obra/superpowers](https://github.com/obra/superpowers) methodology.
 
 The "Token-Efficient Output" rules (terse speak without losing context), "Auto-Clarity Overrides", and our "JIT v2" Section-level skill loading protocol were directly adapted from the excellent token compression concepts in **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)**.
+
+Our shell command token-optimization logic and `rtk-token-killer` skill are powered by **[rtk-ai/rtk](https://github.com/rtk-ai/rtk)** (Rust Token Killer), which filters and shapes terminal command outputs to reduce context token usage by 60–90%.
+
+### 📦 Installing RTK
+
+To install the `rtk` CLI utility on Linux/macOS:
+
+```bash
+# Run the installation script
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+
+# The binary is installed to ~/.local/bin. Add it to your PATH if needed:
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc  # or ~/.zshrc
+```
+
