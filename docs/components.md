@@ -11,8 +11,8 @@ Every project interaction in Prompt Base is governed by three component types, v
 | Type | Target | Behavior | Activation |
 |---|---|---|---|
 | **1. Rules** | `GEMINI.md` / `CLAUDE.md` | Persistent logic & governance | Always Active |
-| **2. Workflows** | `antigravity/global_workflows/*.md` | Multi-step procedural logic | On-Demand (`/slash`) |
-| **3. Skills** | `antigravity/skills/*/SKILL.md` | Specialized domain knowledge | Auto-Triggered (JIT) |
+| **2. Workflows** | global_workflows/*.md | Multi-step procedural logic | On-Demand (`/slash`) |
+| **3. Skills** | `skills/*/SKILL.md` | Specialized domain knowledge | Auto-Triggered (JIT) |
 
 ---
 
@@ -30,7 +30,7 @@ Rules are the "constitution" of the framework. They are injected into the system
 ---
 
 ## 2. Workflows (On-Demand Orchestration)
-**Path:** `~/.gemini/antigravity/global_workflows/`
+**Path:** `~/.gemini/config/global_workflows/`
 
 Workflows are specialized "modes" that coordinate multiple specialist agents to execute complex, multi-step procedures. They are triggered explicitly by the user via slash commands.
 
@@ -43,7 +43,7 @@ Workflows are specialized "modes" that coordinate multiple specialist agents to 
 ---
 
 ## 3. Skills (The Librarian Protocol)
-**Path:** `~/.gemini/antigravity/skills/`
+**Path:** `~/.gemini/config/skills/*/SKILL.md`
 
 Skills are specialized knowledge packs. To maintain a "Minimal Viable Context" (MVC), Prompt Base never loads all skills at once. Instead, it uses the **Librarian Protocol** for Just-In-Time (JIT) loading.
 

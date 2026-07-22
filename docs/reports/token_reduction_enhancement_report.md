@@ -17,8 +17,7 @@ It is *not* a runtime: the tools the agent calls (`Read`, `Grep`, Bash, etc.)
 belong to the host harness, and their outputs enter context directly. Nothing
 in this repo sits between the model and its tools.
 
-The **Automated Context Memory Engine**
-(`docs/openspecs/context-memory-engine-2026/`) already handles the macro
+The **Automated Context Memory Engine** already handles the macro
 problem — long-term memory and session-boundary compression — via two hooks:
 
 - `PreCompact` → `tools/memory_compact.py`: extracts `<adr>`-tagged decisions

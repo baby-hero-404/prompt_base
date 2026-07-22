@@ -29,13 +29,12 @@ def main():
         registry = json.load(f)
         
     skill_triggers = {}
-    for cat, skills in registry.get('skills', {}).items():
-        for skill in skills:
-            name = skill['name']
-            desc = skill.get('description', '')
-            triggers = extract_triggers(desc)
-            if triggers:
-                skill_triggers[name] = triggers
+    for skill in registry.get('skills', []):
+        name = skill['name']
+        desc = skill.get('description', '')
+        triggers = extract_triggers(desc)
+        if triggers:
+            skill_triggers[name] = triggers
 
     # Collision report
     kw_to_skills = defaultdict(list)

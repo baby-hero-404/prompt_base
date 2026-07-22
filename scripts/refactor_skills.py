@@ -8,12 +8,10 @@ def slugify(text):
     return text.strip('-')
 
 def extract_references():
-    skill_root = "./antigravity/skills"
-    for cat in ["core", "tech", "process", "custom"]:
-        cat_dir = os.path.join(skill_root, cat)
-        if not os.path.exists(cat_dir): continue
-        for d in os.listdir(cat_dir):
-            d_path = os.path.join(cat_dir, d)
+    skill_root = "./skills"
+    if os.path.exists(skill_root):
+        for d in os.listdir(skill_root):
+            d_path = os.path.join(skill_root, d)
             skill_md = os.path.join(d_path, "SKILL.md")
             if not os.path.exists(skill_md): continue
 

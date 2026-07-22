@@ -23,14 +23,14 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It 
 
 ### 2. Workflows (On-Demand Modes)
 
-- **Path**: `~/.gemini/antigravity/global_workflows/*.md`
+- **Path**: `~/.gemini/config/global_workflows/*.md`
 - **Purpose**: Define how the agent behaves temporarily, triggered via slash commands.
 - **Activation**: `/plan`, `/review`, `/create`, `/debug`, etc.
 - **Scope**: Global — available in all workspaces.
 
 ### 3. Skills (Auto-Triggered)
 
-- **Path**: `~/.gemini/antigravity/skills/*/SKILL.md`
+- **Path**: `~/.gemini/config/skills/*/SKILL.md`
 - **Purpose**: Specialized knowledge modules automatically invoked when relevant.
 - **Activation**: Keyword matching via `registry.min.json`.
 - **Scope**: Global — available in all workspaces.
@@ -39,49 +39,43 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It 
 
 ## 📁 Directory Structure
 
-All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.gemini`.
+All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.gemini` (or `~/.claude`).
 
 ```
-{FRAMEWORK_ROOT}/                          (~/.gemini)
-├── GEMINI.md                              ← Rules (always active, all projects)
+{FRAMEWORK_ROOT}/                          (~/.gemini or ~/.claude)
+├── GEMINI.md / CLAUDE.md                  ← Rules (always active, all projects — persona, classifier, memory rules folded in)
 ├── ARCHITECTURE.md                        ← This file
 ├── registry.min.json                      ← Unified metadata index
 │
-├── core/                                  ← Core logic
-│   ├── system_prompt.md                   ← Base persona & behaviors
-│   ├── rules.md                           ← Operational rules (TIER 0)
-│   ├── classifier.md                      ← Request type mapping
-│   └── memory_rules.md                    ← Context & token efficiency
+├── agents/                                ← 14 Specialist Agent definitions
+│   ├── orchestrator.md
+│   ├── frontend-specialist.md
+│   ├── backend-specialist.md
+│   └── ...
 │
-├── antigravity/                           ← Antigravity platform integration
-│   ├── agents/                            ← 14 Specialist Agent definitions
-│   │   ├── orchestrator.md
-│   │   ├── frontend-specialist.md
-│   │   ├── backend-specialist.md
-│   │   └── ...
+├── global_workflows/                              ← Workflows (slash commands)
+│   ├── brainstorm.md
+│   ├── plan.md
+│   ├── create.md
+│   ├── debug.md
+│   ├── deploy.md
+│   ├── enhance.md
+│   ├── init-context.md
+│   ├── orchestrate.md
+│   ├── restructure.md
+│   ├── review.md
+│   ├── status.md
+│   ├── test.md
+│   ├── deep-solve.md
+│   └── ux-ui-pro.md
 │
+├── skills/                                ← Skills (auto-trigger)
+│   ├── core/                              ← Core skills (9)
+│   ├── tech/                              ← Technology skills (16)
+│   ├── process/                           ← Process skills (24+)
+│   └── custom/                            ← Custom/user skills
 │
-    ├── global_workflows/                  ← Workflows (slash commands)
-    │   ├── brainstorm.md
-    │   ├── plan.md
-    │   ├── create.md
-    │   ├── debug.md
-    │   ├── deploy.md
-    │   ├── enhance.md
-    │   ├── init-context.md
-    │   ├── orchestrate.md
-    │   ├── restructure.md
-    │   ├── review.md
-    │   ├── status.md
-    │   ├── test.md
-    │   ├── deep-solve.md
-    │   └── ux-ui-pro.md
-    │
-    └── skills/                            ← Skills (auto-trigger)
-        ├── core/                          ← Core skills (8)
-        ├── tech/                          ← Technology skills (16)
-        ├── process/                       ← Process skills (16+)
-        └── custom/                        ← Custom/user skills
+└── projects/                               ← Project templates
 ```
 
 ---
@@ -268,8 +262,8 @@ Create SKILL.md → Register in registry.min.json → make audit
 
 | File | Depends On | Why? |
 | ---- | ---------- | ---- |
-| `{FRAMEWORK_ROOT}/registry.min.json` | All `.md` files in `{FRAMEWORK_ROOT}/antigravity/agents/` and `{FRAMEWORK_ROOT}/antigravity/skills/` | Source of truth for paths and descriptions. |
-| `{FRAMEWORK_ROOT}/GEMINI.md` | `{FRAMEWORK_ROOT}/core/*.md` | Governance and rule enforcement. |
+| `{FRAMEWORK_ROOT}/registry.min.json` | All `.md` files in `{FRAMEWORK_ROOT}/agents/` and `{FRAMEWORK_ROOT}/skills/` | Source of truth for paths and descriptions. |
+| `{FRAMEWORK_ROOT}/GEMINI.md` / `CLAUDE.md` | Self-contained | Governance and rule enforcement. |
 | `ARCHITECTURE.md` | `{FRAMEWORK_ROOT}/registry.min.json` | Statistics and module overview. |
 | `README.md` | `ARCHITECTURE.md` | General project overview and setup. |
 

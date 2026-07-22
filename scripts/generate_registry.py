@@ -45,16 +45,11 @@ def build_registry(framework_dir=".", force_prefix=None):
 
     registry = {
         "agents": [],
-        "skills": {
-            "core": [],
-            "tech": [],
-            "process": [],
-            "custom": []
-        }
+        "skills": []
     }
 
     # Agents
-    agent_dir = os.path.join(abs_framework_root, "antigravity", "agents")
+    agent_dir = os.path.join(abs_framework_root, "agents")
     if os.path.exists(agent_dir):
         for f in sorted(os.listdir(agent_dir)):
             if f.endswith('.md'):
@@ -63,25 +58,23 @@ def build_registry(framework_dir=".", force_prefix=None):
                     "id": f.replace('.md', ''),
                     "name": meta.get('name', f),
                     "description": meta.get('description', ''),
-                    "path": f"{rel_prefix}antigravity/agents/{f}"
+                    "path": f"{rel_prefix}agents/{f}"
                 })
 
-    # Skills (located under antigravity/skills/)
-    skill_categories = ["core", "tech", "process", "custom"]
-    for cat in skill_categories:
-        cat_path = os.path.join(abs_framework_root, "antigravity", "skills", cat)
-        if os.path.exists(cat_path):
-            for d in sorted(os.listdir(cat_path)):
-                skill_dir = os.path.join(cat_path, d)
-                skill_md = os.path.join(skill_dir, "SKILL.md")
-                if os.path.isdir(skill_dir) and os.path.exists(skill_md):
-                    meta = get_frontmatter(skill_md)
-                    registry["skills"][cat].append({
-                        "id": d,
-                        "name": meta.get('name', d),
-                        "description": meta.get('description', ''),
-                        "path": f"{rel_prefix}antigravity/skills/{cat}/{d}"
-                    })
+    # Skills (located directly under skills/)
+    skills_path = os.path.join(abs_framework_root, "skills")
+    if os.path.exists(skills_path):
+        for d in sorted(os.listdir(skills_path)):
+            skill_dir = os.path.join(skills_path, d)
+            skill_md = os.path.join(skill_dir, "SKILL.md")
+            if os.path.isdir(skill_dir) and os.path.exists(skill_md):
+                meta = get_frontmatter(skill_md)
+                registry["skills"].append({
+                    "id": d,
+                    "name": meta.get('name', d),
+                    "description": meta.get('description', ''),
+                    "path": f"{rel_prefix}skills/{d}"
+                })
 
     # Write registry to the framework_dir
     registry_file = os.path.join(abs_framework_root, "registry.min.json")

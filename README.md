@@ -34,11 +34,10 @@ After cleanup, only the runtime essentials remain in `~/.gemini`:
 ├── GEMINI.md              ← Rules (always active)
 ├── ARCHITECTURE.md        ← System map
 ├── registry.min.json      ← Skill discovery
-├── core/                  ← Core logic
 ├── agents/                ← Agent definitions
-└── antigravity/
-    ├── global_workflows/  ← Workflows
-    └── skills/            ← Skills
+├── global_workflows/      ← Workflows
+├── skills/                ← Skills
+└── projects/              ← Project templates
 ```
 
 ---
@@ -50,29 +49,28 @@ Prompt Base is built on **3 global component types**. Each has a dedicated stora
 | # | Component | Purpose | Storage Path | Activation |
 |---|-----------|---------|-------------|------------|
 | 1 | **Rules** | Persistent behavior (coding style, safety, patterns) | `~/.gemini/GEMINI.md` | Always active |
-| 2 | **Workflows** | On-demand modes triggered via slash commands | `~/.gemini/antigravity/global_workflows/*.md` | `/plan`, `/review`, `/create`, etc. |
-| 3 | **Skills** | Auto-triggered knowledge modules | `~/.gemini/antigravity/skills/*/SKILL.md` | Automatic (keyword match) |
+| 2 | **Workflows** | On-demand modes triggered via slash commands | `~/.gemini/config/global_workflows/*.md` | `/plan`, `/review`, `/create`, etc. |
+| 3 | **Skills** | Auto-triggered knowledge modules | `~/.gemini/config/skills/*/SKILL.md` | Automatic (keyword match) |
 
 ### How It Fits Together
 
 ```
 ~/.gemini/                          ← FRAMEWORK_ROOT
-├── GEMINI.md                       ← Rules (always active)
+├── GEMINI.md                       ← Rules (always active, self-contained)
 ├── ARCHITECTURE.md                 ← System map
-├── core/                           ← Core logic (system prompt, rules, classifier)
-├── agents/                         ← 14 Specialist Agent definitions
 ├── registry.min.json               ← Unified metadata index
-└── antigravity/                    ← Antigravity platform integration
-    ├── global_workflows/           ← Workflows (slash commands)
-    │   ├── brainstorm.md
-    │   ├── plan.md
-    │   ├── create.md
-    │   └── ...
-    └── skills/                     ← Skills (auto-trigger)
-        ├── core/
-        ├── tech/
-        ├── process/
-        └── custom/
+├── agents/                         ← 14 Specialist Agent definitions
+├── global_workflows/               ← Workflows (slash commands)
+│   ├── brainstorm.md
+│   ├── plan.md
+│   ├── create.md
+│   └── ...
+├── skills/                         ← Skills (auto-trigger)
+│   ├── core/
+│   ├── tech/
+│   ├── process/
+│   └── custom/
+└── projects/                       ← Project templates
 ```
 
 ---
@@ -101,7 +99,7 @@ You don't need to manually load skills. Simply describe what you want to do, and
 - **Example**: "Refactor this API for performance" → Triggers `backend-specialist` + `performance-optimizer`
 - **Example**: "Write unit tests for this module" → Triggers `test-engineer` + `testing-patterns`
 
-Skills are stored at `~/.gemini/antigravity/skills/*/SKILL.md`.
+Skills are stored at `~/.gemini/skills/*/SKILL.md`.
 
 ### 3. Workflows (Slash Commands)
 
@@ -124,7 +122,7 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | `/orchestrate` | Multi-agent coordination | Tasks requiring multiple perspectives |
 | `/ux-ui-pro` | Design intelligence mode | Premium UI/UX design work |
 
-Workflows are stored at `~/.gemini/antigravity/global_workflows/*.md`.
+Workflows are stored at `~/.gemini/config/global_workflows/*.md`.
 
 ### 4. Specialized Skill: UX/UI Pro Max
 

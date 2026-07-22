@@ -1,5 +1,5 @@
 # Prompt Base - Global Mode
-# Supported: Antigravity
+# Supported: Antigravity 2.x, Claude Code
 
 # Audit project structure
 audit:
@@ -15,10 +15,9 @@ registry:
 	@python3 scripts/generate_registry.py
 	@python3 scripts/skill_lint.py
 
-# Scaffold a new skill: make new-skill NAME=my-skill CATEGORY=tech DESCRIPTION="..."
-CATEGORY ?= custom
+# Scaffold a new skill: make new-skill NAME=my-skill DESCRIPTION="..."
 new-skill:
-	@python3 scripts/create_skill.py "$(NAME)" --category "$(CATEGORY)" --description "$(DESCRIPTION)"
+	@python3 scripts/create_skill.py "$(NAME)" --description "$(DESCRIPTION)"
 
 # Run skill gates
 skill-check:
@@ -67,10 +66,12 @@ eval-all:
 # so this install never clobbers a user's own settings.
 install-gemini:
 	@echo "Installing to ~/.gemini..."
-	@mkdir -p ~/.gemini
-	@rm -rf ~/.gemini/core ~/.gemini/tools ~/.gemini/antigravity/agents ~/.gemini/antigravity/skills ~/.gemini/antigravity/global_workflows
+	@mkdir -p ~/.gemini/config
+	@rm -rf ~/.gemini/tools ~/.gemini/agents ~/.gemini/skills ~/.gemini/global_workflows ~/.gemini/config/skills ~/.gemini/config/global_workflows
 	@if [ -f ~/.gemini/settings.json ]; then cp ~/.gemini/settings.json ~/.gemini/.pb_settings_backup.json; fi
 	@python3 scripts/install_manifest.py ~/.gemini
+	@mv ~/.gemini/skills ~/.gemini/config/skills
+	@mv ~/.gemini/global_workflows ~/.gemini/config/global_workflows
 	@if [ -f ~/.gemini/.pb_settings_backup.json ]; then mv ~/.gemini/.pb_settings_backup.json ~/.gemini/settings.json; else rm -f ~/.gemini/settings.json; fi
 	@rm -f ~/.gemini/CLAUDE.md
 	@bash scripts/cleanup.sh ~/.gemini
@@ -86,16 +87,14 @@ install-gemini:
 install-claude:
 	@echo "Installing to ~/.claude..."
 	@mkdir -p ~/.claude/skills ~/.claude/commands
-	@rm -rf ~/.claude/core ~/.claude/tools ~/.claude/antigravity/agents ~/.claude/antigravity/skills ~/.claude/antigravity/global_workflows
+	@rm -rf ~/.claude/tools ~/.claude/agents ~/.claude/skills ~/.claude/global_workflows
 	@if [ -f ~/.claude/settings.json ]; then cp ~/.claude/settings.json ~/.claude/.pb_settings_backup.json; fi
 	@python3 scripts/install_manifest.py ~/.claude
 	@if [ -f ~/.claude/.pb_settings_backup.json ]; then mv ~/.claude/.pb_settings_backup.json ~/.claude/settings.json; else rm -f ~/.claude/settings.json; fi
 	@python3 scripts/install_settings.py --source settings.json --dest ~/.claude/settings.json
 	@rm -f ~/.claude/GEMINI.md
-	@find ~/.claude/skills -maxdepth 1 -type l ! -exec test -e {} \; -delete
 	@find ~/.claude/commands -maxdepth 1 -type l ! -exec test -e {} \; -delete
-	@find ~/.claude/antigravity/skills -mindepth 2 -maxdepth 2 -type d -exec ln -snf {} ~/.claude/skills/ \;
-	@find ~/.claude/antigravity/global_workflows -maxdepth 1 -name "*.md" -exec ln -snf {} ~/.claude/commands/ \;
+	@find ~/.claude/global_workflows -maxdepth 1 -name "*.md" -exec ln -snf {} ~/.claude/commands/ \;
 	@bash scripts/cleanup.sh ~/.claude
 	@echo "Claude Install complete."
 

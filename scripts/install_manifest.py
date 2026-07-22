@@ -12,22 +12,35 @@ def is_excluded(name, rel_path, is_dir, excludes):
     for ex in excludes:
         if ex.endswith('/'):
             ex_name = ex[:-1]
-            if is_dir and (fnmatch.fnmatch(name, ex_name) or fnmatch.fnmatch(rel_path, ex_name)):
+            # Directory excludes are root-relative only, so a top-level dir
+            # like "references/" doesn't also strip nested skills/*/references/.
+            if is_dir and fnmatch.fnmatch(rel_path, ex_name):
                 return True
         else:
             if fnmatch.fnmatch(name, ex) or fnmatch.fnmatch(rel_path, ex):
                 return True
     return False
 
-def force_copy(src, dst):
+def force_copy(src, dst, target_prefix=""):
     if os.path.exists(dst):
         try:
             os.chmod(dst, 0o666)
         except OSError:
             pass
-    shutil.copy2(src, dst)
 
-def copy_tree_filtered(src_root, dst_root, excludes):
+    if src.endswith('.md'):
+        with open(src, 'r', encoding='utf-8') as f:
+            content = f.read()
+        if target_prefix:
+            content = content.replace('`tools/', f'`{target_prefix}/tools/')
+            content = content.replace('python tools/', f'python {target_prefix}/tools/')
+        with open(dst, 'w', encoding='utf-8') as f:
+            f.write(content)
+        shutil.copystat(src, dst)
+    else:
+        shutil.copy2(src, dst)
+
+def copy_tree_filtered(src_root, dst_root, excludes, target_prefix=""):
     for root, dirs, files in os.walk(src_root):
         rel_root = os.path.relpath(root, src_root)
         if rel_root == '.':
@@ -47,15 +60,15 @@ def copy_tree_filtered(src_root, dst_root, excludes):
                 src_path = os.path.join(root, file)
                 dst_path = os.path.join(dst_root, rel_path)
                 os.makedirs(os.path.dirname(dst_path), exist_ok=True)
-                force_copy(src_path, dst_path)
+                force_copy(src_path, dst_path, target_prefix)
 
 def main():
     if len(sys.argv) < 2:
         print("Usage: install_manifest.py <target_dir>")
         sys.exit(1)
         
-    target = sys.argv[1]
-    target = os.path.expanduser(target)
+    target_prefix = sys.argv[1]
+    target = os.path.expanduser(target_prefix)
     
     manifest_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "install.manifest.json")
     if not os.path.exists(manifest_path):
@@ -65,10 +78,10 @@ def main():
     excludes = manifest.get("excludes", [])
     
     # Source is current working directory where make is run
-    copy_tree_filtered(".", target, excludes)
+    copy_tree_filtered(".", target, excludes, target_prefix)
     
     # Post-install assertions
-    required = ["registry.min.json", "core", "antigravity/skills"]
+    required = ["registry.min.json", "agents", "skills"]
     for req in required:
         if not os.path.exists(os.path.join(target, req)):
             print(f"Error: Required path {req} missing from target {target}")

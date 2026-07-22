@@ -1,156 +1,90 @@
-# CLAUDE.md - Maestro Configuration
+# CLAUDE.md - Prompt Base
 
-> Prompt Base AI Development Orchestrator
-> This file defines how the AI behaves in this workspace.
+> Installed globally at `~/.claude`. Applies to every project.
 
-## 🛠️ CORE CONFIGURATION (Global Mode)
+## Layout
 
-> 🔴 **MANDATORY**: This framework is installed **globally** in `~/.claude`.
-> All paths below use `{FRAMEWORK_ROOT}` which resolves to `~/.claude`.
+| What | Where | When it loads |
+|---|---|---|
+| Rules (this file) | `~/.claude/CLAUDE.md` | Always |
+| Agents | `~/.claude/agents/*.md` | Delegated via the Agent tool |
+| Skills | `~/.claude/skills/*/SKILL.md` | Auto-triggered by keyword match |
+| Workflows | `~/.claude/global_workflows/*.md` | On-demand via `/slash` commands |
+| Registry | `~/.claude/registry.min.json` | Discovery index for the above |
 
-### 3 Component Types
+## How to work
 
-| # | Component | Storage Path | Activation |
-|---|-----------|-------------|------------|
-| 1 | **Rules** | `~/.claude/CLAUDE.md` | Always active (all projects) |
-| 2 | **Workflows** | `~/.claude/antigravity/global_workflows/*.md` | On-demand via `/slash` commands |
-| 3 | **Skills** | `~/.claude/antigravity/skills/*/SKILL.md` | Auto-triggered (keyword match) |
+1. **Classify the request** (table below) before touching any tool.
+2. **Discover**: grep `registry.min.json` by keyword to find a matching skill/agent — don't read it upfront.
+3. **Load**: read only the `SKILL.md` sections you need.
+4. **Execute**, then **forget**: once a sub-task ends, stop referencing that skill's details.
 
-### Core Logic Files
+### Request classifier
 
-| Component          | File Path                                | Purpose                    |
-| ------------------ | ---------------------------------------- | -------------------------- |
-| **System Prompt**  | `./core/system_prompt.md`                | Base persona & behaviors   |
-| **Logic & Policy** | `./core/rules.md`                       | Operational rules (TIER 0) |
-| **Classification** | `./core/classifier.md`                   | Request type mapping       |
-| **Memory Logic**   | `./core/memory_rules.md`                 | Context & token efficiency |
-| **Skill Registry** | `./registry.min.json`                    | Skill discovery & triggers |
+| Type | Trigger words | Requires |
+|---|---|---|
+| Question | "what is", "how does", "explain" | Just answer |
+| Survey | "analyze", "list files", "overview" | Read-only exploration |
+| Simple edit | "fix", "add", "change" (single file) | Confirm understanding, then edit |
+| Complex build | "build", "create", "implement", "refactor" | 3+ clarifying questions first, then a plan artifact |
+| Design/UI | "design", "UI", "page", "dashboard" | Same as complex build |
+| Slash command | `/plan`, `/review`, `/debug`, etc. | Follow that command's own flow |
 
----
+**Plan artifact** (for complex build / design work): use exactly one —
+1. An OpenSpec set at `docs/openspecs/<task>/` if one exists or was requested — detail goes in `design.md`/`tasks.md`, progress tracked via `tasks.md` checkboxes.
+2. Otherwise `docs/plans/PLAN-YYYYMMDD-{slug}.md`.
 
-## 📚 THE "LIBRARIAN" PROTOCOL (START HERE)
+Never keep both for the same task.
 
-> **MANDATORY:** Prompt Base uses **Progressive Disclosure**. Skills remain dormant until explicitly activated.
+## Rules
 
-### 1. Discovery & Activation
+**Clarify before building.** For new features or ambiguous edits, ask at least 3 concrete questions (or confirm understanding for small fixes) before writing code. Don't touch code until that's resolved.
 
-```
-Intent Analysis → Consult {FRAMEWORK_ROOT}/registry.min.json
-    │
-    ├── Find Matching Skill (Core, Tech, Process, custom)
-    ├── Discovery: Search metadata for domain match
-    └── Activation: Load SKILL.md from {FRAMEWORK_ROOT}/antigravity/skills/
-```
+**Explore before asking.** Check the codebase, project docs/memory, and related patterns first; only escalate to the user when the answer genuinely isn't derivable and the decision affects architecture, security, data models, API contracts, or UX.
 
-### 2. Implementation Lifecycle
+**Keep it minimal.** Write only what the task needs — no speculative abstractions. State assumptions and tradeoffs instead of guessing silently. Push back on requested complexity when a simpler approach exists.
 
-1. **Activation**: Read `SKILL.md` for relevant sections.
-2. **Execution**: Specialised agent performs task.
-3. **Review**: Invoke `quality-gatekeeper` to validate.
-4. **Pruning**: Knowledge is moved back to a "dormant" state.
+**Stay surgical.** Touch only what's necessary, match existing style, remove imports/vars your change orphaned. Fix an adjacent bug the moment you see it and note the fix.
 
----
+**Check dependencies.** Before editing a file, check `ARCHITECTURE.md` → File Dependencies and update everything affected together.
 
-## 🔎 REQUEST CLASSIFIER (STEP 2)
+**Document as you go.** Update the relevant `.md` files for what you changed. For spec-driven work, keep an `implementation-notes.md` in `docs/implementation/` with decisions, deviations, and tradeoffs not in the spec.
 
-**Detailed Logic:** `{FRAMEWORK_ROOT}/core/classifier.md`
+**Test and review.** Add tests for the success and failure paths before/with the implementation. Follow the 5-phase deployment process for infra changes. Prefer modern, actively-maintained libraries over legacy patterns.
 
-| Request Type     | Trigger Keywords                                    | Active Tiers                   | Result                       |
-| ---------------- | --------------------------------------------------- | ------------------------------ | ---------------------------- |
-| **QUESTION**     | "what is", "how does", "explain"                    | TIER 0 only                    | Text Response                |
-| **SURVEY/INTEL** | "analyze", "list files", "overview"                 | TIER 0 + Explorer              | Session Intel (No File)      |
-| **SIMPLE CODE**  | "fix", "add", "change" (single file)                | TIER 0 + TIER 1 (lite)         | Inline Edit                  |
-| **COMPLEX CODE** | "build", "create", "implement", "refactor"          | TIER 0 + TIER 1 (full) + Agent | **Plan artifact Required** (see Precedence) |
-| **DESIGN/UI**    | "design", "UI", "page", "dashboard"                 | TIER 0 + TIER 1 + Agent        | **Plan artifact Required** (see Precedence) |
-| **SLASH CMD**    | /brainstorm, /create, /debug, /deploy, /enhance, /orchestrate, /plan, /status, /test, /init-context, /deep-solve, /restructure, /review, /ux-ui-pro | Command-specific flow | Variable |
+## Context hygiene
 
-> 📌 **Plan Artifact Precedence**: If an OpenSpec set exists for the task (`docs/openspecs/<task>/`), it **IS** the plan — put implementation detail in its `design.md`/`tasks.md` and track state via `tasks.md` checkboxes. Do **NOT** create a parallel `docs/plans/PLAN-*.md`. The plan file `docs/plans/PLAN-YYYYMMDD-{slug}.md` is the **fallback** for complex work without a spec set. Never maintain both for the same task.
+- Don't reread `registry.min.json` in full more than once a session — grep it.
+- Don't reread full files when a snippet or line range answers the question.
+- Don't repeat file contents already shown in this conversation; reference path:line instead.
+- Rely on the active plan artifact for state, not chat history.
+- No filler: no apologies, no restating the request, no "the user wants X?" — act.
+- Long-term decisions (architecture calls, rejected alternatives) belong in an ADR, captured automatically by the context memory engine's hooks when installed (`make memory-setup`; see the `project-memory` skill). Without hooks, capture them manually under `docs/ai/`.
 
----
+## Final checklist
 
-## TIER 0: UNIVERSAL RULES (Always Active)
+When the user says "run final checks" or similar:
 
-**Full Policy:** `{FRAMEWORK_ROOT}/core/rules.md`
+| Stage | Command |
+|---|---|
+| Audit | `python scripts/checklist.py .` |
+| Deploy | `python scripts/checklist.py . --url <URL>` |
 
-### 🧹 Clean Code (Summary)
+## Agents (14)
 
-- **Self-Documentation**: Update `.md` files.
-- **Global Testing**: Mandate tests for all changes.
-- **Safety**: Follow deployment phases.
-- **Modern Tech**: Prioritize high-performance, next-gen frameworks/libraries.
-- **Quality**: Review via `quality-gatekeeper`.
-
-### 📁 File Dependency Awareness
-
-1. Check `ARCHITECTURE.md` → File Dependencies
-2. Update ALL affected files together
-
-### 🧘 Behavioral Excellence
-
-- **Intellectual Integrity**: Think before coding; state assumptions; surface tradeoffs.
-- **Simplicity First**: Minimum code; no speculative features.
-- **Surgicality**: Touch only what's needed; fix adjacent bugs immediately + doc.
-- **Goal-Driven**: Define success criteria/tests before implementation.
-
-### 🗺️ System Map Read
-
-> 🔴 **MANDATORY**: Grep `{FRAMEWORK_ROOT}/registry.min.json` by trigger keyword when selecting a skill. Read `ARCHITECTURE.md` by section only when needed for the task. Do not read the entire files upfront.
-
----
-
-## TIER 1: CODE RULES (When Writing Code)
-
-### 🧩 JIT Knowledge Protocol (New)
-
-> 🔴 **MANDATORY**: Skills must be pruned from context once their specific sub-task ends. Do not hold unnecessary knowledge in the context window.
-
-### 📱 Project Type Routing
-
-| Project Type      | Primary Agent                     | Category          |
-| ----------------- | --------------------------------- | ----------------- |
-| **MOBILE**        | `mobile-developer`                | Mobile Specialist |
-| **WEB**           | `frontend-specialist`             | UI/UX & Growth    |
-| **BACKEND**       | `backend-specialist`              | API & Logic       |
-| **ORCHESTRATION** | `orchestrator`, `skill-librarian` | Framework Core    |
-
-### 🛑 GLOBAL SOCRATIC GATE (TIER 0)
-
-**MANDATORY: Every user request must pass through the Socratic Gate before ANY tool use or implementation.**
-
-| Request Type            | Strategy                                      | Required Action                              |
-| ----------------------- | --------------------------------------------- | -------------------------------------------- |
-| **New Feature / Build** | Deep Discovery                                | ASK minimum 3 strategic questions            |
-| **Code Edit / Bug Fix** | Context Check                                 | Confirm understanding + ask impact questions |
-| **Wait:**               | Do NOT write code until user clears the Gate. |
-
----
-
-## 🏁 Final Checklist Protocol
-
-**Trigger**: When the user says "run final checks", "final checks", or similar.
-
-| Task Stage | Command                                     |
-| ---------- | ------------------------------------------- |
-| **Audit**  | `python scripts/checklist.py .`             |
-| **Deploy** | `python scripts/checklist.py . --url <URL>` |
-
----
-
-## 📁 QUICK REFERENCE (14 Agents)
-
-| Agent                   | Domain & Focus                   |
-| ----------------------- | -------------------------------- |
-| `orchestrator`          | Multi-agent coordination (Core)  |
-| `project-planner`       | Discovery & Task Planning (Core) |
-| `explorer-agent`        | Codebase Analysis                |
-| `backend-specialist`    | Server-side & Database Logic     |
-| `frontend-specialist`   | Web UI/UX & Growth               |
-| `mobile-developer`      | Cross-platform Mobile Apps       |
-| `database-architect`    | Schema & Query Optimization      |
-| `test-engineer`         | Quality Assurance & TDD          |
-| `security-auditor`      | Cybersecurity & Audit            |
-| `devops-engineer`       | CI/CD & Production Ops           |
-| `performance-optimizer` | Speed & Core Web Vitals          |
-| `seo-specialist`        | Search Visibility & GEO          |
-| `debugger`              | Root Cause Investigation         |
-| `documentation-writer`  | Technical Writing (On-demand)    |
+| Agent | Domain |
+|---|---|
+| `orchestrator` | Multi-agent coordination |
+| `project-planner` | Discovery & task planning |
+| `explorer-agent` | Codebase analysis |
+| `backend-specialist` | Server-side & database logic |
+| `frontend-specialist` | Web UI/UX & growth |
+| `mobile-developer` | Cross-platform mobile apps |
+| `database-architect` | Schema & query optimization |
+| `test-engineer` | QA & TDD |
+| `security-auditor` | Cybersecurity & audit |
+| `devops-engineer` | CI/CD & production ops |
+| `performance-optimizer` | Speed & Core Web Vitals |
+| `seo-specialist` | Search visibility & GEO |
+| `debugger` | Root cause investigation |
+| `documentation-writer` | Technical writing (on-demand) |

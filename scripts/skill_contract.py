@@ -24,9 +24,13 @@ def main():
         registry = json.load(f)
         
     valid_skills = set()
-    for cat, skills in registry.get('skills', {}).items():
-        for skill in skills:
-            valid_skills.add(skill['name'])
+    for skill in registry.get('skills', []):
+        skill_id = skill['id']
+        skill_path = root_dir / skill['path']
+        if not skill_path.exists():
+            print(f"WARN: Registry references missing path {skill_path}")
+            continue
+        valid_skills.add(skill_id)
             
     valid_agents = set()
     for agent in registry.get('agents', []):
@@ -35,12 +39,9 @@ def main():
     errors = 0
     warnings = 0
     
-    skills_dir = root_dir / 'antigravity' / 'skills'
-    for cat in ['core', 'tech', 'process', 'custom']:
-        cat_dir = skills_dir / cat
-        if not cat_dir.exists():
-            continue
-        for skill_dir in cat_dir.iterdir():
+    skills_dir = root_dir / 'skills'
+    if skills_dir.exists():
+        for skill_dir in skills_dir.iterdir():
             if not skill_dir.is_dir():
                 continue
                 

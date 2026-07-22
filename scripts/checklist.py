@@ -36,12 +36,8 @@ def check_structure():
         f"{root_dir}/ARCHITECTURE.md",
         f"{root_dir}/GEMINI.md",
         f"{root_dir}/registry.min.json",
-        f"{root_dir}/core/system_prompt.md",
-        f"{root_dir}/core/memory_rules.md",
-        f"{root_dir}/core/classifier.md",
-        f"{root_dir}/core/rules.md",
         ]
-    
+
     for f in critical_files:
         if os.path.exists(f):
             print(f"✅ {f} found.")
@@ -50,13 +46,9 @@ def check_structure():
 
     # 2. Directory Structure — 3 component types
     dirs = [
-        f"{root_dir}/core",
-        f"{root_dir}/antigravity/agents",
-        f"{root_dir}/antigravity/skills/core",
-        f"{root_dir}/antigravity/skills/tech",
-        f"{root_dir}/antigravity/skills/process",
-        f"{root_dir}/antigravity/skills/custom",
-        f"{root_dir}/antigravity/global_workflows"
+        f"{root_dir}/agents",
+        f"{root_dir}/skills",
+        f"{root_dir}/global_workflows",
     ]
     
     for d in dirs:
@@ -77,57 +69,52 @@ def check_structure():
                 if not os.path.exists(full_path):
                     issues.append(f"❌ Registry points to non-existent agent: {full_path}")
             
-            # Check Skills (paths now under antigravity/skills/)
-            for cat, skills in registry.get("skills", {}).items():
-                for skill in skills:
-                    full_path = os.path.join(root_dir, skill["path"])
-                    if not os.path.exists(full_path):
-                        issues.append(f"❌ Registry points to non-existent skill ({cat}): {full_path}")
+            # Check Skills (paths now under skills/)
+            for skill in registry.get("skills", []):
+                full_path = os.path.join(root_dir, skill["path"])
+                if not os.path.exists(full_path):
+                    issues.append(f"❌ Registry points to non-existent skill: {full_path}")
         print("✅ Registry consistency check complete.")
 
     # 4. Deep Skill Verification & Orphans
     print("🔍 Performing deep skill verification...")
-    skill_root = f"{root_dir}/antigravity/skills"
+    skill_root = f"{root_dir}/skills"
     registered_paths = set()
     
     # Collect all registered paths
     if os.path.exists(registry_path):
         with open(registry_path, "r") as f:
             registry = json.load(f)
-            for cat, skills in registry.get("skills", {}).items():
-                for skill in skills:
-                    skill_path = os.path.join(root_dir, skill["path"])
-                    registered_paths.add(os.path.abspath(skill_path))
-                    
-                    if not skill.get("description"):
-                        issues.append(f"⚠️ Skill missing description ({cat}): {skill['id']}")
-                    
-                    # Check for SKILL.md
-                    if os.path.isdir(skill_path):
-                        skill_md_path = os.path.join(skill_path, "SKILL.md")
-                        if not os.path.exists(skill_md_path):
-                            issues.append(f"❌ Skill directory missing SKILL.md ({cat}): {skill_path}")
-                        else:
-                            with open(skill_md_path, "r", encoding="utf-8") as smd:
-                                line_count = sum(1 for _ in smd)
-                                if line_count > 175:
-                                    issues.append(f"⚠️ SKILL.md exceeds 175 lines ({line_count} lines) in {skill_path}. Recommend moving details into a references/ subdirectory read on demand.")
-    
+            for skill in registry.get("skills", []):
+                skill_path = os.path.join(root_dir, skill["path"])
+                registered_paths.add(os.path.abspath(skill_path))
+
+                if not skill.get("description"):
+                    issues.append(f"⚠️ Skill missing description: {skill['id']}")
+
+                # Check for SKILL.md
+                if os.path.isdir(skill_path):
+                    skill_md_path = os.path.join(skill_path, "SKILL.md")
+                    if not os.path.exists(skill_md_path):
+                        issues.append(f"❌ Skill directory missing SKILL.md: {skill_path}")
+                    else:
+                        with open(skill_md_path, "r", encoding="utf-8") as smd:
+                            line_count = sum(1 for _ in smd)
+                            if line_count > 175:
+                                issues.append(f"⚠️ SKILL.md exceeds 175 lines ({line_count} lines) in {skill_path}. Recommend moving details into a references/ subdirectory read on demand.")
+
     # Check for Orphans
-    skill_categories = ["core", "tech", "process", "custom"]
-    for cat in skill_categories:
-        cat_dir = os.path.join(skill_root, cat)
-        if os.path.exists(cat_dir):
-            for d in os.listdir(cat_dir):
-                d_path = os.path.join(cat_dir, d)
-                if os.path.isdir(d_path):
-                    if os.path.exists(os.path.join(d_path, "SKILL.md")):
-                        if os.path.abspath(d_path) not in registered_paths:
-                             issues.append(f"⚠️ Orphaned skill found: {d_path}")
+    if os.path.exists(skill_root):
+        for d in os.listdir(skill_root):
+            d_path = os.path.join(skill_root, d)
+            if os.path.isdir(d_path):
+                if os.path.exists(os.path.join(d_path, "SKILL.md")):
+                    if os.path.abspath(d_path) not in registered_paths:
+                         issues.append(f"⚠️ Orphaned skill found: {d_path}")
 
     # 5. Workflow Verification
     print("🔍 Checking workflows...")
-    workflow_dir = f"{root_dir}/antigravity/global_workflows"
+    workflow_dir = f"{root_dir}/global_workflows"
     if os.path.isdir(workflow_dir):
         workflow_files = [f for f in os.listdir(workflow_dir) if f.endswith(".md")]
         print(f"✅ Found {len(workflow_files)} workflow(s) in {workflow_dir}")
@@ -135,7 +122,7 @@ def check_structure():
         issues.append(f"❌ Missing workflow directory: {workflow_dir}")
 
     # 6. Orphaned Agents Check
-    agents_dir = f"{root_dir}/antigravity/agents"
+    agents_dir = f"{root_dir}/agents"
     if os.path.exists(agents_dir):
         agent_ids = set()
         if os.path.exists(registry_path):

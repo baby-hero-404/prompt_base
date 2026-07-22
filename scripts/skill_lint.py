@@ -58,17 +58,13 @@ def lint_skill(skill_dir, registry_data, pre_gen=False):
     elif len(lines) > 150:
         warnings.append(f"Body > 150 lines ({len(lines)}) in {skill_dir.name}")
         
-    # Validates registry sync
     if not pre_gen:
         found = False
-        for cat in registry_data.get('skills', {}).values():
-            for skill in cat:
-                if skill.get('name') == name:
-                    found = True
-                    if skill.get('description') != description:
-                        errors.append(f"Description mismatch with registry.min.json for {skill_dir.name}")
-                    break
-            if found:
+        for skill in registry_data.get('skills', []):
+            if skill.get('name') == name:
+                found = True
+                if skill.get('description') != description:
+                    errors.append(f"Description mismatch with registry.min.json for {skill_dir.name}")
                 break
                 
         if not found:
@@ -79,7 +75,7 @@ def lint_skill(skill_dir, registry_data, pre_gen=False):
 def main():
     pre_gen = '--pre-gen' in sys.argv
     root_dir = Path(__file__).resolve().parent.parent
-    skills_dir = root_dir / 'antigravity' / 'skills'
+    skills_dir = root_dir / 'skills'
     registry_path = root_dir / 'registry.min.json'
     
     with open(registry_path, 'r') as f:
@@ -88,11 +84,8 @@ def main():
     total_errors = 0
     total_warnings = 0
     
-    for category in ['core', 'tech', 'process', 'custom']:
-        cat_dir = skills_dir / category
-        if not cat_dir.exists():
-            continue
-        for skill_dir in cat_dir.iterdir():
+    if skills_dir.exists():
+        for skill_dir in skills_dir.iterdir():
             if not skill_dir.is_dir():
                 continue
             errs, warns = lint_skill(skill_dir, registry_data, pre_gen)

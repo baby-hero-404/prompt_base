@@ -33,10 +33,10 @@ User Request → Orchestrator reads registry.min.json
 
 | Category | Path | Use For |
 |----------|------|---------|
-| `core` | `antigravity/skills/core/` | Framework fundamentals (coding standards, planning, brainstorming) |
-| `tech` | `antigravity/skills/tech/` | Technology-specific knowledge (React, Go, Docker, etc.) |
-| `process` | `antigravity/skills/process/` | Development workflows (testing, security, deployment, etc.) |
-| `custom` | `antigravity/skills/custom/` | Project-specific or user-created skills |
+| `core` | `skills/core/` | Framework fundamentals (coding standards, planning, brainstorming) |
+| `tech` | `skills/tech/` | Technology-specific knowledge (React, Go, Docker, etc.) |
+| `process` | `skills/process/` | Development workflows (testing, security, deployment, etc.) |
+| `custom` | `skills/custom/` | Project-specific or user-created skills |
 
 ---
 
@@ -59,14 +59,14 @@ Name your directory using `kebab-case` (lowercase with hyphens):
 
 ```bash
 # Example: adding a "redis-patterns" skill to the tech category
-mkdir -p antigravity/skills/tech/redis-patterns
+mkdir -p skills/tech/redis-patterns
 ```
 
 ### Step 3: Create the SKILL.md File
 
 Every skill **must** have a `SKILL.md` file. This is the only required file.
 
-Create `antigravity/skills/tech/redis-patterns/SKILL.md`:
+Create `skills/tech/redis-patterns/SKILL.md`:
 
 ```markdown
 ---
@@ -155,7 +155,7 @@ Add your skill entry to `registry.min.json` in the appropriate category:
                 "id": "redis-patterns",
                 "name": "redis-patterns",
                 "description": "Redis caching patterns, data structures, and best practices. Use for caching, sessions, pub/sub, and rate limiting.",
-                "path": "antigravity/skills/tech/redis-patterns"
+                "path": "skills/tech/redis-patterns"
             }
         ]
     }
@@ -168,7 +168,7 @@ Add your skill entry to `registry.min.json` in the appropriate category:
 > | `id` | Directory name |
 > | `name` | `name` from SKILL.md frontmatter |
 > | `description` | `description` from SKILL.md frontmatter |
-> | `path` | Relative path: `antigravity/skills/<category>/<skill-name>` |
+> | `path` | Relative path: `skills/<category>/<skill-name>` |
 
 **Alternative:** Run the registry generator script to auto-generate from all SKILL.md files:
 
@@ -275,13 +275,13 @@ Here's a complete walkthrough of adding a `graphql-patterns` skill:
 ### 1. Create directory
 
 ```bash
-mkdir -p antigravity/skills/tech/graphql-patterns
+mkdir -p skills/tech/graphql-patterns
 ```
 
 ### 2. Create SKILL.md
 
 ```bash
-cat > antigravity/skills/tech/graphql-patterns/SKILL.md << 'EOF'
+cat > skills/tech/graphql-patterns/SKILL.md << 'EOF'
 ---
 name: graphql-patterns
 description: GraphQL API design patterns, schema design, resolvers, and performance. Use for GraphQL, Apollo, schema, query, mutation, subscription.
@@ -328,7 +328,7 @@ Add this entry to `"skills" > "tech"` array:
     "id": "graphql-patterns",
     "name": "graphql-patterns",
     "description": "GraphQL API design patterns, schema design, resolvers, and performance. Use for GraphQL, Apollo, schema, query, mutation, subscription.",
-    "path": "antigravity/skills/tech/graphql-patterns"
+    "path": "skills/tech/graphql-patterns"
 }
 ```
 

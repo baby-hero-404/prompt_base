@@ -332,10 +332,9 @@ def judge_results(old_res, new_res, rubric, model, root_dir, prefix=""):
 
 
 def find_skill_dir(root_dir, skill_name):
-    for cat in ['core', 'tech', 'process', 'custom']:
-        p = root_dir / 'antigravity' / 'skills' / cat / skill_name
-        if p.exists():
-            return p
+    p = root_dir / 'skills' / skill_name
+    if p.exists():
+        return p
     return None
 
 

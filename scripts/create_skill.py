@@ -11,8 +11,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from generate_registry import build_registry
 
 FRAMEWORK_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CATEGORIES = ["core", "tech", "process", "custom"]
-
 SKILL_TEMPLATE = """---
 name: {name}
 description: "{description}"
@@ -40,15 +38,14 @@ def slugify(name: str) -> str:
 
 def load_existing_skill_ids():
     ids = set()
-    for cat in CATEGORIES:
-        cat_path = os.path.join(FRAMEWORK_ROOT, "antigravity", "skills", cat)
-        if os.path.isdir(cat_path):
-            ids.update(d for d in os.listdir(cat_path) if os.path.isdir(os.path.join(cat_path, d)))
+    skills_path = os.path.join(FRAMEWORK_ROOT, "skills")
+    if os.path.isdir(skills_path):
+        ids.update(d for d in os.listdir(skills_path) if os.path.isdir(os.path.join(skills_path, d)))
     return ids
 
 
 def load_existing_agent_ids():
-    agent_dir = os.path.join(FRAMEWORK_ROOT, "antigravity", "agents")
+    agent_dir = os.path.join(FRAMEWORK_ROOT, "agents")
     if not os.path.isdir(agent_dir):
         return set()
     return {f[:-3] for f in os.listdir(agent_dir) if f.endswith(".md")}
@@ -57,7 +54,6 @@ def load_existing_agent_ids():
 def main():
     parser = argparse.ArgumentParser(description="Scaffold a new skill for Prompt Base.")
     parser.add_argument("name", help="Skill name, e.g. 'rust-patterns' (will be slugified).")
-    parser.add_argument("--category", choices=CATEGORIES, default="custom")
     parser.add_argument("--description", default="")
     parser.add_argument("--trigger-case", help="A seed prompt to add to trigger_cases.json")
     parser.add_argument("--eval", action="store_true", help="Add eval: required to frontmatter")
@@ -86,7 +82,7 @@ def main():
     if slug in existing_agents:
         print(f"⚠️  Warning: an agent named '{slug}' already exists. This may confuse routing.")
 
-    skill_dir = os.path.join(FRAMEWORK_ROOT, "antigravity", "skills", args.category, slug)
+    skill_dir = os.path.join(FRAMEWORK_ROOT, "skills", slug)
     if os.path.exists(skill_dir):
         sys.exit(f"❌ Directory already exists on disk: {skill_dir} (registry may be stale — run `make registry`).")
 

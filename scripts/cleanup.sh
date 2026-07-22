@@ -49,8 +49,12 @@ echo "📦 Remaining (runtime essentials):"
 echo "   GEMINI.md / CLAUDE.md  ← Rules (always active)"
 echo "   ARCHITECTURE.md        ← System map"
 echo "   registry.min.json      ← Skill discovery"
-echo "   core/                  ← Core logic"
 echo "   tools/                 ← Agent utilities"
-echo "   antigravity/agents/    ← Agent definitions"
-echo "   antigravity/skills/    ← Skills (auto-trigger)"
-echo "   antigravity/global_workflows/  ← Workflows (slash commands)"
+echo "   agents/                ← Agent definitions"
+if [ "$ROOT" = "/home/ubuntu/.gemini" ]; then
+    echo "   config/skills/         ← Skills (auto-trigger)"
+    echo "   config/global_workflows/ ← Workflows (slash commands)"
+else
+    echo "   skills/                ← Skills (auto-trigger)"
+    echo "   global_workflows/             ← Workflows (slash commands)"
+fi
