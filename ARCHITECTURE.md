@@ -193,7 +193,7 @@ No plan or spec needed. The agent applies the Socratic Gate lightly (confirms un
 ```
 
 1. `/plan` runs Socratic discovery and drafts the high-level roadmap (phases, agent assignments).
-2. The `openspec-authoring` skill decomposes the approved roadmap into 4 specification files (`docs/openspecs/{task}/`: proposal, specs, design, tasks). The roadmap content lands in `proposal.md`/`tasks.md` — **no separate `docs/plans/PLAN-*.md` is kept** (Plan Artifact Precedence: the OpenSpec set IS the plan; the plan file is only the fallback when no spec set is authored).
+2. The `openspec-authoring` skill decomposes the approved roadmap into a spec set sized to task complexity (`docs/openspecs/{task}/`: `spec.md` alone for Small, `proposal.md`/`specs.md`/`tasks.md` for Medium, plus `design.md` for Large). The roadmap content lands in `proposal.md`/`tasks.md` — **no separate `docs/plans/PLAN-*.md` is kept** (Plan Artifact Precedence: the OpenSpec set IS the plan; the plan file is only the fallback when no spec set is authored).
 3. `/create` or `/enhance` implements the tasks defined in the spec set, tracking state via `tasks.md` checkboxes.
 4. `/review` performs a pre-commit quality check before merging.
 
@@ -208,7 +208,7 @@ No plan or spec needed. The agent applies the Socratic Gate lightly (confirms un
 1. `/brainstorm` explores approaches, tech stack options, and trade-offs.
 2. `/plan` maps out the architecture and milestones.
 3. `/ux-ui-pro` generates a professional design system and UI foundation.
-4. `openspec-authoring` writes the execution contract (the 4 spec files).
+4. `openspec-authoring` writes the execution contract (Large-task spec set: proposal, design, specs, tasks).
 5. `/create` scaffolds and implements the full application with multi-agent coordination.
 
 ### Debugging & Troubleshooting (Variable Complexity)

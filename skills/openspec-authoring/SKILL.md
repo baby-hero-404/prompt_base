@@ -1,134 +1,167 @@
 ---
 name: openspec-authoring
-description: "Use when writing OpenSpec specification sets (proposal, specs, design, tasks), structuring requirement documents, creating Gherkin-style scenarios, or breaking down complex tasks into prioritized work items. Triggers on spec, specification, proposal, design doc, task breakdown, openspec, requirement."
+description: "Use when a coding task requires explicit expected behavior, verification criteria, or implementation coordination. Avoid for trivial changes."
 allowed-tools: Read, Write, Edit
 priority: HIGH
 ---
 
 # OpenSpec Authoring
 
-> **Single Source of Truth**: An OpenSpec set is the authoritative contract between human intent and agent execution. The Coder Agent reads Specs — not raw descriptions.
+> **Decision-Preserving Execution Contract**: OpenSpec is NOT a heavy, bureaucratic requirement document. It is a contract that preserves intent, decisions, boundaries, and validation methods so that neither humans nor AI agents misunderstand the goal.
 
-> 📌 **Plan Artifact Precedence**: A complete OpenSpec set **satisfies** the COMPLEX CODE plan requirement (see the request classifier in CLAUDE.md/GEMINI.md). Do NOT create a parallel `docs/plans/PLAN-*.md` for the same task — implementation detail (data structures, test code, exact commands) belongs in `design.md`/`tasks.md`, and execution state is tracked via `tasks.md` checkboxes. If `tasks.md` feels too high-level to code from, enrich it in place instead of writing a separate plan.
-
----
-
-## 1. Directory Convention
-
-Every OpenSpec set lives under `docs/openspecs/<task-name>/` and contains exactly **4 files**:
-
-```
-docs/openspecs/<task-name>/
-├── proposal.md    # WHY & WHAT — context, scope, impact
-├── specs.md       # HOW to verify — Gherkin-style scenarios
-├── design.md      # HOW to build — architecture, data models, APIs
-└── tasks.md       # WHAT to do — prioritized work items with checklists
-```
+> 📌 **Plan Artifact Precedence**: A complete OpenSpec set **satisfies** the COMPLEX CODE plan requirement. Do NOT create a parallel `docs/plans/PLAN-*.md`.
 
 ---
 
-## 2. Core Documents
+## 1. Style Guidelines
 
-### 2.1 `proposal.md` — Solution Proposal
+**Write for the next developer reading this 6 months later.**
 
-| Section | Content |
-|---------|---------|
-| **Why** | Root cause or motivation (cite real logs/traces when available) |
-| **What Changes** | Detailed change list, grouped by Issue |
-| **Capabilities** | `New` / `Modified` / `Removed` capabilities |
-| **Impact** | Table: `Area \| Files Affected` |
+**✅ Prefer:**
+- Explain *why*
+- State decisions explicitly — prefer decisions over descriptions (the choice made and why beats a plain description of what the system does)
+- Mention trade-offs
+- Define strict boundaries
+- Distinguish **Success** (outcome-level: how we know the *problem* is solved) from **Verify** (action-level: the concrete check that proves a *behavior* works)
+
+**❌ Avoid:**
+- Empty sections
+- Bureaucratic requirement IDs (e.g. REQ-001) or duplicated acceptance criteria
+- Repeating obvious implementation details
+
+---
+
+## 2. Directory Convention & Complexity Check
+
+Specs should live under the single root `docs/openspecs/` unless the repository already has an established convention. Choose the output size based on risk and complexity.
+
+### Complexity Signals
+**Upgrade one level (e.g. Small -> Medium, Medium -> Large) if the task includes:**
+- Database schema migration
+- Public API change
+- Security/authentication
+- Cross-service communication
+- Data migration
+- Backward compatibility concerns
+
+**Downgrade one level (e.g. Medium -> Small) if:**
+- Change is isolated to one module
+- No API/data contract changes
+- Existing tests fully cover behavior
+
+### 🟢 Small Task
+**Use for:** Simple UI tweaks, minor bug fixes, single-file changes.
+**Output:** `docs/openspecs/<task-name>/spec.md` (1 file)
+
+### 🟡 Medium Task
+**Use for:** Independent features, minor refactoring, changes contained within a single service.
+**Output:** `docs/openspecs/<task-name>/` containing 3 files:
+- `proposal.md` (Why do it + key decisions)
+- `specs.md` (What must be true - expected behavior)
+- `tasks.md` (How to execute - implementation map)
+
+### 🔴 Large Task
+**Use for:** New architecture, complex cross-service features, high-risk migrations.
+**Output:** `docs/openspecs/<task-name>/` containing 4 files:
+- `proposal.md` (Why do it + key decisions)
+- `specs.md` (What must be true - expected behavior)
+- `design.md` (How to build it - architecture & reasoning)
+- `tasks.md` (How to execute - implementation map)
+
+---
+
+## 3. Core Documents
+
+### 3.1 Small Task: `spec.md`
+
+For small tasks, keep it extremely minimal.
+*Note: Add Constraints only when they prevent wrong implementation choices.*
 
 <details>
-<summary>Template</summary>
+<summary>Template: docs/openspecs/&lt;task-name&gt;/spec.md</summary>
+
+```markdown
+# Spec: <Task Name>
+
+## Goal
+[1-2 sentences explaining the goal]
+
+## Constraints (Optional)
+[e.g. Do not change cache invalidation behavior.]
+
+## Verify
+[Concrete, executable check — HOW to confirm the behavior works, not why it matters]
+- [Action to take]
+- [Expected outcome]
+```
+
+</details>
+
+### 3.2 Medium/Large: `proposal.md` — Decision Record
+
+Defines the Why, Goals, Decisions, Trade-offs, and what is NOT included.
+
+<details>
+<summary>Template: proposal.md</summary>
 
 ```markdown
 # Proposal: <Task Name>
 
-## Why
-<!-- Root cause, log traces, user pain points -->
+## Problem
+[What is the current issue? e.g. Payment failures require users to retry manually.]
 
-## What Changes
+## Goal
+[What is the desired outcome?]
 
-### Issue 1: <Title>
-- Change A
-- Change B
+## Success
+[Outcome-level signal that the *problem* is resolved — business/product terms, not a test step. For the concrete pass/fail check on a specific behavior, use the Scenario `Then:` in specs.md instead.]
 
-### Issue 2: <Title>
-- Change C
+## Decisions
+[Which direction was chosen and why? e.g. Retry temporary failures in service layer.]
 
-## Capabilities
+## Trade-offs
+[What do we gain? What do we lose or risk?]
 
-### New Capabilities
-- ...
-
-### Modified Capabilities
-- ...
-
-### Removed Capabilities
-- ...
+## Out of Scope
+[Explicitly state what to NOT build. e.g. No admin retry dashboard.]
 
 ## Impact
-
-| Area | Files Affected |
-|------|----------------|
-| Router | `internal/router/router.go` |
-| Service | `internal/feature/service.go` |
+[What areas/files are affected?]
 ```
 
 </details>
 
-### 2.2 `specs.md` — Requirement Specifications
+### 3.3 Medium/Large: `specs.md` — Expected Behavior
 
-| Section | Content |
-|---------|---------|
-| **Requirements** | Grouped as `Added` / `Modified` / `Removed` |
-| **Scenarios** | Gherkin-style `WHEN … THEN … AND …` |
-| **Status Icons** | `✅` Done · `⚠️` In Progress · `❌` Not Started |
+Defines exactly how the system should behave. Avoid bureaucratic tags. Focus on clear Scenarios (When/Then), Rules, and Constraints.
 
 <details>
-<summary>Template</summary>
+<summary>Template: specs.md</summary>
 
 ```markdown
-# Specs: <Task Name>
+# Expected Behavior: <Task Name>
 
-## Added Requirements
+## Scenario: [Behavior Name e.g. Retry timeout errors]
+**When:**
+- [Trigger condition, e.g. payment timeout occurs]
 
-### REQ-001: <Title>
-> ✅ Status: Implemented
+**Then:**
+- [Expected result, e.g. retry up to 3 times with exponential backoff]
 
-**Scenario:**
-- WHEN <precondition or action>
-- THEN <expected outcome>
-- AND <additional assertion>
+## Rules
+- [Business or technical rules that must hold true regardless of specific events]
 
-### REQ-002: <Title>
-> ❌ Status: Not Started
-
-**Scenario:**
-- WHEN ...
-- THEN ...
-
-## Modified Requirements
-
-### REQ-M01: <Title>
-> ⚠️ Status: In Progress
-
-**Scenario:**
-- WHEN ...
-- THEN ...
-
-## Removed Requirements
-- REQ-R01: <removed capability description>
+## Constraints
+- [System boundaries or limitations]
 ```
 
 </details>
 
-
 ## Extended References
-For less-frequently-needed detail, see [`references/extended-reference.md`](references/extended-reference.md):
-- 2.3 `design.md` — Technical Design
-- 2.4 `tasks.md` — Execution Task List
-- 3. Golden Rules
-- 4. Authoring Decision Matrix
-- 5. Anti-Patterns
-- 6. Checklist Before Submission
+For Large tasks or detailed task breakdown rules, see [`references/extended-reference.md`](references/extended-reference.md):
+- 3.4 `design.md` (Large Tasks only)
+- 3.5 `tasks.md` (Medium/Large Tasks)
+- 4. Golden Rules
+- 5. Authoring Decision Matrix
+- 6. Anti-Patterns
+- 7. Checklist Before Submission
