@@ -56,15 +56,14 @@ HEAD_SHA=$(git rev-parse HEAD)
 - [ ] Nothing extra built that wasn't requested (YAGNI)
 - [ ] No requirements misinterpreted
 
-### Code Quality
-- [ ] Clear naming — intent obvious from names
-- [ ] DRY — no duplicate code
-- [ ] SOLID principles followed
-- [ ] Error handling in place
-- [ ] No hardcoded secrets or sensitive credentials
-- [ ] Input validated and sanitized
+### Code Quality (Critical Review Framework)
 
-### Testing
-- [ ] Unit tests for new code
-- [ ] Edge cases tested
-- [ ] All tests pass (verified, not assumed)
+Focus strictly on deficiencies, required improvements, and potential risks. Avoid positive affirmations.
+
+1. **Key Changes & Impacts**: Check for regressions, conflicts, or unwanted behavior alterations.
+2. **Clarity Deficiencies**: Pinpoint obscure logic, excessive nesting, long methods, and "magic" values. Suggest concrete refactorings.
+3. **Comments and Naming**: Identify misleading/terse names, missing comments for complex logic, and redundant comments.
+4. **Complexity Reduction**: Highlight overly complex logic/structures. Suggest simpler alternative approaches.
+5. **Bug Risks & Edge Cases**: Enumerate off-by-one errors, unhandled states, resource mismanagement, concurrency issues, and security vulnerabilities.
+6. **Best Practices Violations**: Flag anti-patterns, hardcoded configs, inefficient algorithms, and poor error handling.
+7. **Testing & Follow-up**: Ensure unit tests cover new code, edge cases are tested, and tests pass (verified). If this is a follow-up review, verify previously requested changes and provide a strict Merge Decision (Yes / Yes with minor changes / No).
