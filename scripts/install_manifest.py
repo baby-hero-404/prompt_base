@@ -32,8 +32,12 @@ def force_copy(src, dst, target_prefix=""):
         with open(src, 'r', encoding='utf-8') as f:
             content = f.read()
         if target_prefix:
+            skills_prefix = f"{target_prefix}/config/skills" if "gemini" in target_prefix else f"{target_prefix}/skills"
             content = content.replace('`tools/', f'`{target_prefix}/tools/')
             content = content.replace('python tools/', f'python {target_prefix}/tools/')
+            content = content.replace('python3 tools/', f'python3 {target_prefix}/tools/')
+            content = content.replace('python3 skills/', f'python3 {skills_prefix}/')
+            content = content.replace('python skills/', f'python {skills_prefix}/')
         with open(dst, 'w', encoding='utf-8') as f:
             f.write(content)
         shutil.copystat(src, dst)

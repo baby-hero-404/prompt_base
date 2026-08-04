@@ -107,6 +107,7 @@ Must include:
 
 **IMPORTANT**: Do NOT mention "tech-research-framework" or internal AI instructions in the generated README or project documentation. The output should appear as an authentic, professional open-source project.
 
+<!-- contract:ignore -->
 ### B. Research Document (`docs/research.md`)
 Must include:
 1. **Technology Profile / Analysis Matrix**:
@@ -151,6 +152,7 @@ Must include:
 Must review and document:
 - **Secret management**, **Authentication**, **Authorization** (e.g., No password vs ACL in Redis, PLAINTEXT vs SSL/SASL in Kafka).
 - **Network exposure**, **Container privilege**, and **Dependency vulnerability**.
+<!-- /contract:ignore -->
 
 ## 5. Infrastructure Standard
 
@@ -192,6 +194,7 @@ For Maturity Level 3 projects, resilience testing must be documented and automat
 - **Graceful Shutdown**: Send `SIGTERM` -> verify pending messages/transactions flush cleanly.
 - **Scaling Validation**: Add node, remove node, rebalance workload -> observe system recovery and stability.
 
+<!-- contract:ignore -->
 ## 9. CI/CD (Optional)
 
 CI/CD is recommended when:
@@ -201,6 +204,7 @@ CI/CD is recommended when:
 - Documentation generation is automated.
 
 Use CI pipelines when automation value justifies the complexity (e.g. GitHub Actions `.github/workflows/ci.yml`).
+<!-- /contract:ignore -->
 
 ## 10. Maturity Level
 
@@ -209,6 +213,7 @@ Define the project's maturity level during initialization:
 - **Maturity Level 2 - Engineering**: Build a realistic system (e.g., Distributed rate limiter, Event-driven pipeline). Focus on clean architecture and tests.
 - **Maturity Level 3 - Production Simulation**: Near production readiness (Includes Observability, Resilience/Failure injection, Load testing, Scaling test).
 
+<!-- contract:ignore -->
 ## 11. Output Acceptance Criteria
 
 Before declaring the task complete, the agent MUST verify this checklist:
@@ -224,6 +229,7 @@ Before declaring the task complete, the agent MUST verify this checklist:
 - [ ] System and Sequence diagrams included in `docs/architecture.md`
 - [ ] Unit & Integration tests passing
 - [ ] No hardcoded secrets, ports, or hostnames in code/Makefile
+<!-- /contract:ignore -->
 
 ## 12. Final Workflow
 

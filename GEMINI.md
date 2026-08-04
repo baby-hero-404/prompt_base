@@ -65,10 +65,10 @@ Never keep both for the same task.
 
 When the user says "run final checks" or similar:
 
-| Stage | Command |
+| Stage | Action / Command |
 |---|---|
-| Audit | `python scripts/checklist.py .` |
-| Deploy | `python scripts/checklist.py . --url <URL>` |
+| Audit | Run project's native test and lint suite (e.g. `make test`, `pytest`, `npm test`) |
+| Deploy | Run deployment or pre-flight verification script if configured |
 
 ## Agents (14)
 
