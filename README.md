@@ -176,6 +176,8 @@ The "Token-Efficient Output" rules (terse speak without losing context), "Auto-C
 
 Our shell command token-optimization logic and `rtk-token-killer` skill are powered by **[rtk-ai/rtk](https://github.com/rtk-ai/rtk)** (Rust Token Killer), which filters and shapes terminal command outputs to reduce context token usage by 60–90%.
 
+The `ux-ui-pro-max` skill's anti-AI-slop rules, brief inference workflow, three-dial configuration system, craft rules (typography, color, animation, state coverage), and pattern vocabulary are adapted from **[OpenDesign](https://github.com/open-design)** — specifically its `taste-skill`, `craft/` universal rules, and 151-package design system architecture.
+
 ### 📦 Installing RTK
 
 To install the `rtk` CLI utility on Linux/macOS:

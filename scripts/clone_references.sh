@@ -18,3 +18,4 @@ clone_repo() {
 }
 
 clone_repo "https://github.com/JuliusBrussee/caveman.git"
+clone_repo "https://github.com/nexu-io/open-design.git"
