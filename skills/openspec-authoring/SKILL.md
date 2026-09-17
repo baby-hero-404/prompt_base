@@ -1,6 +1,6 @@
 ---
 name: openspec-authoring
-description: "Use when a coding task requires explicit expected behavior, verification criteria, or implementation coordination. Avoid for trivial changes."
+description: "Use when a coding task requires explicit expected behavior, verification criteria, or implementation coordination. Avoid for trivial changes. Triggers on openspec, proposal, design doc, spec."
 allowed-tools: Read, Write, Edit
 priority: HIGH
 ---

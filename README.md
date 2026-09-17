@@ -99,7 +99,7 @@ You don't need to manually load skills. Simply describe what you want to do, and
 - **Example**: "Refactor this API for performance" → Triggers `backend-specialist` + `performance-optimizer`
 - **Example**: "Write unit tests for this module" → Triggers `test-engineer` + `testing-patterns`
 
-Skills are stored at `~/.gemini/skills/*/SKILL.md`.
+Skills are stored at `~/.gemini/config/skills/*/SKILL.md`.
 
 ### 3. Workflows (Slash Commands)
 

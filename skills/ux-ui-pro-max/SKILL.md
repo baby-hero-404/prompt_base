@@ -85,183 +85,26 @@ After the design read, set three dials. Every layout, motion, and density decisi
 
 ### How the Dials Drive Output
 
-- **DESIGN_VARIANCE 1-3:** Symmetrical grids, equal paddings, centered alignment
-- **DESIGN_VARIANCE 4-7:** Offset overlaps, varied aspect ratios, asymmetric alignment
-- **DESIGN_VARIANCE 8-10:** Masonry layouts, fractional grid units, massive empty zones
-- **MOTION_INTENSITY 1-3:** No auto-animations. CSS :hover/:active only
-- **MOTION_INTENSITY 4-7:** Fluid CSS transitions, animation-delay cascades, transform + opacity
-- **MOTION_INTENSITY 8-10:** Scroll-triggered reveals, parallax, scroll-driven animation, physics
-- **VISUAL_DENSITY 1-3:** Lots of white space, huge section gaps (py-32 to py-48)
-- **VISUAL_DENSITY 4-7:** Standard web app spacing (py-16 to py-24)
-- **VISUAL_DENSITY 8-10:** Tight paddings, 1px line separators, font-mono for numbers
+- **DESIGN_VARIANCE:** `1-3` (symmetrical grids, equal padding) → `4-7` (offset overlaps, asymmetric) → `8-10` (masonry, huge empty zones).
+- **MOTION_INTENSITY:** `1-3` (hover/active only) → `4-7` (CSS transitions, opacity+transform) → `8-10` (scroll reveals, parallax, physics).
+- **VISUAL_DENSITY:** `1-3` (airy whitespace, py-32+) → `4-7` (standard web app spacing) → `8-10` (tight padding, 1px separators, font-mono).
 
 ---
 
-## 2. Rule Categories by Priority
+## 2. Rule Categories & Craft Reference
 
-| Priority | Category | Impact | Domain |
-|----------|----------|--------|--------|
-| 1 | Accessibility | CRITICAL | `ux` |
-| 2 | Touch & Interaction | CRITICAL | `ux` |
-| 3 | Performance | HIGH | `ux` |
-| 4 | Layout & Responsive | HIGH | `ux` |
-| 5 | Typography & Color | HIGH | `typography`, `color` |
-| 6 | Animation | MEDIUM | `ux` |
-| 7 | Style Selection | MEDIUM | `style`, `product` |
-| 8 | Charts & Data | LOW | `chart` |
+> 📖 **Deep Craft Specifications**: Detailed craft standards are maintained in [`references/quick-reference.md`](references/quick-reference.md) and [`references/craft/`](references/craft/).
 
-## Quick Reference
-
-### 1. Accessibility (CRITICAL)
-
-- `color-contrast` - Minimum 4.5:1 ratio for normal text, 3:1 for large text (>18px or 14px bold)
-- `focus-states` - Visible focus rings on interactive elements
-- `alt-text` - Descriptive alt text for meaningful images
-- `aria-labels` - aria-label for icon-only buttons
-- `keyboard-nav` - Tab order matches visual order
-- `form-labels` - Use label with for attribute
-- `reduced-motion` - Motion above MOTION_INTENSITY 3 should honor `prefers-reduced-motion`. Exception: opacity crossfades under 200ms are safe to keep for state-change feedback
-
-### 2. Touch & Interaction (CRITICAL)
-
-- `touch-target-size` - Minimum 44x44px touch targets
-- `hover-vs-tap` - Use click/tap for primary interactions
-- `loading-buttons` - Disable button during async operations
-- `error-feedback` - Clear error messages near problem
-- `cursor-pointer` - Add cursor-pointer to clickable elements
-- `button-contrast` - Button text must be readable against button background (WCAG AA 4.5:1)
-- `cta-wrap-ban` - Button text should fit on one line at desktop. If wrapping is unavoidable (e.g., i18n long labels), ensure min-height and padding accommodate it gracefully
-- `no-duplicate-cta` - One label per intent on a page ("Get in touch" + "Contact us" = duplicate)
-
-### 3. Performance (HIGH)
-
-- `image-optimization` - Use WebP, srcset, lazy loading
-- `reduced-motion` - Check prefers-reduced-motion
-- `content-jumping` - Reserve space for async content (CLS < 0.1)
-- `lcp-target` - LCP < 2.5s. Hero image must be priority/preloaded
-- `inp-target` - INP < 200ms. Heavy work off main thread
-- `hardware-accel` - Animate ONLY transform and opacity. Never animate top, left, width, height
-
-### 4. Layout & Responsive (HIGH)
-
-- `viewport-meta` - width=device-width initial-scale=1
-- `readable-font-size` - Minimum 16px body text on mobile
-- `horizontal-scroll` - Ensure content fits viewport width
-- `z-index-management` - Define z-index scale (10, 20, 30, 50)
-- `viewport-stability` - Prefer `min-h-[100dvh]` over `h-screen` — `h-screen` causes iOS Safari address-bar jumps. `h-screen` is acceptable in desktop-only admin/dashboard views where mobile Safari is not a target
-- `grid-over-flex-math` - Use CSS Grid, not `w-[calc(33%-1rem)]`
-- `mobile-collapse` - For every multi-column layout, declare the <768px fallback explicitly
-- `hero-viewport-fit` - Hero headline max 2 lines, subtext max 20 words, CTAs visible without scroll
-
-### 5. Typography & Color (HIGH)
-
-#### Typography Rules
-
-| Context | Letter-spacing |
-|---------|---------------|
-| Body text (14-18px) | `0` (default) |
-| Small text (11-13px) | `0.01em` to `0.02em` (positive) |
-| UI labels and button text | `0.02em` |
-| **ALL CAPS** | **`0.06em` to `0.1em` (required)** |
-| Headings 32px+ | `-0.01em` to `-0.02em` |
-| Display 48px+ | `-0.02em` to `-0.03em` |
-
-ALL CAPS without positive tracking looks cramped and amateur. Display text without negative tracking looks loose and weak. These are the most reliable AI-slop tells.
-
-#### Type Scale
-
-| Role | Range |
-|------|-------|
-| Display | 48-72px |
-| H1 | 32-48px |
-| H2 | 24-32px |
-| H3 | 20-24px |
-| Body | 15-18px |
-| Small | 13-14px |
-| Caption | 11-12px |
-
-#### Line Height
-
-| Text size | Line height |
-|-----------|-------------|
-| Display / H1 (>=32px) | `1.0`-`1.2` (tight) |
-| Body (15-18px) | `1.5`-`1.6` |
-| Small (<=14px) | `1.5` |
-
-#### Three-Weight System
-
-Most well-crafted UIs use exactly 3 weights:
-- **Read** (400/450) - body copy
-- **Emphasize** (510/550) - UI text, labels, navigation
-- **Announce** (590/600) - headlines, buttons
-
-Weight 700+ is rarely needed.
-
-- `line-length` - Limit to 50-75 characters per line (`max-width: 65ch`)
-- `font-pairing` - Maximum 2 typefaces per artifact (display + body)
-- `font-defaults` - AVOID Inter as default display font. Prefer Geist, Outfit, Cabinet Grotesk, Satoshi
-
-#### Color Rules
-
-**Palette structure (plan all 4 layers before writing CSS):**
-
-| Layer | Share of pixels | Purpose |
-|-------|----------------|---------|
-| **Neutrals** | 70-90% | Background, surface, text, muted, border |
-| **Accent** (one) | 5-10% | One accent color only |
-| **Semantic** | 0-5% | Success, warning, danger |
-| **Effect** | <1% | Gradients, glows (rarely justified) |
-
-**Accent discipline:**
-- At most 2 visible uses of accent per screen
-- Links count as accent; demote to underline if you also have a CTA on the same screen
-
-**Contrast minimums:**
-
-| Pair | Minimum |
-|------|---------|
-| Body text (<=16px) on background | 4.5:1 |
-| Large text (>18px or 14px bold) | 3:1 |
-| UI components against adjacent surfaces | 3:1 |
-
-**Dark themes:** Avoid pure #000000 and #ffffff. Use off-black (e.g., #0f0f0f) and off-white (e.g., #fafafa).
-
-**Semantic naming:** Name tokens by purpose (--accent, --success), never by hue (--blue-500, --green-500).
-
-- `60-30-10` - 60% Background, 30% Structure, 10% Accent
-- `color-consistency-lock` - Once accent chosen, use it on the WHOLE page. No random color changes mid-page
-- `shape-consistency-lock` - Pick ONE corner-radius scale and stick to it across all components
-
-### 6. Animation (MEDIUM)
-
-| Duration | Use |
-|----------|-----|
-| 50-100ms | Instant feedback (button press, toggle, hover) |
-| 150ms | Default for state-confirmation |
-| 200-300ms | Entering UI (modals, sheets, dropdowns) |
-| 300-500ms | Cross-screen transitions, container morphs |
-| >500ms | Reserved for cross-screen, staged transitions |
-
-- `transform-performance` - Use transform/opacity, not width/height
-- `loading-states` - Skeleton screens matching final layout shape (not generic spinners)
-- `motion-must-be-motivated` - Every animation needs a reason: hierarchy, storytelling, feedback, or state transition. "It looked cool" is not a reason.
-- `marquee-max-one` - Maximum one horizontal marquee per page
-- `no-window-scroll-listener` - Prefer IntersectionObserver, CSS scroll-driven animations, or library hooks over raw `window.addEventListener('scroll')`. Raw scroll listeners are acceptable when throttled via rAF for scroll-position-dependent logic (e.g., parallax math) that IO/CSS can't express
-- `reduced-motion-mandatory` - Motion above MOTION_INTENSITY 3 should honor `prefers-reduced-motion`. Keep opacity/color crossfades as state-change substitutes
-
-### 7. Style Selection (MEDIUM)
-
-- `style-match` - Match style to product type (use dial system from Section 1)
-- `consistency` - Use same style across all pages
-- `no-emoji-icons` - Use SVG icons (Phosphor, HugeIcons, Radix, Tabler), not emojis
-- `one-icon-family` - One icon library per project, standardize strokeWidth globally
-- `no-hand-rolled-svg` - Do not hand-draw SVG icons. Use icon libraries.
-
-### 8. Charts & Data (LOW)
-
-- `chart-type` - Match chart type to data type
-- `color-guidance` - Use accessible color palettes
-- `data-table` - Provide table alternative for accessibility
+| Priority | Category | Critical Checks | Reference Doc |
+|---|---|---|---|
+| 1 | **Accessibility (CRITICAL)** | 4.5:1 text contrast (3:1 large), visible focus rings, aria-labels on icon buttons, honor `prefers-reduced-motion` | [Accessibility Baseline](references/craft/accessibility-baseline.md) |
+| 2 | **Touch & Interaction (CRITICAL)** | 44x44px min target size, `cursor-pointer` on clickables, single line desktop CTA, clear error feedback | [Form Validation](references/craft/form-validation.md) |
+| 3 | **Performance (HIGH)** | Animate transform/opacity ONLY, LCP < 2.5s, reserve layout space (CLS < 0.1), WebP/lazy images | [Quick Reference](references/quick-reference.md) |
+| 4 | **Layout & Responsive (HIGH)** | `min-h-[100dvh]` over `h-screen`, CSS Grid over calc math, declare <768px fallback explicitly | [Quick Reference](references/quick-reference.md) |
+| 5 | **Typography & Color (HIGH)** | Max 2 typefaces, positive tracking on ALL CAPS, negative tracking on display (>=32px), 60-30-10 palette | [Typography](references/craft/typography.md), [Color](references/craft/color.md) |
+| 6 | **Animation (MEDIUM)** | 150-300ms micro-interactions, motivated motion only, max 1 marquee, reduced-motion fallback | [Animation Discipline](references/craft/animation-discipline.md) |
+| 7 | **Style Selection (MEDIUM)** | Standard SVG icon library (Phosphor, Radix, Tabler), never emojis or hand-rolled SVG paths | [Pattern Vocabulary](references/pattern-vocabulary.md) |
+| 8 | **Charts & Data (LOW)** | Accessible palettes, provide semantic table alternative for screen readers | [Extended Reference](references/extended-reference.md) |
 
 ---
 
@@ -291,32 +134,13 @@ Every surface that fetches, transforms, or accepts data must render ALL five sta
 6. **Invented metrics** - "10x faster", "99.9% uptime", "3x more productive". Use real data or labeled placeholders.
 7. **Filler copy** - "Lorem ipsum", "Feature one/two/three". Design around real or realistic content.
 
-### Production-Test Tells (P1 - Should Fix)
+### Production-Test Tells & Adding Soul
 
-- **Avoid three-column equal feature cards** when DESIGN_VARIANCE > 4. The generic "three identical cards" row reads as template. Prefer 2-column zig-zag, asymmetric grid, or horizontal-scroll. Acceptable for DENSITY >= 7 data-heavy UIs (pricing tiers, plan comparison).
-- **NO centered hero** when DESIGN_VARIANCE > 4. Use split-screen, left-aligned, or asymmetric layouts.
-- **Avoid generic placeholder names** - "John Doe", "Jane Smith" read as placeholder. Use contextually appropriate names. Exception: form field examples where generic names are conventional (e.g., placeholder text in a name input).
-- **NO startup-slop brand names** - "Acme", "Nexus", "SmartFlow", "Cloudly". Invent contextual, premium names.
-- **NO filler verbs** - "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize". Use concrete verbs.
-- **Avoid section-number eyebrows** - `001 Capabilities`, `002 Featured` are an AI tell in most contexts. Acceptable for portfolio/case-study pages where numbered sections serve as deliberate editorial structure.
-- **Avoid decorative scroll cues** - "Scroll", "arrow-scroll", "Scroll to explore" are usually unnecessary. Acceptable on immersive full-screen experiences (galleries, scrollytelling) where below-fold content is not visually implied.
-- **NO div-based fake screenshots** - Never build fake product UI from styled divs. Use real images or generated images.
-
-### Soft Tells (P2 - Nice to Fix)
-
-- Standard "Hero - Features - Pricing - FAQ - CTA" sequence with no variation
-- More than 12 raw hex values outside `:root`
-- Accent color used 6+ times in the rendered body (cap at 2 per screen)
-- Decorative blob/wave SVG backgrounds with no functional purpose
-- Perfect symmetric layout with no visual tension
-
-### How to Add Soul (the 80/20 rule)
-
-Aim for 80% proven patterns + 20% distinctive choice. The 20% should live in:
-- One bold visual move - a typography choice, a single color decision, an unexpected proportion
-- Voice and microcopy - a button that says "Start tracking" beats "Get started"
-- One micro-interaction the user will remember
-- One detail that could only have been put there by someone who used the product
+- **Avoid 3-column equal feature cards** when DESIGN_VARIANCE > 4 (prefer 2-column zig-zag, asymmetric grid, or horizontal-scroll).
+- **NO centered hero** when DESIGN_VARIANCE > 4 (prefer split-screen or asymmetric).
+- **NO startup-slop names/verbs** (Acme, Elevate, Revolutionize) or generic placeholders (John Doe).
+- **NO div-based fake screenshots** (use real or generated images).
+- For complete P1/P2 soft tells, token leak audits, and the 80/20 soul guide, see [`references/craft/anti-ai-slop.md`](references/craft/anti-ai-slop.md).
 
 ---
 

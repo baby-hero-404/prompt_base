@@ -253,8 +253,8 @@ Create SKILL.md → Register in registry.min.json → make audit
 | Metric              | Value |
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
-| **Total Skills**    | 54    |
-| **Total Workflows** | 14    |
+| **Total Skills**    | 53    |
+| **Total Workflows** | 15    |
 
 ---
 

@@ -60,8 +60,8 @@ eval-all:
 
 # Install/Update locally to ~/.gemini
 # NOTE: context-memory-engine hooks are intentionally NOT registered here.
-# Gemini's hook stdin schema is unverified (see docs/openspecs/context-memory-engine-2026,
-# Task 3.4) - registering blind would risk misparsing a payload we've never seen.
+# Gemini's hook stdin schema is unverified
+# (adapter unverified, Task 3.4) - registering blind would risk misparsing a payload we've never seen.
 # A pre-existing ~/.gemini/settings.json is backed up/restored around the copy step
 # so this install never clobbers a user's own settings.
 install-gemini:
@@ -101,7 +101,7 @@ install-claude:
 # Install for both
 install: install-gemini install-claude
 
-# --- Context memory engine (opt-in; see docs/openspecs/context-memory-engine-2026) ---
+# --- Context memory engine (opt-in) ---
 
 # Build isolated venvs for the memory engine's heavy deps (fastembed/onnxruntime,
 # sqlite-vec) - never installed into the user's global Python - then calibrate the

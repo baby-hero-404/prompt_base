@@ -48,7 +48,7 @@ Never keep both for the same task.
 
 **Check dependencies.** Before editing a file, check `ARCHITECTURE.md` → File Dependencies and update everything affected together.
 
-**Document as you go.** Update the relevant `.md` files for what you changed. For spec-driven work, keep an `implementation-notes.md` in `docs/implementation/` with decisions, deviations, and tradeoffs not in the spec.
+**Document as you go.** Update the relevant `.md` files for what you changed.
 
 **Test and review.** Add tests for the success and failure paths before/with the implementation. Follow the 5-phase deployment process for infra changes. Prefer modern, actively-maintained libraries over legacy patterns.
 
