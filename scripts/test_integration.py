@@ -17,7 +17,19 @@ def test_integration():
     else:
         print(f"❌ Missing Rules file: GEMINI.md")
         sys.exit(1)
-    
+
+    # CLAUDE.md and GEMINI.md must carry identical rules (only the Layout paths differ)
+    def rules_section(name):
+        with open(os.path.join(project_root, name), "r") as f:
+            text = f.read()
+        return text[text.find("## Rules"):]
+
+    if rules_section("CLAUDE.md") == rules_section("GEMINI.md"):
+        print(f"✅ CLAUDE.md and GEMINI.md rules are in sync")
+    else:
+        print(f"❌ CLAUDE.md and GEMINI.md rules differ (from '## Rules' onward)")
+        sys.exit(1)
+
     # 2. Verify Workflows (global_workflows/)
     print("\n--- 2. Workflows ---")
     workflow_dir = os.path.join(project_root, "global_workflows")

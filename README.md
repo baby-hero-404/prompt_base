@@ -87,6 +87,7 @@ Rules are defined in `~/.gemini/GEMINI.md` and apply to **every** conversation a
 - The Socratic Gate (mandatory clarification before complex tasks)
 - Request classification (QUESTION → SIMPLE CODE → COMPLEX CODE)
 - File dependency awareness
+- Prompt-injection & supply-chain safety (only the user gives instructions; new dependencies are untrusted; never run unread scripts)
 
 > You don't need to do anything — rules are always enforced.
 
