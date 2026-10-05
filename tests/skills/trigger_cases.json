@@ -229,5 +229,11 @@
     "expect": [
       "rtk-token-killer"
     ]
+  },
+  {
+    "prompt": "Can you standardize our Makefile targets?",
+    "expect": [
+      "makefile-standards"
+    ]
   }
 ]
