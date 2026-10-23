@@ -128,14 +128,14 @@ For phased projects, tracks the overall roadmap and milestone boundaries.
 
 ### 3.1 On Session Start
 
-Every new AI session **MUST** begin with this bootstrap sequence:
+Every new AI session begins with this bootstrap sequence:
 
 ```
-1. Read docs/ai/context/AI_PROJECT_CONTEXT.md
-2. Read docs/ai/context/PROJECT_INDEX.md
-3. Read docs/ai/progress/TASK_STATUS.md
-4. Read docs/ai/patterns/CODING_PATTERNS.md (if touching code)
-5. Do NOT scan the whole repository unless a needed file is missing from the index
+1. Read docs/ai/PROFILE.md — identity, architecture, stack, repo map
+2. Read docs/ai/DOMAIN.md — domain concepts, invariant rules, quirks
+3. Check task state in docs/openspecs/<task>/tasks.md (or docs/ai/progress/ if used)
+4. Check recall pointers (injected ADRs) if relevant
+5. Do NOT rescan the repository unless a required file is missing from the repo map
 ```
 
 ### 3.2 Bootstrap Prompt Template
@@ -144,13 +144,12 @@ Use this as the internal session bootstrap directive:
 
 ```
 Before coding, read the project memory files:
-1. docs/ai/context/AI_PROJECT_CONTEXT.md — understand the project
-2. docs/ai/context/PROJECT_INDEX.md — know where files live
-3. docs/ai/progress/TASK_STATUS.md — know current progress
-4. docs/ai/patterns/CODING_PATTERNS.md — follow established patterns
+1. docs/ai/PROFILE.md — understand the project and architecture
+2. docs/ai/DOMAIN.md — adhere to invariant rules and domain concepts
+3. docs/openspecs/<task>/tasks.md — current active task status
 
 Do not rescan the whole project unless required.
-Follow existing patterns exactly.
+Follow existing patterns and invariant rules exactly.
 Before coding, explain which files you will touch and why.
 ```
 
@@ -158,9 +157,9 @@ Before coding, explain which files you will touch and why.
 
 If context files don't exist:
 
-1. **Check for `ARCHITECTURE.md`** — may contain partial context (legacy format).
-2. **Auto-generate** the missing files by scanning the codebase once.
-3. **Prompt the user** to run `/init-memory` for guided generation.
+1. **Check for `ARCHITECTURE.md`** — may contain partial context (spec format).
+2. **Read-only orientation** via `/init-context`.
+3. **Prompt the user** to run `/init-memory` if persistent cross-session memory is needed.
 
 ---
 
@@ -168,23 +167,21 @@ If context files don't exist:
 
 ### 4.1 After Every Task Completion
 
-> 🔴 **MANDATORY**: After finishing any implementation, update the relevant context files.
+> 🔴 **MANDATORY**: After finishing any implementation, keep project memory fresh.
 
 | What Changed | Files to Update |
 |-------------|-----------------|
-| New feature/module added | `PROJECT_INDEX.md`, `AI_PROJECT_CONTEXT.md`, `TASK_STATUS.md` |
-| New pattern established | `CODING_PATTERNS.md` |
-| Task completed | `TASK_STATUS.md` |
-| Architecture decision made | `AI_PROJECT_CONTEXT.md` |
-| Phase milestone reached | `PHASE_PLAN.md`, `TASK_STATUS.md` |
+| New module/stack component | `docs/ai/PROFILE.md` (Repository Map / Stack) |
+| Invariant rule / domain concept | `docs/ai/DOMAIN.md` |
+| Architectural decision | Emit `<adr>` tag (automatically saved to `docs/ai/adr/`) |
+| Trigger file or config updated | Run `python3 tools/memory_stale.py --root . --update` |
+| Task progress | `docs/openspecs/<task>/tasks.md` |
 
 ### 4.2 Update Rules
 
-- **Append, don't overwrite** — preserve history in task status.
-- **Be concise** — these files should remain scannable (aim for < 200 lines each).
-- **Date-stamp** significant changes in `TASK_STATUS.md`.
-- **Never store raw code** — only patterns, references, and summaries.
-- **Keep paths current** — if files move, update `PROJECT_INDEX.md` immediately.
+- **Append, don't overwrite** — preserve history in task status and ADR records.
+- **Be concise** — keep memory files scannable (PROFILE.md and DOMAIN.md each under ~60 lines).
+- **Run staleness update** — always run `memory_stale.py --update` after modifying trigger files.
 
 ---
 
@@ -210,8 +207,8 @@ If context files don't exist:
 ### 5.3 Staleness Prevention
 
 - Context files are **versioned with the repo** (committed to git).
-- Review context files during code review — they are living documentation.
-- Run periodic audits: ensure `PROJECT_INDEX.md` matches actual file structure.
+- `manifest.json` tracks checksums of `autoRefreshTriggers` (rule files, architecture, build files).
+- `python3 tools/memory_stale.py --root .` detects stale memory when trigger files change; refresh via `/init-memory`.
 
 ---
 
@@ -220,10 +217,10 @@ If context files don't exist:
 | Skill | Integration Point |
 |-------|-------------------|
 | `context-management` | Project memory files are the primary MVC (Minimal Viable Context) source |
-| `plan-writing` | Plans reference `TASK_STATUS.md` for current state |
-| `architecture` | `AI_PROJECT_CONTEXT.md` feeds architectural decisions |
-| `coding-standards` | `CODING_PATTERNS.md` enforces consistency |
-| `verification-before-completion` | Must verify context files are updated before claiming completion |
+| `openspec-authoring` | Active task progress tracked in `docs/openspecs/<task>/tasks.md` |
+| `architecture` | Project memory feeds architectural decisions; capture via `<adr>` tags |
+| `coding-standards` | Invariant rules in `docs/ai/DOMAIN.md` enforce coding consistency |
+| `verification-before-completion` | Must verify memory staleness before claiming completion |
 | Automated long-term tier | `PreCompact`/`UserPromptSubmit` hooks handle ADR capture/recall (see Section 0) — no skill invocation needed, just emit the `<adr>` tag |
 
 ---
@@ -237,21 +234,18 @@ If context files don't exist:
 │  New Session                                               │
 │      │                                                     │
 │      ▼                                                     │
-│  Read ai/context/AI_PROJECT_CONTEXT.md   ← What is this?  │
+│  Read docs/ai/PROFILE.md                 ← What & Where?   │
 │      │                                                     │
 │      ▼                                                     │
-│  Read ai/context/PROJECT_INDEX.md        ← Where?          │
+│  Read docs/ai/DOMAIN.md                  ← Invariants?     │
 │      │                                                     │
 │      ▼                                                     │
-│  Read ai/progress/TASK_STATUS.md         ← Status?         │
+│  Read docs/openspecs/<task>/tasks.md     ← Task status?    │
 │      │                                                     │
 │      ▼                                                     │
-│  Read ai/patterns/CODING_PATTERNS.md     ← Patterns?       │
+│  START WORK (minimal scan needed)                          │
 │      │                                                     │
 │      ▼                                                     │
-│  START WORK (no full scan needed)                          │
-│      │                                                     │
-│      ▼                                                     │
-│  FINISH → Update context files in docs/ai/                 │
+│  FINISH → Update memory (emit <adr>, update manifest)     │
 └────────────────────────────────────────────────────────────┘
 ```

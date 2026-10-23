@@ -9,7 +9,7 @@
 **Key Components:**
 - **Rules (`GEMINI.md` / `CLAUDE.md`):** Persistent, self-contained rule governance loaded into every session (Classifier, Socratic gate, Supply chain security, Code hygiene).
 - **Workflows (`global_workflows/`):** 16 on-demand operational modes triggered via slash commands (`/plan`, `/review`, `/create`, `/create-skill`, `/debug`, `/init-context`, `/init-memory`, etc.).
-- **Skills (`skills/`):** 56 auto-triggered domain knowledge modules categorized into Core, Tech, Process, and Custom, loaded via progressive disclosure.
+- **Skills (`skills/`):** 58 auto-triggered domain knowledge modules categorized into Core, Tech, Process, and Custom, loaded via progressive disclosure.
 - **Agents (`agents/`):** 14 specialist personas (e.g. `orchestrator`, `project-planner`, `frontend-specialist`, `backend-specialist`, `test-engineer`, `security-auditor`).
 - **Registry (`registry.min.json`):** Unified, minified discovery index for zero-cost discovery.
 - **5-Tier Quality Gate Pipeline:** Tier 1 Lint (`skill_lint.py`), Tier 2 Trigger test (`trigger_test.py`), Tier 0 Contract (`skill_contract.py`), Tier 3 Golden Eval (`golden_eval.py`), Tier 4 Journal (`skill-feedback.md`).

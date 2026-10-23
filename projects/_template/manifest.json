@@ -4,6 +4,9 @@
   "checksums": {},
   "autoRefreshTriggers": [
     "ARCHITECTURE.md",
-    "README.md"
+    "README.md",
+    "Makefile",
+    "AGENTS.md",
+    "CLAUDE.md"
   ]
 }

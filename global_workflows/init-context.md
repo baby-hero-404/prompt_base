@@ -12,8 +12,9 @@ Read-only: writes no files in the project and creates no memory. Persistent proj
 3.  Check rule loading and enforcement (report only; ask before changing anything in the project):
     - `AGENTS.md` exists but `CLAUDE.md` does not: Claude Code will not load it. Propose a `CLAUDE.md` containing `@AGENTS.md`.
     - No `verify` target in the `Makefile`, or invariants tagged `[test]`/`[lint]` with no check behind them: propose the `rule-enforcement` skill. The Stop hook (`tools/verify_gate.py`) only gates projects that have a `verify` target and that you trusted.
+    - Check trust status via `python3 ~/.gemini/tools/pb_trust.py --list` (or `~/.claude/tools/...`) and report whether automated hooks and Stop gate are active.
 4.  Project memory:
-    - If `docs/ai/` exists, read its `PROFILE.md` and `DOMAIN.md` and run `python3 ~/.gemini/tools/memory_stale.py --root .` (or `~/.claude/tools/...`); if stale, suggest `/init-memory` to refresh.
+    - If `docs/ai/` exists, read its `PROFILE.md` and `DOMAIN.md` and run `python3 ~/.gemini/tools/memory_stale.py --root .` (or `~/.claude/tools/...`); report staleness; if stale, suggest `/init-memory` to refresh. Also run `memory_status.py --root .` if helpful to report recall/index status.
     - If it does not exist, do nothing about memory. Mention `/init-memory` once, only if the project looks long-lived; never create `docs/ai/` from this command.
 5.  Suggest essential Core and Tech skills.
 6.  Load the suggested Core and Tech skills and `context-management` to keep the context lean. Load `project-memory` only when `docs/ai/` exists.

@@ -9,6 +9,9 @@ audit:
 test:
 	@python3 scripts/test_integration.py
 
+# Full gate used by the Stop hook (R11): structure audit, tests, skill gates, memory freshness
+verify: audit test skill-check memory-stale
+
 # Regenerate registry.min.json from all SKILL.md files
 registry:
 	@python3 scripts/skill_lint.py --pre-gen
