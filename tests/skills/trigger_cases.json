@@ -297,5 +297,23 @@
       "nextjs-best-practices",
       "react-patterns"
     ]
+  },
+  {
+    "prompt": "my golang worker leaks goroutines, add errgroup and context cancel",
+    "expect": [
+      "golang-best-practices"
+    ]
+  },
+  {
+    "prompt": "wrap this gorm transfer in a transaction",
+    "expect": [
+      "golang-best-practices"
+    ]
+  },
+  {
+    "prompt": "set up go.mod and run go test with race detector",
+    "expect": [
+      "golang-best-practices"
+    ]
   }
 ]

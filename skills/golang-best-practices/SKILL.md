@@ -1,140 +1,113 @@
 ---
 name: golang-best-practices
-description: "Use when writing or refactoring Go (Golang) code, implementing goroutines/channels, or structuring Go projects."
----
-# Golang Pro Max - Advanced Engineering
-
-You are a Senior Go Architect. Your code is idiomatic, high-concurrency safe, and follows the "Simplicity is the ultimate sophistication" philosophy.
-
+description: "Use when writing or refactoring Go (Golang) code, implementing goroutines/channels, handling errors and context, accessing databases (database/sql, GORM), or structuring Go projects. Triggers on golang, goroutine, errgroup, gorm, go.mod, go test."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+references: [concurrency-and-lifecycle.md, ddd-and-architecture.md, db-and-transactions.md, testing-and-quality.md]
 ---
 
-## 1. Core Philosophy (The Go Way)
+# Golang Best Practices
 
-- **Simplicity > Cleverness**: If a junior can't understand it, it's probably too clever.
-- **Explicit > Implicit**: No magic. No hidden behavior.
-- **Errors are NOT Exceptions**: Errors are values to be handled, not thrown.
-- **Accept Interfaces, Return Structs**: The fundamental rule of Go decoupling.
+> **Philosophy:** Concrete types first, small interfaces where callers benefit, no goroutine without an owner. Simplicity over cleverness; explicit over implicit; errors are values.
 
 ---
 
-## 2. Advanced Concurrency Patterns
+## Step 0: Read the project first (MANDATORY)
 
-Go is built for concurrency. Use these patterns to build resilient systems:
+1. Read `go.mod`: the `go` directive (this skill targets **Go 1.27+**; if a module is older, say so and stop to ask), module path, key dependencies (router, ORM, logger, test libs).
+2. Check for `.golangci.yml`, `Makefile`, CI config. Use the project's lint and test commands.
+3. Follow the existing layout, router, ORM and logging choices. Apply the defaults below to new code or when there is no convention.
+4. Do not add a dependency the standard library already covers. Ask before adding one, and pin its version.
 
-### The "Golden Rules" of Goroutines
-1.  **Never start a goroutine without knowing how it will stop.**
-2.  **Pass context.Context** to all blocking/long-running operations.
-3.  **Prefer channels** for orchestration, **mutexes** for protecting state.
+## NEVER Do (Go Footguns)
 
-### Essential Concurrency Patterns
+1. **Start a goroutine with no owner or exit.** Every `go` needs a stop condition (context, closed channel) and something that waits for it.
+2. **Store `context.Context` in a struct.** Pass `ctx` as the first parameter of every function that does I/O or blocks.
+3. **Ignore an error** (`_ = f()`, unchecked `Close`, `Scan`, `Rollback` without a reason). Handle it, return it wrapped, or document why it is safe to drop.
+4. **Compare errors by string.** Use `errors.Is` and `errors.As`.
+5. **Use `panic` for business errors.** Panic is for programmer bugs and failed startup invariants. Return `error` elsewhere.
+6. **Create an interface before a second need exists.** One implementation and no test seam means use the struct.
+7. **Share a slice's backing array by accident.** `append` and re-slicing can overwrite a sibling; copy when ownership is unclear.
+8. **Copy large structs or lock-containing structs by value** on hot paths (`sync.Mutex` must never be copied; use pointers).
+9. **Mutate maps or counters from several goroutines without sync.** Run `go test -race`.
+10. **Leak resources.** `defer resp.Body.Close()`, `defer rows.Close()`, `defer cancel()` right after the call that creates them.
 
-| Pattern | Use Case | Tool |
-|---------|----------|------|
-| **Worker Pool** | Limiting resource usage (CPU/DB) | `chan T` + `sync.WaitGroup` |
-| **Bailout** | First response wins | `select` + `context` |
-| **Pipeline** | Stream processing | `chan T` stages |
-| **Error Groups** | Parallel tasks where one fail cancels all | 'golang.org/x/sync/errgroup' |
-| **Rate Limiting** | Preventing service abuse | `time.Ticker` or 'x/time/rate' |
+## Concrete Types First
 
----
+- Start with a struct and functions. Introduce an interface when there are **2+ implementations**, or a consumer needs a **test seam**.
+- Define the interface **in the consumer's package**, with only the methods that consumer calls (usually 1-3).
+- "Accept interfaces, return structs": parameters can be small interfaces; constructors return concrete types.
+- Do not export an interface just to mock your own package.
 
-## 3. Interface Design & Decoupling
+## Errors
 
-| Concept | "The Go Way" |
-|---------|--------------|
-| **Small Interfaces** | `io.Reader`, `io.Writer` (mostly 1-3 methods). |
-| **Implicit Implementation** | Interfaces are defined by the consumer, not the producer. |
-| **Mocking** | Define interfaces in the testing package to mock dependencies. |
-| **Polymorphism** | Use interfaces to support multiple storage backends (SQL, GCS, S3). |
+1. **Wrap with context:** `fmt.Errorf("create user %q: %w", email, err)`
+2. **Sentinels** for conditions callers branch on: `var ErrNotFound = errors.New("not found")`; check with `errors.Is`.
+3. **Typed errors** for data callers need: `errors.As(err, &target)`.
+4. **Handle once:** log or return, never both. Log at the boundary (handler, main).
+5. Combine independent errors with `errors.Join`.
 
----
+## Selective Loading Rule
 
-## 4. Modern Go Features (v1.23+)
+| Task | Load |
+|---|---|
+| Goroutines, channels, context, errgroup, worker pools, graceful shutdown, races | `references/concurrency-and-lifecycle.md` |
+| Project layout, optional DDD layers, dependency injection, HTTP server and middleware | `references/ddd-and-architecture.md` |
+| SQL, GORM, transactions, migrations, connection pool | `references/db-and-transactions.md` |
+| Table tests, mocks, integration tests, coverage, benchmarks, lint | `references/testing-and-quality.md` |
 
-### Generics (Type Parameters)
-Use only when logic is identical across types (e.g., 'Map/Filter' on slices, generic cache).
-```go
-func Map[T, U any](s []T, f func(T) U) []U {
-    res := make([]U, len(s))
-    for i, v := range s {
-        res[i] = f(v)
-    }
-    return res
-}
+## Concurrency Quick Rules
+
+1. Never start a goroutine without knowing how it stops.
+2. Pass `ctx` to everything blocking or long-running.
+3. Channels for orchestration and ownership transfer; mutexes for protecting state.
+4. Default channel size 0 or 1; a bigger buffer needs a stated bound and reason.
+
+| Pattern | Use | Tool |
+|---|---|---|
+| Worker pool | Bound CPU/DB use | channel + WaitGroup, or errgroup with `SetLimit` |
+| Fan-out, first error cancels all | Parallel calls | errgroup.WithContext |
+| First response wins | Hedged requests | `select` + context |
+| Pipeline | Stream stages | channels, close by producer |
+| Rate limiting | Protect services | x/time/rate limiter |
+
+## Modern Go (baseline 1.27+)
+
+Use the modern idioms directly; do not write workarounds for older versions.
+- Standard library first: slog (standard logging package), `slices`, `maps`, `cmp`, builtin `min`/`max`/`clear`, `errors.Join`.
+- Loop variables are per-iteration: no `v := v` copies. Use `for i := range n`.
+- Standard ServeMux handles methods and path wildcards (`GET /users/{id}`).
+- Iterators: range-over-func with `iter.Seq` / `iter.Seq2`.
+- Tests: `t.Context()`, `b.Loop()`, `t.Parallel()` without `tt := tt`.
+- Concurrency: `sync.WaitGroup.Go`, `errgroup` with `SetLimit`.
+- Newer language and library additions (1.26 and later) are not listed here; check the release notes and `go doc` before assuming an API exists.
+- Generics only when logic is identical across types (collections, `Map`/`Filter`, typed caches). Not for hiding a single use.
+
+## Project Layout (default: flat)
+
 ```
-
-### Iterators (Go 1.23 Range over Func)
-Use `yield` patterns for custom collection iteration.
-
----
-
-## 5. Standard Project Layout (Standard-Layout)
-
+cmd/<app>/main.go      # wiring only: config, dependencies, start, shutdown
+internal/<feature>/    # private code, grouped by feature or domain
+api/                   # OpenAPI / proto
+migrations/            # SQL migrations
 ```
-├── cmd/ (Main entry points)
-├── internal/ (Private logic - cannot be imported by others)
-├── pkg/ (Public libraries - stable APIs)
-├── api/ (OpenAPI/gRPC/Proto definitions)
-├── web/ (Frontend/Static assets)
-├── configs/ (Default config files)
-├── deployments/ (Docker/K8s/Terraform)
-└── scripts/ (Makefiles/Bash helpers)
-```
+Add `pkg` only for code intended for other modules. For complex domains with several teams or adapters, use the optional layered structure in `references/ddd-and-architecture.md`.
 
----
-
-## 6. Error Handling Strategy
-
-1.  **Wrap for Context**: `fmt.Errorf("user_service.Create: %w", err)`
-2.  **Sentinel Errors**: `var ErrNotFound = errors.New("not found")`
-3.  **Type Assertion**: `errors.As(err, &myErr)` for custom error types.
-4.  **Check once**: Handle the error and move on. Don't handle it twice.
-
----
-
-## 7. High-Performance Go
+## Performance (profile first)
 
 | Optimization | Method |
-|--------------|--------|
-| **Memory Allocation** | Pre-allocate slices/maps with `make(T, 0, capacity)`. |
-| **Pointer vs Value** | Only use pointers for large structs (>128 bytes) or when mutation is REQUIRED. |
-| **String Ops** | Use `strings.Builder` for building large strings in loops. |
-| **Sync.Pool** | Reuse objects to reduce GC pressure (hot paths only). |
-| **Profiling** | Always use `pprof` before assuming where the bottleneck is. |
+|---|---|
+| Allocation | Preallocate: `make([]T, 0, n)`, `make(map[K]V, n)` |
+| Strings | `strings.Builder` in loops; `strconv` over `fmt` for conversions |
+| Pointers vs values | Values for small structs; pointers for large structs, mutation, or types with locks |
+| Pooling | `sync.Pool` only on measured hot paths |
+| Diagnosis | `pprof` and benchmarks before changing code |
 
----
+## Task Progress (validation loop)
 
-## 8. Testing & TDD (Pro Level)
+- [ ] Step 0 done (go version, lint config, conventions)
+- [ ] NEVER list checked against the diff
+- [ ] Errors wrapped with `%w`; every goroutine has an owner; `ctx` first, not stored
+- [ ] Tests: table-driven, success and failure paths, `t.Parallel()` where safe
+- [ ] **Run:** `gofmt -l .` -> `go vet ./...` -> `golangci-lint run` -> `go test -race ./...` -> `go mod tidy` -> fix -> repeat until clean
 
-- **Table-Driven Tests**: The standard for testing multiple inputs/outputs.
-- **TestMain**: For global setup/teardown (DB migrations).
-- **Parallel Testing**: Use `t.Parallel()` to speed up suite execution.
-- **Golden Files**: For testing large outputs (JSON/HTML).
-- **Embedded Files**: Use `//go:embed` for test data.
-
----
-
-## 9. Tooling & Linting
-
-### Mandatory Tools
-- `go fmt` (formatting)
-- `go mod tidy` (dependency cleaning)
-- `golangci-lint run` (The ultimate linter - use it!)
-
-### CI/CD Integration
-- Run `go test -v -race ./...` (Race detector is MANDATORY).
-- Ensure `go.mod` and `go.sum` are always verified.
-
----
-
-## 10. Decision Checklist
-
-- [ ] **Could this be simpler?**
-- [ ] **Is the goroutine leak-proof?**
-- [ ] **Is the error wrapped or ignored?**
-- [ ] **Are we using interfaces correctly?**
-- [ ] **Did I run the race detector?**
-
----
-
-> **Go is about readability and maintainability.** Write code for the engineer who will be debugging it at 3 AM.
+> Write code for the engineer who will debug it at 3 AM.

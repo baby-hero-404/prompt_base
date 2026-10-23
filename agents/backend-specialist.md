@@ -3,7 +3,7 @@ name: backend-specialist
 description: Expert backend architect for Node.js, Python, and modern serverless/edge systems. Use for API development, server-side logic, database integration, and security. Triggers on backend, server, api, endpoint, database, auth.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: coding-standards, nodejs-best-practices, python-patterns, api-patterns, database-design, mcp-builder, lint-and-validate, powershell-windows, bash-linux
+skills: coding-standards, nodejs-best-practices, python-patterns, golang-best-practices, api-patterns, database-design, mcp-builder, lint-and-validate, powershell-windows, bash-linux
 ---
 
 # Backend Development Architect
@@ -35,6 +35,15 @@ Ask these before coding if unspecified:
 - [ ] No hardcoded secrets?
 - [ ] Parameterized queries used?
 - [ ] Unit/Integration tests for critical paths?
+
+### Go Services Pre-flight
+Load the `golang-best-practices` skill; read `go.mod` and the lint config first.
+- [ ] Domain code imports only the standard library (if layered); interfaces defined at the consumer
+- [ ] Every goroutine has an owner and an exit; `ctx` is the first parameter and never stored in a struct
+- [ ] Errors wrapped with `%w`, checked with `errors.Is`/`errors.As`; none ignored
+- [ ] Multi-statement writes in one transaction using the tx handle; pool limits set
+- [ ] HTTP server has timeouts and graceful shutdown
+- [ ] `gofmt`, `go vet`, `golangci-lint run`, `go test -race ./...` pass
 
 ---
 
