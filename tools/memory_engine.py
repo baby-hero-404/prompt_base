@@ -28,21 +28,49 @@ CLAUDE_EVENTS = ("PreCompact", "SessionStart", "UserPromptSubmit")
 
 def get_memory_dir(root: str) -> Path:
     """Resolve the storage directory for context memory database and logs.
-    Defaults to global user directory ~/.claude/prompt_base_memory/{project_name}-{project_hash}
-    to avoid polluting the project repository. Falls back to local project-root/.ai-memory
+    Defaults to global user directory ~/.gemini/prompt_base_memory or
+    ~/.claude/prompt_base_memory/{project_name}-{project_hash} to avoid polluting
+    the project repository. Falls back to local project-root/.ai-memory
     if PB_LOCAL_MEMORY env var is set to '1'."""
     if os.environ.get("PB_LOCAL_MEMORY") == "1":
         return Path(root) / ".ai-memory"
 
-    base_dir = os.environ.get("PB_GLOBAL_MEMORY_DIR")
-    if base_dir:
-        base_path = Path(base_dir).resolve()
-    else:
-        base_path = Path("~/.claude/prompt_base_memory").expanduser()
-
     abs_root = str(Path(root).resolve())
     project_hash = hashlib.sha256(abs_root.encode("utf-8")).hexdigest()[:16]
     folder_name = f"{Path(abs_root).name}-{project_hash}"
+
+    base_dir = os.environ.get("PB_GLOBAL_MEMORY_DIR")
+    if base_dir:
+        return Path(base_dir).resolve() / folder_name
+
+    gemini_base = Path("~/.gemini/prompt_base_memory").expanduser()
+    claude_base = Path("~/.claude/prompt_base_memory").expanduser()
+
+    # 1. Reuse existing index from either agent base so memories are shared
+    if (gemini_base / folder_name).exists():
+        return gemini_base / folder_name
+    if (claude_base / folder_name).exists():
+        return claude_base / folder_name
+
+    # 2. Check calling agent location or environment symmetrically
+    caller_str = str(Path(__file__).resolve())
+    if ".gemini" in caller_str:
+        base_path = gemini_base
+    elif ".claude" in caller_str:
+        base_path = claude_base
+    elif gemini_base.exists() and not claude_base.exists():
+        base_path = gemini_base
+    elif claude_base.exists() and not gemini_base.exists():
+        base_path = claude_base
+    elif Path("~/.gemini").expanduser().exists() and not Path("~/.claude").expanduser().exists():
+        base_path = gemini_base
+    elif Path("~/.claude").expanduser().exists() and not Path("~/.gemini").expanduser().exists():
+        base_path = claude_base
+    elif Path("~/.gemini").expanduser().exists():
+        base_path = gemini_base
+    else:
+        base_path = claude_base
+
     return base_path / folder_name
 
 SECRET_PATTERNS = [
@@ -114,28 +142,74 @@ def _empty_payload():
     }
 
 
+def _extract_last_user_prompt(transcript_path: str) -> str | None:
+    try:
+        path = Path(transcript_path)
+        if not path.is_file():
+            return None
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+        for line in reversed(lines):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+                if isinstance(obj, dict):
+                    if obj.get("type") == "USER_INPUT" and obj.get("content"):
+                        return str(obj["content"])
+                    if obj.get("source") == "USER_EXPLICIT" and obj.get("content"):
+                        return str(obj["content"])
+            except json.JSONDecodeError:
+                continue
+    except Exception:
+        return None
+    return None
+
+
 def normalize_payload(raw: dict) -> dict:
     """Normalize host-specific hook stdin JSON into the internal payload
     {host, event, cwd, session_id, transcript_path, prompt}. Missing/unknown
-    fields become None; never raises. Claude Code is the only verified host
-    today - Gemini's schema is unverified (see design.md, Task 3.4), so any
-    payload that doesn't match a known Claude Code event maps to host=unknown
-    with event=None, which callers treat as a no-op."""
+    fields become None; never raises. Supports both Claude Code and Gemini/Antigravity."""
     if not isinstance(raw, dict):
         return _empty_payload()
 
     event = raw.get("hook_event_name")
-    host = "claude" if event in CLAUDE_EVENTS else "unknown"
-    if host != "claude":
+    if event in CLAUDE_EVENTS:
+        host = "claude"
+    elif any(k in raw for k in ("workspacePaths", "conversationId", "invocationNum", "executionNum", "toolCall")):
+        host = "gemini"
+        if "invocationNum" in raw:
+            event = "PreInvocation"
+        elif "executionNum" in raw or "terminationReason" in raw:
+            event = "Stop"
+        elif "toolCall" in raw:
+            event = "PreToolUse"
+        else:
+            event = "PostInvocation"
+    else:
+        host = "unknown"
         event = None
+
+    cwd = None
+    if host == "gemini":
+        workspaces = raw.get("workspacePaths") or []
+        cwd = workspaces[0] if workspaces else raw.get("cwd")
+    else:
+        cwd = raw.get("cwd")
+
+    session_id = raw.get("session_id") or raw.get("conversationId")
+    transcript_path = raw.get("transcript_path") or raw.get("transcriptPath")
+    prompt = raw.get("prompt")
+    if not prompt and transcript_path and host == "gemini":
+        prompt = _extract_last_user_prompt(transcript_path)
 
     return {
         "host": host,
         "event": event,
-        "cwd": raw.get("cwd"),
-        "session_id": raw.get("session_id"),
-        "transcript_path": raw.get("transcript_path"),
-        "prompt": raw.get("prompt"),
+        "cwd": cwd,
+        "session_id": session_id,
+        "transcript_path": transcript_path,
+        "prompt": prompt,
     }
 
 
@@ -159,6 +233,12 @@ def _load_vec_extension(conn: sqlite3.Connection) -> bool:
     global _VEC_AVAILABLE
     if _VEC_AVAILABLE is False:
         return False
+    try:
+        conn.execute("SELECT vec_version()")
+        _VEC_AVAILABLE = True
+        return True
+    except sqlite3.OperationalError:
+        pass
     try:
         import sqlite_vec  # type: ignore
 

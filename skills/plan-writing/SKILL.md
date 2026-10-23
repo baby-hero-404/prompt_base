@@ -10,7 +10,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 Write comprehensive implementation plans assuming the engineer has zero context and questionable taste. Document everything they need: which files to touch, code, testing, how to verify. Give them bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
 
-**Output location (Plan Artifact Precedence):** If the spec is an OpenSpec set (`docs/openspecs/<task>/`), write the plan content INTO its `tasks.md` (structure below still applies) — do not create a separate `docs/plans/PLAN-*.md`. Only use `docs/plans/PLAN-YYYYMMDD-{slug}.md` when no OpenSpec set exists.
+**Output location:** Always write plan content into an OpenSpec set at `docs/openspecs/<task>/` — specifically in its `tasks.md` (structure below applies). For single-file small tasks, write into `spec.md`.
 
 **Announce at start:** "I'm using the plan-writing skill to create the implementation plan."
 

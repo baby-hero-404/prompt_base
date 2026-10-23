@@ -109,7 +109,7 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | Command | Description | When to Use |
 |---------|-------------|-------------|
 | `/brainstorm [topic]` | Structured exploration with 3+ approaches, pros/cons, effort estimates | Exploring options before committing |
-| `/plan [task]` | Socratic discovery → technical blueprint (into the task's OpenSpec set if one exists, else `docs/plans/PLAN-*.md`) | Before any complex feature (**no code**) |
+| `/plan [task]` | Socratic discovery → technical blueprint (into the task's OpenSpec set at `docs/openspecs/<task>/`) | Before any complex feature (**no code**) |
 | `/create [feature]` | Full-stack implementation via coordinated expert agents | Building new features or prototypes |
 | `/enhance [feature]` | Iterative improvement with dependency management | Adding modules to existing code |
 | `/test [file/feature]` | Unit/integration tests (AAA pattern), coverage checks | Ensuring code reliability |
@@ -117,7 +117,8 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | `/review` | Formal audit of staged changes | Before committing code |
 | `/deploy` | Production deployment with pre-flight checks | Releasing to production/staging |
 | `/status` | Project-wide health check | Checking pending tasks & agent assignments |
-| `/init-context` | Initialize context (MVC) | Start of every new conversation |
+| `/init-context` | Initialize context (MVC), read-only | Start of a conversation in an unfamiliar project |
+| `/init-memory` | Opt-in persistent memory in `docs/ai/` (profile, invariants, decisions) | Only in projects that need memory across sessions |
 | `/deep-solve` | JIT Knowledge workflow | Complex multi-domain problems |
 | `/restructure` | Maintenance & registry update | Framework maintenance |
 | `/orchestrate` | Multi-agent coordination | Tasks requiring multiple perspectives |

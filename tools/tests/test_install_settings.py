@@ -22,6 +22,7 @@ class MergeSettingsTests(unittest.TestCase):
             merged = ins.install(_tracked_source(), dest)
             self.assertIn("PreCompact", merged["hooks"])
             self.assertIn("UserPromptSubmit", merged["hooks"])
+            self.assertIn("Stop", merged["hooks"])
 
     def test_preserves_preexisting_unrelated_hooks_and_keys(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -46,10 +47,11 @@ class MergeSettingsTests(unittest.TestCase):
             dest = Path(tmp) / "settings.json"
             ins.install(_tracked_source(), dest)
             merged = ins.install(_tracked_source(), dest)
-            for event in ("PreCompact", "UserPromptSubmit"):
+            for event in ("PreCompact", "UserPromptSubmit", "Stop"):
                 groups = merged["hooks"][event]
                 self.assertEqual(len(groups), 1)
-                self.assertEqual(len(groups[0]["hooks"]), 1)
+                expected = 2 if event == "UserPromptSubmit" else 1  # recall + invariants
+                self.assertEqual(len(groups[0]["hooks"]), expected)
 
     def test_merging_into_dest_with_same_event_different_matcher_adds_new_group(self):
         with tempfile.TemporaryDirectory() as tmp:

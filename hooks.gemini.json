@@ -1,0 +1,20 @@
+{
+  "prompt-base": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "PY=\"$HOME/.gemini/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.gemini/tools/memory_recall.py\""
+      },
+      {
+        "type": "command",
+        "command": "PY=\"$HOME/.gemini/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.gemini/tools/memory_invariants.py\""
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "PY=\"$HOME/.gemini/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.gemini/tools/verify_gate.py\""
+      }
+    ]
+  }
+}

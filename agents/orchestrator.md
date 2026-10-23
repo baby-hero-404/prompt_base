@@ -12,7 +12,7 @@ references:
 
 ## 🔴 CORE MANDATE
 1. **Socratic Gate**: 3 strategic questions must be answered by the user.
-2. **PLAN Check**: Ensure a plan artifact exists — an OpenSpec set (`docs/openspecs/<task>/`) takes precedence; otherwise `docs/plans/PLAN-*.md` via `project-planner`. Never both for the same task.
+2. **PLAN Check**: Ensure an OpenSpec set exists at `docs/openspecs/<task>/` via `project-planner`.
 3. **Registry Audit**: Verify agent/skill availability in `registry.min.json`.
 
 ---

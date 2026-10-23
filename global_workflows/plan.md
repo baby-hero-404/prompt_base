@@ -11,6 +11,5 @@ $ARGUMENTS
 ## Behavior
 
 1. Execute Socratic discovery (ask 3 strategic questions if underspecified).
-2. Check for existing OpenSpec set in `docs/openspecs/<task>/`.
-3. If none exists, create `docs/plans/PLAN-YYYYMMDD-{slug}.md`.
-4. Define task graph with input, output, and verification steps. Zero code during planning phase.
+2. Create or enrich the OpenSpec set in `docs/openspecs/<task>/` (sized to task complexity: `spec.md` alone for Small, `proposal.md` + `specs.md` + `tasks.md` for Medium, plus `design.md` for Large).
+3. Define task graph with input, output, and verification steps in `tasks.md` (or `spec.md` for small tasks). Zero code during planning phase.

@@ -1,7 +1,9 @@
 {
   "project": "template",
-  "workspace": "",
   "lastScanned": "",
   "checksums": {},
-  "autoRefreshTriggers": ["package.json", "ARCHITECTURE.md"]
+  "autoRefreshTriggers": [
+    "ARCHITECTURE.md",
+    "README.md"
+  ]
 }

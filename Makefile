@@ -75,8 +75,7 @@ install-gemini:
 	@if [ -f ~/.gemini/.pb_settings_backup.json ]; then mv ~/.gemini/.pb_settings_backup.json ~/.gemini/settings.json; else rm -f ~/.gemini/settings.json; fi
 	@rm -f ~/.gemini/CLAUDE.md
 	@bash scripts/cleanup.sh ~/.gemini
-	@echo "NOTE: context-memory-engine hooks are NOT registered for Gemini yet (adapter unverified, Task 3.4)."
-	@echo "      Use 'make memory-rebuild' + degraded/FTS5 recall manually until that lands."
+	@python3 scripts/install_gemini_hooks.py --source hooks.gemini.json --dest ~/.gemini/config/hooks.json
 	@echo "Gemini Install complete."
 
 # Install/Update locally to ~/.claude
@@ -118,17 +117,38 @@ memory-setup:
 	@$(MAKE) memory-bench
 	@echo "memory-setup complete."
 
+# Agent-neutral Python runner: prefers ~/.gemini/venv or ~/.claude/venv, fallback to python3
+PY_VENV := $(shell if [ -x ~/.gemini/venv/bin/python ]; then echo ~/.gemini/venv/bin/python; elif [ -x ~/.claude/venv/bin/python ]; then echo ~/.claude/venv/bin/python; else echo python3; fi)
+
 # Force a fresh cold-start latency measurement for the current project.
 memory-bench:
-	@if [ -x ~/.claude/venv/bin/python ]; then ~/.claude/venv/bin/python tools/memory_bench.py --root .; else python3 tools/memory_bench.py --root .; fi
+	@$(PY_VENV) tools/memory_bench.py --root .
 
 # Create an empty, schema-correct .ai-memory/memory.db for the current project.
 memory-init:
 	@python3 tools/memory_init.py --root .
 
+# Read-only report: docs/ai state, this agent's derived index, leftover index dirs.
+memory-status:
+	@$(PY_VENV) tools/memory_status.py --root .
+
+# Is docs/ai project memory stale? (exit 1 when an autoRefreshTriggers file changed)
+memory-stale:
+	@python3 tools/memory_stale.py --root .
+
 # Rebuild the derived index from docs/ai/adr/ + docs/ai/archive/ markdown.
 memory-rebuild:
-	@python3 tools/memory_rebuild.py --root .
+	@$(PY_VENV) tools/memory_rebuild.py --root .
+
+# Trust current project for automated hooks (verify gate, memory recall/invariants)
+trust:
+	@python3 tools/pb_trust.py --add .
+	@echo "Project trusted for automated hooks."
+
+# Remove current project from trust list
+untrust:
+	@python3 tools/pb_trust.py --remove .
+	@echo "Project removed from trust list."
 
 clone-references: ## Clone external test/skill references
 	@echo "==> Cloning external references..."

@@ -5,6 +5,7 @@ root-level DB (not scattered under the subdirectory)."""
 
 import os
 os.environ["PB_LOCAL_MEMORY"] = "1"
+os.environ["PB_TRUST_ALL"] = "1"  # these tests exercise the hooks themselves; opt-in gating is covered in test_memory_optin.py
 import json
 import subprocess
 import sys

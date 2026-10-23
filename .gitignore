@@ -26,3 +26,5 @@ references/*
 .tmp/*
 .tokensave
 .claude/*
+
+docs/ai

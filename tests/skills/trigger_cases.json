@@ -235,5 +235,17 @@
     "expect": [
       "makefile-standards"
     ]
+  },
+  {
+    "prompt": "agent keeps violating AGENTS.md rules, add rule enforcement to make verify",
+    "expect": [
+      "rule-enforcement"
+    ]
+  },
+  {
+    "prompt": "rule drift again, the agent ignores the line limit",
+    "expect": [
+      "rule-enforcement"
+    ]
   }
 ]

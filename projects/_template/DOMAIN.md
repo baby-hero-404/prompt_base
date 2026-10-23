@@ -5,7 +5,7 @@
 - **Concept 2:** Definition and role in the system.
 
 ## Invariant Rules
-*(Rules that must never be broken, e.g., "All DB queries must use the ORM" or "User IDs are always UUIDv4")*
+*(Rules that must never be broken, e.g., "All DB queries must use the ORM". Cite the source rule ID and enforcement tag, see `projects/_template/rules/README.md` in the framework: `1.2 [test] domain/ never imports Flutter`)*
 1. 
 2. 
 

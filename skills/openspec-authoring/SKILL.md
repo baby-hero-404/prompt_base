@@ -9,7 +9,7 @@ priority: HIGH
 
 > **Decision-Preserving Execution Contract**: OpenSpec is NOT a heavy, bureaucratic requirement document. It is a contract that preserves intent, decisions, boundaries, and validation methods so that neither humans nor AI agents misunderstand the goal.
 
-> 📌 **Plan Artifact Precedence**: A complete OpenSpec set **satisfies** the COMPLEX CODE plan requirement. Do NOT create a parallel `docs/plans/PLAN-*.md`.
+> 📌 **Sole Plan Standard**: An OpenSpec set is the sole planning and execution artifact for all non-trivial tasks. Never create legacy `docs/plans/` files.
 
 ---
 

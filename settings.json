@@ -18,6 +18,21 @@
           {
             "type": "command",
             "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_recall.py\""
+          },
+          {
+            "type": "command",
+            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_invariants.py\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/verify_gate.py\""
           }
         ]
       }

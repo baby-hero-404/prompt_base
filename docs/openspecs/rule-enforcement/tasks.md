@@ -1,0 +1,23 @@
+# Tasks: Per-Project Rule Sync & Deterministic Enforcement
+
+- [x] **W1: `/init-context` v2 (`global_workflows/init-context.md`)**
+  - [x] Detect workspace `AGENTS.md` / `CLAUDE.md`.
+  - [x] Distil ~13 invariants into `DOMAIN.md` with source rule IDs.
+  - [x] Propose `CLAUDE.md` with `@AGENTS.md` if needed.
+- [x] **W2: Skill `rule-enforcement` (`skills/rule-enforcement/SKILL.md`)**
+  - [x] Scaffold skill with `references/check-recipes.md`.
+  - [x] Add trigger cases and pass `make skill-check`.
+- [x] **W3: Template updates (`projects/_template/`)**
+  - [x] Add `rules/README.md` documenting rule format and enforcement tags.
+  - [x] Add rule reference hint to template `DOMAIN.md` (Invariant Rules cite source IDs + tags).
+- [x] **W4: Stop hook gate (`tools/verify_gate.py`)**
+  - [x] Implement stdlib-only Stop hook with loop guard and Makefile check.
+  - [x] Add unit tests in `tools/tests/test_verify_gate.py`.
+  - [x] Register in `settings.json`.
+- [x] **W5: Rule text standardization**
+  - [x] Number rules with IDs and enforcement tags in `GEMINI.md` and `CLAUDE.md`.
+  - [x] Add critical rules summary tail.
+- [x] **W6: Eliminate legacy `docs/plans/`**
+  - [x] Convert existing plan into OpenSpec (`docs/openspecs/rule-enforcement/`).
+  - [x] Delete `docs/plans/` directory.
+  - [x] Update all workflows, agents, skills, and rules to reference only `docs/openspecs/`.

@@ -1,0 +1,24 @@
+{
+  "project": "prompt_base",
+  "lastScanned": "2026-10-23T16:08:56+07:00",
+  "checksums": {
+    "ARCHITECTURE.md": "1b9a5c234bf7c97a122d2722340d3bc6a4b7d44c4c83fa59165decb7770507f6",
+    "README.md": "d6d8adc4e7e89a250cd469460c98a4f3650ed8fb3d1afadcd21117247886a687",
+    "CLAUDE.md": "773e596f100f70d5c9ee3477b8beee2922e38c58980aecd27ebd820e7d90899c",
+    "GEMINI.md": "08e16499a3b08efee1c8a9e97b648056b15ea0bc3c27598d6226c049075d2d4e",
+    "registry.min.json": "fbf0a14c615965503ece48e3f0fc0467eb4598a58855e2d1f4d5b5015f222726",
+    "Makefile": "c4df65c5dcd2eaebf39da939aad2bb692d02f27d1f9d59342c610ab949abb548",
+    "install.manifest.json": "5a3a6c5f24b34660f8eeb2277cbf93d163840809d4a360b3c7d6a60edd38d0f6",
+    "settings.json": "d3fd97c50604c31398076f2357f4707f6f6e0a66c93a08cea519a7a214bc91be"
+  },
+  "autoRefreshTriggers": [
+    "ARCHITECTURE.md",
+    "README.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "registry.min.json",
+    "Makefile",
+    "install.manifest.json",
+    "settings.json"
+  ]
+}

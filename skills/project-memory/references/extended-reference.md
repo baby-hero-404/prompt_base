@@ -1,3 +1,5 @@
+> **Superseded in part:** `AI_PROJECT_CONTEXT.md`, `PROJECT_INDEX.md` and `CODING_PATTERNS.md` (§2.2, §2.3) are replaced by `docs/ai/PROFILE.md` and `docs/ai/DOMAIN.md`. §2.4 and §2.5 stay optional under `docs/ai/progress/`. Sections 3 to 5 refer to the old file names; read them as `PROFILE.md` / `DOMAIN.md`. Current model: `SKILL.md` → Memory layers.
+
 ### 2.2 `PROJECT_INDEX.md` — File Map
 
 A curated directory of important files grouped by domain. This replaces the need for `find`, `grep`, and `ls` exploration.
@@ -158,7 +160,7 @@ If context files don't exist:
 
 1. **Check for `ARCHITECTURE.md`** — may contain partial context (legacy format).
 2. **Auto-generate** the missing files by scanning the codebase once.
-3. **Prompt the user** to run `/init-context` for guided generation.
+3. **Prompt the user** to run `/init-memory` for guided generation.
 
 ---
 

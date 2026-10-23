@@ -18,6 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import memory_engine as me  # noqa: E402
+import pb_trust  # noqa: E402
 
 DEFAULT_K = 5
 DEFAULT_MAX_CHARS = 2000
@@ -129,24 +130,36 @@ def main() -> None:
 
     try:
         raw_payload = json.loads(raw_text) if raw_text.strip() else {}
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, TypeError):
         raw_payload = {}
     if not isinstance(raw_payload, dict):
         raw_payload = {}
-
-    cwd = raw_payload.get("cwd") or os.getcwd()
+    payload = me.normalize_payload(raw_payload)
+    host = payload.get("host") or "unknown"
+    cwd = payload.get("cwd") or raw_payload.get("cwd") or os.getcwd()
     root = me.resolve_project_root(cwd)
+
+    # Opt-in per project (/init-memory): do nothing, create nothing, elsewhere.
+    if not pb_trust.memory_enabled(root):
+        if host == "gemini":
+            print(json.dumps({}))
+        sys.exit(0)
 
     output = ""
     try:
-        payload = me.normalize_payload(raw_payload)
         output = recall(root, payload)
     except Exception as exc:
         me._log(root, f"memory_recall: unhandled error: {exc}")
         output = ""
 
-    if output:
-        print(output)
+    if host == "gemini":
+        if output:
+            print(json.dumps({"injectSteps": [{"ephemeralMessage": f"Context Memory Recall:\n{output}"}]}))
+        else:
+            print(json.dumps({}))
+    else:
+        if output:
+            print(output)
     sys.exit(0)
 
 

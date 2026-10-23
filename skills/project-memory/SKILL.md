@@ -7,6 +7,7 @@ triggers:
   - "architecture"
   - "system overview"
   - "init-context"
+  - "init-memory"
   - "project memory"
   - "context cache"
   - "long-term memory"
@@ -22,7 +23,31 @@ triggers:
 
 ## 0. Automated Long-Term Tier (Hook-Enforced)
 
-The context files in `docs/ai/` below are this project's **current-state** memory — architecture, file map, task status. There is a separate, **automated long-term tier** for *why past decisions were made*, enforced by Claude Code hooks (not agent discipline):
+### Memory layers (shared by every agent)
+
+**Rule:** the source of truth is plain markdown in the project repo under `docs/ai/`, readable by any agent (Claude Code, Gemini/Antigravity, Codex, Cursor...). Hooks, databases and embeddings are per-agent accelerators and are always rebuildable from that markdown.
+
+| Layer | Location | Holds | Written by | Agent-neutral? |
+|-------|----------|-------|------------|----------------|
+| Profile | `docs/ai/PROFILE.md` | Identity, stack, repo map | `/init-memory` | Yes (markdown) |
+| Invariants | `docs/ai/DOMAIN.md` | Domain rules with source rule IDs + enforcement tags | `/init-memory` | Yes. Re-injected by `tools/memory_invariants.py` (Claude hook, or `--print` for any agent) |
+| Freshness | `docs/ai/manifest.json` | `autoRefreshTriggers` + `checksums` | `tools/memory_stale.py --update` | Yes (any agent runs the script) |
+| Decisions (why) | `docs/ai/adr/`, `docs/ai/archive/` | ADRs, session rollups | `PreCompact` hook from `<adr>` tags, or by hand | Source files yes; hook capture is Claude-only |
+| Derived index | `~/.claude/prompt_base_memory/<name>-<hash>/` | FTS/vector index of the above | hooks, `make memory-rebuild` | No (disposable) |
+| Preferences | Claude Code native auto-memory (`~/.claude/projects/.../memory/`) | User/feedback notes | Claude Code itself | No. Never use it as the shared store |
+| Task progress | `docs/openspecs/<task>/tasks.md` | Checkbox state | the agent doing the task | Yes |
+
+Opt-in: memory exists only in projects where the user ran `/init-memory`; elsewhere no files are created and the memory hooks do nothing (they need `docs/ai/` and a trusted project). `/init-context` is read-only.
+
+Legacy: `~/.gemini/projects/<parent>-<leaf>/` held PROFILE/DOMAIN before `docs/ai/`. It is read as a fallback only; migrate by copying the files into `docs/ai/`.
+
+Trust: hooks that act on repo content (invariant injection, Stop gate) run only for projects the user trusted with `python3 tools/pb_trust.py --add`; the list lives outside the repo.
+
+Staleness: `python3 tools/memory_stale.py --root .` exits 1 when a file in `autoRefreshTriggers` changed since the last `--update`; refresh with `/init-memory`.
+
+### Automated long-term tier (Claude hooks)
+
+There is a separate, **automated long-term tier** for *why past decisions were made*, enforced by Claude Code hooks (not agent discipline):
 
 | Layer | Location | Written by |
 |-------|----------|------------|
@@ -65,62 +90,26 @@ Eliminate redundant project scanning across AI sessions by maintaining a set of 
 
 ## 2. Context File Structure
 
-All project memory files live in the `docs/ai/` directory, separated from human-facing documentation to avoid mixing concerns.
+All project memory lives in `docs/ai/`, separated from human-facing documentation:
 
 ```
 docs/ai/
-├── context/                     # Project identity & discovery
-│   ├── AI_PROJECT_CONTEXT.md    # Project overview & architecture summary
-│   └── PROJECT_INDEX.md         # File map — where everything lives
-├── patterns/                    # Code conventions & standards
-│   └── CODING_PATTERNS.md      # Established code patterns & conventions
-└── progress/                    # Task tracking & roadmap
-    ├── TASK_STATUS.md           # Current task progress & notes
-    └── PHASE_PLAN.md           # Roadmap phases & milestones (optional)
+├── PROFILE.md        # identity, architecture, stack, repo map
+├── DOMAIN.md         # concepts, "## Invariant Rules", quirks
+├── manifest.json     # autoRefreshTriggers + checksums (staleness)
+├── adr/              # decision records (hook- or hand-written)
+├── archive/          # session rollups (hook-written)
+└── progress/         # optional TASK_STATUS.md / PHASE_PLAN.md
 ```
 
-### 2.1 `AI_PROJECT_CONTEXT.md` — Project Overview
+Templates: `projects/_template/` (`PROFILE.md`, `DOMAIN.md`, `manifest.json`, `projects/_template/rules/README.md` for the rule ID + enforcement tag convention). `DOMAIN.md` Invariant Rules cite the project's own rule IDs, e.g. `1.2 [test] domain/ never imports Flutter`, capped at about 13 lines because they are re-injected into context.
 
-The single source of truth for project identity and architecture.
-
-**Must contain:**
-
-```markdown
-# Project Overview
-
-- **Name**: <project-name>
-- **Type**: <Backend | Frontend | Fullstack | Mobile | CLI | Library>
-- **Language/Runtime**: <e.g., Go 1.22, Node 20, Python 3.12>
-- **Framework**: <e.g., Gin, Next.js, FastAPI>
-- **Database**: <e.g., PostgreSQL 16, MongoDB, SQLite>
-- **Architecture**: <e.g., handler → service → repository>
-
-# Key Architectural Decisions
-
-- <Decision 1: e.g., Docker SDK for container management, not shell commands>
-- <Decision 2: e.g., LLM execution is stubbed until Phase 4>
-
-# Entry Points
-
-- Main: <e.g., server/main.go>
-- Router: <e.g., server/internal/router/router.go>
-- Migrations: <e.g., server/migrations/>
-
-# External Dependencies
-
-- <e.g., Docker SDK, Redis, RabbitMQ>
-
-# Environment & Config
-
-- Config source: <e.g., .env, config.yaml>
-- Key env vars: <list critical ones>
-```
-
+The older `AI_PROJECT_CONTEXT.md` / `PROJECT_INDEX.md` / `CODING_PATTERNS.md` files are superseded by `PROFILE.md` + `DOMAIN.md`.
 
 ## Extended References
 For less-frequently-needed detail, see [`references/extended-reference.md`](references/extended-reference.md):
-- 2.2 `PROJECT_INDEX.md` — File Map
-- 2.3 `CODING_PATTERNS.md` — Conventions & Patterns
+- 2.2 `PROJECT_INDEX.md` — File Map (superseded by `PROFILE.md` Repository Map)
+- 2.3 `CODING_PATTERNS.md` — Conventions & Patterns (superseded by `DOMAIN.md`)
 - 2.4 `TASK_STATUS.md` — Progress Tracker
 - 2.5 `PHASE_PLAN.md` — Roadmap (Optional)
 - 3. Session Bootstrap Protocol

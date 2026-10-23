@@ -19,6 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import memory_engine as me  # noqa: E402
+import pb_trust  # noqa: E402
 
 ADR_PATTERN = re.compile(
     r'<adr\s+title="(?P<title>[^"]*)"\s*>\s*'
@@ -179,6 +180,10 @@ def main() -> None:
 
     cwd = raw_payload.get("cwd") or os.getcwd()
     root = me.resolve_project_root(cwd)
+
+    # Opt-in per project (/init-memory): do nothing, create nothing, elsewhere.
+    if not pb_trust.memory_enabled(root):
+        sys.exit(0)
 
     try:
         payload = me.normalize_payload(raw_payload)

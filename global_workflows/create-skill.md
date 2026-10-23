@@ -32,7 +32,7 @@ Create a new skill from a name (and optional category/description) with zero man
 
 5. **Confirm**
    - Report the final path and confirm the skill now appears in `registry.min.json`.
-   - It's live immediately: installed skills are symlinked from `~/.claude/skills/`, so no separate activation step is needed.
+   - It's live immediately: installed skills are symlinked/copied to `~/.gemini/config/skills/` and `~/.claude/skills/`, so no separate activation step is needed.
 
 ## Usage Examples
 

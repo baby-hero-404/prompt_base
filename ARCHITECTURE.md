@@ -61,6 +61,7 @@ All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.
 │   ├── deploy.md
 │   ├── enhance.md
 │   ├── init-context.md
+│   ├── init-memory.md
 │   ├── orchestrate.md
 │   ├── restructure.md
 │   ├── review.md
@@ -141,7 +142,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 | Category    | Skills                                                                              |
 | ----------- | ----------------------------------------------------------------------------------- |
-| **Testing** | `testing-patterns`, `tdd-workflow`, `webapp-testing`, `lint-and-validate`, `verification-before-completion` |
+| **Testing** | `testing-patterns`, `tdd-workflow`, `webapp-testing`, `lint-and-validate`, `verification-before-completion`, `rule-enforcement` |
 | **Security**| `vulnerability-scanner`, `red-team-tactics`, `red-teaming`                           |
 | **Growth**  | `seo-fundamentals`, `geo-fundamentals`                                              |
 | **Ops**     | `deployment-procedures`, `server-management`, `bash-linux`, `powershell-windows`    |
@@ -149,7 +150,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 ---
 
-## 🔄 Workflows (14)
+## 🔄 Workflows (16)
 
 | Command         | Description                   |
 | --------------- | ----------------------------- |
@@ -162,11 +163,37 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | `/plan`         | Task breakdown                |
 | `/status`       | Check project status          |
 | `/test`         | Run tests                     |
-| `/init-context` | Initialize MVC                |
+| `/init-context` | Initialize MVC (read-only)    |
+| `/init-memory`  | Opt-in persistent memory      |
 | `/deep-solve`   | JIT Knowledge workflow        |
 | `/restructure`  | Maintenance & registry update |
 | `/review`       | Pre-commit audit              |
 | `/ux-ui-pro`    | Design intelligence           |
+
+---
+
+## 🛡️ Per-Project Rules & Enforcement
+
+Project-specific rules live in the project repo (`AGENTS.md`, `CLAUDE.md`, `.claude/rules/*.md`), not in the framework. Prose rules are advisory, so enforcement is layered:
+
+1. **Memory (opt-in):** `/init-memory` distils the project's rules into ID-tagged invariants in `docs/ai/DOMAIN.md`.
+2. **Convention:** every rule has a stable ID and a tag `[hook] [lint] [test] [review]` (`projects/_template/rules/README.md`).
+3. **Checks:** the `rule-enforcement` skill generates mechanical checks and wires them into the project's `verify` target.
+4. **Gate:** the `Stop` hook (`tools/verify_gate.py`, registered via `settings.json` and merged by `scripts/install_settings.py`) runs `make verify` and blocks completion on failure. It is a no-op without a `verify` target and for any project not trusted by the user (`python3 tools/pb_trust.py --add`, list kept outside the repo, so a cloned repo cannot trust itself); it has a loop guard (`stop_hook_active`) and a timeout (`PB_VERIFY_TIMEOUT`, default 300s).
+
+---
+
+## 🧠 Project Memory (shared by all agents)
+
+**Opt-in per project:** nothing is created and no memory hook acts until the user runs `/init-memory` in that project (creates `docs/ai/` and adds it to the user-local trust list). `/init-context` is read-only. Source of truth is agent-neutral markdown in the project repo: `docs/ai/{PROFILE.md, DOMAIN.md, manifest.json, adr/, archive/}`. Hooks and databases are per-agent accelerators, rebuildable from that markdown. Model and layer table: `skills/project-memory/SKILL.md`.
+
+| Tool | Role |
+|------|------|
+| `tools/memory_invariants.py` | Prints `DOMAIN.md` invariants; Claude hook re-injects them on the 1st and every 10th prompt (`PB_INVARIANT_EVERY`) |
+| `tools/pb_trust.py` | User-local trust list (`--add`, `--remove`, `--list`); Stop gate and invariant hook need a trusted project, capture and recall also need `docs/ai/` (`PB_TRUST_ALL=1` bypasses) |
+| `tools/memory_stale.py` | Compares `manifest.json` checksums with `autoRefreshTriggers`; `make memory-stale` |
+| `tools/memory_status.py` | Read-only report; `make memory-status` |
+| `tools/memory_compact.py` / `memory_recall.py` | Claude-only ADR capture and recall into the derived index |
 
 ---
 
@@ -193,7 +220,7 @@ No plan or spec needed. The agent applies the Socratic Gate lightly (confirms un
 ```
 
 1. `/plan` runs Socratic discovery and drafts the high-level roadmap (phases, agent assignments).
-2. The `openspec-authoring` skill decomposes the approved roadmap into a spec set sized to task complexity (`docs/openspecs/{task}/`: `spec.md` alone for Small, `proposal.md`/`specs.md`/`tasks.md` for Medium, plus `design.md` for Large). The roadmap content lands in `proposal.md`/`tasks.md` — **no separate `docs/plans/PLAN-*.md` is kept** (Plan Artifact Precedence: the OpenSpec set IS the plan; the plan file is only the fallback when no spec set is authored).
+2. The `openspec-authoring` skill decomposes the approved roadmap into a spec set sized to task complexity (`docs/openspecs/{task}/`: `spec.md` alone for Small, `proposal.md`/`specs.md`/`tasks.md` for Medium, plus `design.md` for Large). The roadmap content lands in `proposal.md`/`tasks.md` (the OpenSpec set IS the plan of record; no legacy `docs/plans/` is used).
 3. `/create` or `/enhance` implements the tasks defined in the spec set, tracking state via `tasks.md` checkboxes.
 4. `/review` performs a pre-commit quality check before merging.
 
@@ -253,8 +280,8 @@ Create SKILL.md → Register in registry.min.json → make audit
 | Metric              | Value |
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
-| **Total Skills**    | 53    |
-| **Total Workflows** | 15    |
+| **Total Skills**    | 56    |
+| **Total Workflows** | 16    |
 
 ---
 
@@ -266,6 +293,11 @@ Create SKILL.md → Register in registry.min.json → make audit
 | `{FRAMEWORK_ROOT}/GEMINI.md` / `CLAUDE.md` | Self-contained | Governance and rule enforcement. |
 | `ARCHITECTURE.md` | `{FRAMEWORK_ROOT}/registry.min.json` | Statistics and module overview. |
 | `README.md` | `ARCHITECTURE.md` | General project overview and setup. |
+| `settings.json` (Stop hook) | `tools/verify_gate.py`, `tools/pb_trust.py`, `scripts/install_settings.py`, `tools/tests/test_verify_gate.py` | Hook command path and merge behavior must stay in sync. |
+| `skills/rule-enforcement/` | `projects/_template/rules/README.md`, `global_workflows/init-memory.md`, `CLAUDE.md` / `GEMINI.md` | Share the rule ID + enforcement tag convention. |
+| `CLAUDE.md` | `GEMINI.md` | Same rules; only install paths differ. Edit both together. |
+| `docs/ai/manifest.json` | `tools/memory_stale.py`, `global_workflows/init-memory.md`, `global_workflows/init-context.md`, `global_workflows/status.md` | Staleness check reads/writes this file. |
+| `settings.json` (UserPromptSubmit) | `tools/memory_invariants.py`, `tools/memory_recall.py`, `tools/pb_trust.py` | Two hooks share the event; keep paths in sync. |
 
 ---
 

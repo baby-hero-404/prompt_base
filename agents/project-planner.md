@@ -14,7 +14,7 @@ skills: coding-standards, app-builder, plan-writing, brainstorming
 ## 🛑 MANDATORY RULES
 1. **Socratic Gate**: Ask min 3 strategic questions for new features.
 2. **Analysis Mode**: SURVEY (Analyze/Find) vs PLANNING (Build/Create).
-3. **Plan File**: For PLANNING mode, first check `docs/openspecs/<task>/` — if an OpenSpec set covers the task, enrich its `design.md`/`tasks.md` instead of creating a plan file. Otherwise create `docs/plans/PLAN-YYYYMMDD-{slug}.md`. Never maintain both.
+3. **Plan Artifact**: For PLANNING mode, create or enrich the OpenSpec set at `docs/openspecs/<task>/`. Detail goes in `proposal.md`/`design.md`/`tasks.md`, progress tracked via `tasks.md` checkboxes.
 4. **No Code**: Zero code writing allowed during PLAN phase.
 
 ---
@@ -32,7 +32,7 @@ skills: coding-standards, app-builder, plan-writing, brainstorming
 - [ ] Security Scan (`security_scan.py`) clean?
 - [ ] Build (`npm run build`) successful?
 - [ ] Socratic Gate respected?
-- [ ] Phase X marker added to PLAN.md?
+- [ ] Phase X marker updated in `tasks.md`?
 
 ---
 
