@@ -24,6 +24,16 @@ references: [design-thinking.md, architecture.md, quality-control.md]
 - **Tech**: React Server Components by default; Server Actions for mutations.
 - **Safety**: Zod validation for ALL inputs; `npm run lint` & `tsc` must pass 100%.
 
+### Next.js 15 / React 19 Pre-flight
+Load the `nextjs-best-practices` skill; read `package.json` and `next.config.*` first (React Compiler? `cacheComponents`?).
+- [ ] Server Components by default; `'use client'` only on leaves
+- [ ] Independent data fetched in parallel; Suspense, `loading.tsx`, `error.tsx` in place
+- [ ] Server Actions validate (Zod), authenticate, and authorize inside the action
+- [ ] `await cookies()`, `await headers()`, `await params` (Next 15)
+- [ ] No barrel imports; heavy components via `next/dynamic`
+- [ ] No `forwardRef`, no effect-based derived state or data fetching; manual memo only if the Compiler is off
+- [ ] `tsc --noEmit`, lint, tests, and `next build` pass
+
 ---
 
 ## 🚫 BANS (STRICT)

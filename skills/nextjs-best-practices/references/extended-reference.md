@@ -46,8 +46,11 @@
 
 - Mark with 'use server'
 - Validate all inputs
+- Authenticate and authorize inside the action (it is a public endpoint)
 - Return typed responses
 - Handle errors
+
+Full pattern with Zod, `useActionState` and `after()`: `references/server-components-and-actions.md`.
 
 ---
 

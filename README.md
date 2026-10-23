@@ -170,15 +170,31 @@ Skills are modular knowledge packages that the AI loads on-demand based on user 
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgments & External References
 
-This framework's rigorous process execution, strict behavioral gates, and core workflow skills (including TDD, systematic debugging, planning, and multi-agent coordination) are heavily inspired by and adapted from the [obra/superpowers](https://github.com/obra/superpowers) methodology.
+This framework's rigorous process execution, strict behavioral gates, and specialized domain skills are inspired by and adapted from leading open-source projects and engineering doctrines:
 
-The "Token-Efficient Output" rules (terse speak without losing context), "Auto-Clarity Overrides", and our "JIT v2" Section-level skill loading protocol were directly adapted from the excellent token compression concepts in **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)**.
+- **Core Methodology & Socratic Gates**: Adapted from **[obra/superpowers](https://github.com/obra/superpowers)** (TDD, systematic debugging, planning, and multi-agent coordination).
+- **Token Efficiency & JIT Protocols**: Adapted from **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)** (terse output compression, dynamic section-level context filtering) and **[rtk-ai/rtk](https://github.com/rtk-ai/rtk)** (`rtk-token-killer` terminal output compression).
+- **Design Intelligence & Craft Rules**: Adapted from **[OpenDesign](https://github.com/nexu-io/open-design)** (`taste-skill`, universal craft rules for typography/color/motion, and 151 portable design systems).
+- **Next.js & React 19 Best Practices**: Adapted from **[vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)** (70 atomic performance rules, eliminating waterfalls, server actions security, `after()` API) and **[gohypergiant/agent-skills](https://github.com/gohypergiant/agent-skills)** (`accelint-react-best-practices`, "NEVER Do React" anti-patterns catalog, React Compiler gating).
+- **Flutter & Mobile Architecture**: Adapted from Google's **[flutter/agent-plugins](https://github.com/flutter/agent-plugins)** (layout constraint diagnostics, task verification loops) and **[Mauriciog87/flutter-agent-skill](https://github.com/Mauriciog87/flutter-agent-skill)** (Three-Layer MVVM architecture, Riverpod/BLoC state matrix, memory disposal lifecycle, and Flame 2D game development).
+- **Golang Enterprise Engineering**: Adapted from **[cexll/golang-base-practices-skills](https://github.com/cexll/golang-base-practices-skills)** (4-layer DDD architecture, closure-based GORM transaction safety, `errgroup` concurrency, table-driven testing) and **[mfmezger/ai_agent_dotfiles](https://github.com/mfmezger/ai_agent_dotfiles)** ("Concrete types first", caller-defined minimal interfaces, context hygiene, and critical Go footguns catalog).
 
-Our shell command token-optimization logic and `rtk-token-killer` skill are powered by **[rtk-ai/rtk](https://github.com/rtk-ai/rtk)** (Rust Token Killer), which filters and shapes terminal command outputs to reduce context token usage by 60–90%.
+### 📚 Reference Repositories & Discovery Reports
 
-The `ux-ui-pro-max` skill's anti-AI-slop rules, brief inference workflow, three-dial configuration system, craft rules (typography, color, animation, state coverage), and pattern vocabulary are adapted from **[OpenDesign](https://github.com/open-design)** — specifically its `taste-skill`, `craft/` universal rules, and 151-package design system architecture.
+| Repository | Domain / Focus | Key Contributions | Discovery Report |
+|---|---|---|---|
+| [obra/superpowers](https://github.com/obra/superpowers) | Methodology & Workflows | TDD, planning, systematic debugging, behavioral gates | — |
+| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Token Compression | Terse mode, JIT v2 markdown section filtering | [DISCOVERY-caveman.md](docs/discovery/DISCOVERY-caveman.md) |
+| [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | Terminal Token Reduction | Command output filtering via `rtk-token-killer` | — |
+| [nexu-io/open-design](https://github.com/nexu-io/open-design) | Design Systems & UI Craft | `ux-ui-pro-max`, anti-slop rules, design dials, tokens | [DISCOVERY-open-design-ui.md](docs/discovery/DISCOVERY-open-design-ui.md) |
+| [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | Next.js 15+ & React Performance | 70 atomic rules, eliminating waterfalls, server actions auth, `after()` | [DISCOVERY-nextjs-agent-skills.md](docs/discovery/DISCOVERY-nextjs-agent-skills.md) |
+| [gohypergiant/agent-skills](https://github.com/gohypergiant/agent-skills) | React 19 Defensiveness | "NEVER Do React" catalog, React Compiler gating | [DISCOVERY-nextjs-agent-skills.md](docs/discovery/DISCOVERY-nextjs-agent-skills.md) |
+| [flutter/agent-plugins](https://github.com/flutter/agent-plugins) | Flutter / Dart (Official) | Layout constraint diagnostics, task feedback loops, MCP | [DISCOVERY-flutter-skills.md](docs/discovery/DISCOVERY-flutter-skills.md) |
+| [Mauriciog87/flutter-agent-skill](https://github.com/Mauriciog87/flutter-agent-skill) | Flutter Architecture & Gaming | Three-Layer MVVM, Riverpod/BLoC matrix, Flame 2D engine | [DISCOVERY-flutter-skills.md](docs/discovery/DISCOVERY-flutter-skills.md) |
+| [cexll/golang-base-practices-skills](https://github.com/cexll/golang-base-practices-skills) | Enterprise Go & Microservices | 4-layer DDD layout, GORM transactions, `errgroup`, 99% coverage | [DISCOVERY-golang-skills.md](docs/discovery/DISCOVERY-golang-skills.md) |
+| [mfmezger/ai_agent_dotfiles](https://github.com/mfmezger/ai_agent_dotfiles) | Idiomatic Go & Footguns | "Concrete types first", caller interfaces, context propagation | [DISCOVERY-golang-skills.md](docs/discovery/DISCOVERY-golang-skills.md) |
 
 ### 📦 Installing RTK
 

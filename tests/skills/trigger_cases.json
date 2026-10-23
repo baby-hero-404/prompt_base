@@ -278,5 +278,24 @@
     "expect": [
       "flutter-flame-games"
     ]
+  },
+  {
+    "prompt": "add a server action with zod validation to my Next.js form",
+    "expect": [
+      "nextjs-best-practices"
+    ]
+  },
+  {
+    "prompt": "fix the waterfall in my app router page with suspense",
+    "expect": [
+      "nextjs-best-practices"
+    ]
+  },
+  {
+    "prompt": "explain server components vs client components in nextjs",
+    "expect": [
+      "nextjs-best-practices",
+      "react-patterns"
+    ]
   }
 ]
