@@ -247,5 +247,36 @@
     "expect": [
       "rule-enforcement"
     ]
+  },
+  {
+    "prompt": "my Flutter screen throws RenderFlex overflowed, fix the widget layout",
+    "expect": [
+      "flutter-best-practices"
+    ]
+  },
+  {
+    "prompt": "build a 2D game with Flame engine in Flutter with sprites and collision",
+    "expect": [
+      "flutter-flame-games",
+      "flutter-best-practices"
+    ]
+  },
+  {
+    "prompt": "set up riverpod and go_router for my dart app",
+    "expect": [
+      "flutter-best-practices"
+    ]
+  },
+  {
+    "prompt": "write a flutter widget test for the login screen",
+    "expect": [
+      "flutter-best-practices"
+    ]
+  },
+  {
+    "prompt": "add a FlameGame joystick and tiled map",
+    "expect": [
+      "flutter-flame-games"
+    ]
   }
 ]

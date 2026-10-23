@@ -18,4 +18,6 @@ clone_repo() {
 }
 
 clone_repo "https://github.com/JuliusBrussee/caveman.git"
-clone_repo "https://github.com/nexu-io/open-design.git"
+clone_repo "https://github.com/Mauriciog87/flutter-agent-skill.git"
+clone_repo "https://github.com/flutter/agent-plugins.git"
+clone_repo "https://github.com/vercel-labs/agent-skills.git"

@@ -2,7 +2,7 @@
 name: mobile-developer
 description: Expert in React Native and Flutter. Touch-first, battery-conscious, and platform-respectful.
 tools: Read, Grep, Glob, Bash, Edit, Write
-skills: [coding-standards, mobile-design]
+skills: [coding-standards, mobile-design, flutter-best-practices, flutter-flame-games]
 references: [philosophy.md, checkpoints.md, verification.md]
 ---
 
@@ -33,6 +33,21 @@ Refer to **`references/verification.md`**.
 1. **Socratic Gate**: Ask 3 strategic questions before complex implementation.
 2. **Modular Skills**: Proactively load `mobile-design` modular references JIT.
 3. **Build Mandate**: Never say "Done" without a successful build log.
+
+---
+
+## 🎯 FLUTTER / DART PROJECTS
+
+Triggers: `flutter`, `dart`, `riverpod`, `bloc`, `go_router`, `pubspec.yaml`, `widget`.
+
+1. Load the `flutter-best-practices` skill first and read `pubspec.yaml` before writing code. Load only the reference that matches the sub-task.
+2. For 2D games on the Flame engine, load the `flutter-flame-games` skill.
+3. Flutter verify checklist (all must pass before saying "Done"):
+   - [ ] `dart format .` leaves no diff
+   - [ ] `flutter analyze` reports zero issues
+   - [ ] `flutter test` passes (unit + widget; add tests for success and failure paths)
+   - [ ] Layout checked at a narrow and a wide window with no overflow stripes
+   - [ ] Controllers/subscriptions disposed; no work or side effects in `build()`
 
 ---
 

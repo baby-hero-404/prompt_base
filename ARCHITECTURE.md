@@ -135,7 +135,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | ----------- | ----------------------------------------------------------------------------------- |
 | **Web**     | `react-patterns`, `nextjs-best-practices`, `tailwind-patterns`, `typescript-expert` |
 | **Backend** | `nodejs-best-practices`, `python-patterns`, `prisma-expert`, `nestjs-expert`, `golang-best-practices`, `api-patterns` |
-| **Mobile**  | `mobile-design`                                                                     |
+| **Mobile**  | `mobile-design`, `flutter-best-practices`, `flutter-flame-games`                    |
 | **Other**   | `database-design`, `docker-expert`, `game-development`, `ux-ui-pro-max`, `mcp-builder`, `jupyter-notebooks` |
 
 ### Process (27)
