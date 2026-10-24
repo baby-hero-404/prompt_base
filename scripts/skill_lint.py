@@ -88,6 +88,8 @@ def main():
         for skill_dir in skills_dir.iterdir():
             if not skill_dir.is_dir():
                 continue
+            if skill_dir.name in {"core", "custom", "tech", "process"}:
+                continue
             errs, warns = lint_skill(skill_dir, registry_data, pre_gen)
             
             for w in warns:

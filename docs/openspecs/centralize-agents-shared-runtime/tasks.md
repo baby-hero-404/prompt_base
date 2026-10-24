@@ -1,0 +1,28 @@
+# Tasks: Centralize Shared Runtime, Memory & Trust under `~/.agents`
+
+- [x] **T1: Update `tools/memory_engine.py`**
+  - [x] Set `~/.agents/prompt_base_memory` as the primary base directory in `get_memory_dir`.
+  - [x] Stop reusing legacy memory directories from `~/.claude/` and `~/.gemini/`.
+- [x] **T2: Update `tools/pb_trust.py` and Trust References**
+  - [x] Set `~/.agents/prompt_base_trusted.txt` as primary trust file.
+  - [x] Update `tools/memory_status.py` output strings to reference `~/.agents/tools/pb_trust.py`.
+- [x] **T3: Update Hook Configurations (`settings.json` & `hooks.gemini.json`)**
+  - [x] Point all hook commands in `settings.json` to `$HOME/.agents/tools/` and `$HOME/.agents/venv/`.
+  - [x] Point all hook commands in `hooks.gemini.json` to `$HOME/.agents/tools/` and `$HOME/.agents/venv/`.
+- [x] **T4: Update `/init-memory` Workflow**
+  - [x] Update `global_workflows/init-memory.md` to auto-activate trust via `python3 ~/.agents/tools/pb_trust.py --add .`.
+  - [x] Update tool paths across `global_workflows/init-memory.md` and `global_workflows/init-context.md` to `~/.agents/tools/`.
+- [x] **T5: Update `Makefile`**
+  - [x] Add `install-agents` target copying `tools/` to `~/.agents/tools/` and creating `~/.agents/prompt_base_memory`.
+  - [x] Update `install-gemini`, `install-claude`, and `install-codex` to link or sync `tools/` to `~/.agents/tools/`.
+  - [x] Update `memory-setup` to create and calibrate `~/.agents/venv/`.
+  - [x] Update `PY_VENV` to check `~/.agents/venv/bin/python` first.
+  - [x] Update `install` to include `install-agents`.
+- [x] **T6: Update Rules & Project Memory Invariants**
+  - [x] Update tool and trust paths in `GEMINI.md`, `CLAUDE.md`, and `AGENTS.md` (keep rules in 100% sync).
+  - [x] Update `docs/ai/DOMAIN.md` and refresh `docs/ai/manifest.json`.
+- [x] **T7: Verification & Testing**
+  - [x] Run `python3 scripts/test_integration.py` and `python3 scripts/checklist.py .`.
+  - [x] Run unit tests for `pb_trust.py` (`python3 tools/tests/test_pb_trust.py`).
+  - [x] Execute `make install` and test `make verify`.
+  - [x] Test auto-trust command execution and verify `~/.agents/prompt_base_trusted.txt`.

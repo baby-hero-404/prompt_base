@@ -33,7 +33,7 @@ triggers:
 | Invariants | `docs/ai/DOMAIN.md` | Domain rules with source rule IDs + enforcement tags | `/init-memory` | Yes. Re-injected by `tools/memory_invariants.py` (Claude hook, or `--print` for any agent) |
 | Freshness | `docs/ai/manifest.json` | `autoRefreshTriggers` + `checksums` | `tools/memory_stale.py --update` | Yes (any agent runs the script) |
 | Decisions (why) | `docs/ai/adr/`, `docs/ai/archive/` | ADRs, session rollups | `PreCompact` hook from `<adr>` tags, or by hand | Source files yes; hook capture is Claude-only |
-| Derived index | `~/.claude/prompt_base_memory/<name>-<hash>/` | FTS/vector index of the above | hooks, `make memory-rebuild` | No (disposable) |
+| Derived index | `~/.agents/prompt_base_memory/<name>-<hash>/` | FTS/vector index of the above | hooks, `make memory-rebuild` | Yes (shared globally) |
 | Preferences | Claude Code native auto-memory (`~/.claude/projects/.../memory/`) | User/feedback notes | Claude Code itself | No. Never use it as the shared store |
 | Task progress | `docs/openspecs/<task>/tasks.md` | Checkbox state | the agent doing the task | Yes |
 
@@ -41,7 +41,7 @@ Opt-in: memory exists only in projects where the user ran `/init-memory`; elsewh
 
 Legacy: `~/.gemini/projects/<parent>-<leaf>/` held PROFILE/DOMAIN before `docs/ai/`. It is read as a fallback only; migrate by copying the files into `docs/ai/`.
 
-Trust: hooks that act on repo content (invariant injection, Stop gate) run only for projects the user trusted with `python3 tools/pb_trust.py --add`; the list lives outside the repo.
+Trust: hooks that act on repo content (invariant injection, Stop gate) run only for projects the user trusted with `python3 tools/pb_trust.py --add`; the list lives outside the repo in `~/.agents/prompt_base_trusted.txt`.
 
 Staleness: `python3 tools/memory_stale.py --root .` exits 1 when a file in `autoRefreshTriggers` changed since the last `--update`; refresh with `/init-memory`.
 
@@ -53,7 +53,7 @@ There is a separate, **automated long-term tier** for *why past decisions were m
 |-------|----------|------------|
 | Decision records (source of truth, git-tracked) | `docs/ai/adr/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, from `<adr>` tags you emit |
 | Session rollups (source of truth, git-tracked) | `docs/ai/archive/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, heuristic, every compaction |
-| Derived index (disposable, stored globally) | `~/.claude/prompt_base_memory/{project_name}-{hash}/` (or `.ai-memory/` if `PB_LOCAL_MEMORY=1`) | Both hooks; rebuild anytime with `make memory-rebuild` |
+| Derived index (disposable, stored globally) | `~/.agents/prompt_base_memory/{project_name}-{hash}/` (or `.ai-memory/` if `PB_LOCAL_MEMORY=1`) | Both hooks; rebuild anytime with `make memory-rebuild` |
 
 **To get a decision captured**, emit this exact tag when you make (or the user confirms) an architecturally significant choice — the `PreCompact` hook extracts it by strict regex, not heuristic guessing, so the tag must match verbatim:
 

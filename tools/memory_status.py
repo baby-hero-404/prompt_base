@@ -31,7 +31,7 @@ def main() -> int:
     print(f"project root: {root}")
 
     trusted = pb_trust.is_trusted(root)
-    print(f"trust: {'trusted (hooks active)' if trusted else 'untrusted (hooks inactive; opt in via /init-memory or python3 ~/.gemini/tools/pb_trust.py --add .)'}")
+    print(f"trust: {'trusted (hooks active)' if trusted else 'untrusted (hooks inactive; opt in via /init-memory or python3 ~/.agents/tools/pb_trust.py --add .)'}")
 
     ai_dir = root_path / "docs" / "ai"
     if ai_dir.is_dir():

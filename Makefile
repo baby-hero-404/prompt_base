@@ -1,5 +1,5 @@
 # Prompt Base - Global Mode
-# Supported: Antigravity 2.x, Claude Code
+# Supported: Antigravity 2.x, Claude Code, Codex CLI
 
 # Audit project structure
 audit:
@@ -61,13 +61,21 @@ eval-all:
 		fi \
 	done
 
+# Install/Update shared runtime locally to ~/.agents
+# Canonical home for shared tools, trust list, and memory store across all agents.
+install-agents:
+	@echo "Installing shared runtime to ~/.agents..."
+	@mkdir -p ~/.agents/tools ~/.agents/prompt_base_memory
+	@cp -f tools/*.py ~/.agents/tools/
+	@echo "Shared ~/.agents runtime complete."
+
 # Install/Update locally to ~/.gemini
 # NOTE: context-memory-engine hooks are intentionally NOT registered here.
 # Gemini's hook stdin schema is unverified
 # (adapter unverified, Task 3.4) - registering blind would risk misparsing a payload we've never seen.
 # A pre-existing ~/.gemini/settings.json is backed up/restored around the copy step
 # so this install never clobbers a user's own settings.
-install-gemini:
+install-gemini: install-agents
 	@echo "Installing to ~/.gemini..."
 	@mkdir -p ~/.gemini/config
 	@rm -rf ~/.gemini/tools ~/.gemini/agents ~/.gemini/skills ~/.gemini/global_workflows ~/.gemini/config/skills ~/.gemini/config/global_workflows
@@ -76,7 +84,9 @@ install-gemini:
 	@mv ~/.gemini/skills ~/.gemini/config/skills
 	@mv ~/.gemini/global_workflows ~/.gemini/config/global_workflows
 	@if [ -f ~/.gemini/.pb_settings_backup.json ]; then mv ~/.gemini/.pb_settings_backup.json ~/.gemini/settings.json; else rm -f ~/.gemini/settings.json; fi
-	@rm -f ~/.gemini/CLAUDE.md
+	@rm -f ~/.gemini/CLAUDE.md ~/.gemini/AGENTS.md
+	@rm -rf ~/.gemini/tools
+	@ln -sfn ~/.agents/tools ~/.gemini/tools
 	@bash scripts/cleanup.sh ~/.gemini
 	@python3 scripts/install_gemini_hooks.py --source hooks.gemini.json --dest ~/.gemini/config/hooks.json
 	@echo "Gemini Install complete."
@@ -86,7 +96,7 @@ install-gemini:
 # would otherwise overwrite it with this repo's tracked settings.json) and restored
 # right after, so scripts/install_settings.py can safely MERGE our hook entries into
 # the user's real prior settings instead of destroying them.
-install-claude:
+install-claude: install-agents
 	@echo "Installing to ~/.claude..."
 	@mkdir -p ~/.claude/skills ~/.claude/commands
 	@rm -rf ~/.claude/tools ~/.claude/agents ~/.claude/skills ~/.claude/global_workflows
@@ -94,14 +104,30 @@ install-claude:
 	@python3 scripts/install_manifest.py ~/.claude
 	@if [ -f ~/.claude/.pb_settings_backup.json ]; then mv ~/.claude/.pb_settings_backup.json ~/.claude/settings.json; else rm -f ~/.claude/settings.json; fi
 	@python3 scripts/install_settings.py --source settings.json --dest ~/.claude/settings.json
-	@rm -f ~/.claude/GEMINI.md
+	@rm -f ~/.claude/GEMINI.md ~/.claude/AGENTS.md
+	@rm -rf ~/.claude/tools
+	@ln -sfn ~/.agents/tools ~/.claude/tools
 	@find ~/.claude/commands -maxdepth 1 -type l ! -exec test -e {} \; -delete
 	@find ~/.claude/global_workflows -maxdepth 1 -name "*.md" -exec ln -snf {} ~/.claude/commands/ \;
 	@bash scripts/cleanup.sh ~/.claude
 	@echo "Claude Install complete."
 
-# Install for both
-install: install-gemini install-claude
+# Install/Update locally to ~/.codex
+# Global Skills will be available at ~/.codex/skills/ and callable via $skill-name or /skills.
+# Global rules are placed at ~/.codex/AGENTS.md.
+install-codex: install-agents
+	@echo "Installing to ~/.codex..."
+	@mkdir -p ~/.codex/skills
+	@rm -rf ~/.codex/tools ~/.codex/agents ~/.codex/skills ~/.codex/global_workflows
+	@python3 scripts/install_manifest.py ~/.codex
+	@rm -f ~/.codex/GEMINI.md ~/.codex/CLAUDE.md
+	@rm -rf ~/.codex/tools
+	@ln -sfn ~/.agents/tools ~/.codex/tools
+	@bash scripts/cleanup.sh ~/.codex
+	@echo "Codex Install complete."
+
+# Install for all supported assistants
+install: install-agents install-gemini install-claude install-codex
 
 # --- Context memory engine (opt-in) ---
 
@@ -111,17 +137,14 @@ install: install-gemini install-claude
 # normally happens automatically on that project's first PreCompact run instead;
 # this is for setup/dev use. Idempotent: safe to re-run.
 memory-setup:
-	@[ -d ~/.claude/venv ] || python3 -m venv ~/.claude/venv
-	@~/.claude/venv/bin/pip install --quiet --upgrade pip
-	@~/.claude/venv/bin/pip install --quiet -r requirements.txt
-	@[ -d ~/.gemini/venv ] || python3 -m venv ~/.gemini/venv
-	@~/.gemini/venv/bin/pip install --quiet --upgrade pip
-	@~/.gemini/venv/bin/pip install --quiet -r requirements.txt
+	@[ -d ~/.agents/venv ] || python3 -m venv ~/.agents/venv
+	@~/.agents/venv/bin/pip install --quiet --upgrade pip
+	@~/.agents/venv/bin/pip install --quiet -r requirements.txt
 	@$(MAKE) memory-bench
 	@echo "memory-setup complete."
 
-# Agent-neutral Python runner: prefers ~/.gemini/venv or ~/.claude/venv, fallback to python3
-PY_VENV := $(shell if [ -x ~/.gemini/venv/bin/python ]; then echo ~/.gemini/venv/bin/python; elif [ -x ~/.claude/venv/bin/python ]; then echo ~/.claude/venv/bin/python; else echo python3; fi)
+# Agent-neutral Python runner: prefers ~/.agents/venv, then legacy venvs, fallback to python3
+PY_VENV := $(shell if [ -x ~/.agents/venv/bin/python ]; then echo ~/.agents/venv/bin/python; elif [ -x ~/.gemini/venv/bin/python ]; then echo ~/.gemini/venv/bin/python; elif [ -x ~/.claude/venv/bin/python ]; then echo ~/.claude/venv/bin/python; elif [ -x ~/.codex/venv/bin/python ]; then echo ~/.codex/venv/bin/python; else echo python3; fi)
 
 # Force a fresh cold-start latency measurement for the current project.
 memory-bench:

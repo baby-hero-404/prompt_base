@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_compact.py\""
+            "command": "PY=\"$HOME/.agents/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.agents/tools/memory_compact.py\""
           }
         ]
       }
@@ -17,11 +17,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_recall.py\""
+            "command": "PY=\"$HOME/.agents/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.agents/tools/memory_recall.py\""
           },
           {
             "type": "command",
-            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/memory_invariants.py\""
+            "command": "PY=\"$HOME/.agents/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.agents/tools/memory_invariants.py\""
           }
         ]
       }
@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PY=\"$HOME/.claude/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.claude/tools/verify_gate.py\""
+            "command": "PY=\"$HOME/.agents/venv/bin/python\"; [ -x \"$PY\" ] || PY=python3; \"$PY\" \"$HOME/.agents/tools/verify_gate.py\""
           }
         ]
       }

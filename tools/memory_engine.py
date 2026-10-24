@@ -28,10 +28,9 @@ CLAUDE_EVENTS = ("PreCompact", "SessionStart", "UserPromptSubmit")
 
 def get_memory_dir(root: str) -> Path:
     """Resolve the storage directory for context memory database and logs.
-    Defaults to global user directory ~/.gemini/prompt_base_memory or
-    ~/.claude/prompt_base_memory/{project_name}-{project_hash} to avoid polluting
-    the project repository. Falls back to local project-root/.ai-memory
-    if PB_LOCAL_MEMORY env var is set to '1'."""
+    Defaults to unified global user directory ~/.agents/prompt_base_memory/
+    {project_name}-{project_hash} to avoid polluting the project repository.
+    Falls back to local project-root/.ai-memory if PB_LOCAL_MEMORY env var is set to '1'."""
     if os.environ.get("PB_LOCAL_MEMORY") == "1":
         return Path(root) / ".ai-memory"
 
@@ -43,35 +42,9 @@ def get_memory_dir(root: str) -> Path:
     if base_dir:
         return Path(base_dir).resolve() / folder_name
 
-    gemini_base = Path("~/.gemini/prompt_base_memory").expanduser()
-    claude_base = Path("~/.claude/prompt_base_memory").expanduser()
-
-    # 1. Reuse existing index from either agent base so memories are shared
-    if (gemini_base / folder_name).exists():
-        return gemini_base / folder_name
-    if (claude_base / folder_name).exists():
-        return claude_base / folder_name
-
-    # 2. Check calling agent location or environment symmetrically
-    caller_str = str(Path(__file__).resolve())
-    if ".gemini" in caller_str:
-        base_path = gemini_base
-    elif ".claude" in caller_str:
-        base_path = claude_base
-    elif gemini_base.exists() and not claude_base.exists():
-        base_path = gemini_base
-    elif claude_base.exists() and not gemini_base.exists():
-        base_path = claude_base
-    elif Path("~/.gemini").expanduser().exists() and not Path("~/.claude").expanduser().exists():
-        base_path = gemini_base
-    elif Path("~/.claude").expanduser().exists() and not Path("~/.gemini").expanduser().exists():
-        base_path = claude_base
-    elif Path("~/.gemini").expanduser().exists():
-        base_path = gemini_base
-    else:
-        base_path = claude_base
-
-    return base_path / folder_name
+    agents_base = Path("~/.agents/prompt_base_memory").expanduser()
+    agents_base.mkdir(parents=True, exist_ok=True)
+    return agents_base / folder_name
 
 SECRET_PATTERNS = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),                     # OpenAI/Anthropic-style keys

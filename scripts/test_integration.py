@@ -9,25 +9,33 @@ def test_integration():
     
     print(f"📁 Project root: {project_root}")
     
-    # 1. Verify Rules (GEMINI.md)
+    # 1. Verify Rules (GEMINI.md, CLAUDE.md, AGENTS.md)
     print("\n--- 1. Rules ---")
-    gemini_path = os.path.join(project_root, "GEMINI.md")
-    if os.path.exists(gemini_path):
-        print(f"✅ Rules file exists: GEMINI.md")
-    else:
-        print(f"❌ Missing Rules file: GEMINI.md")
-        sys.exit(1)
+    for rule_file in ["GEMINI.md", "CLAUDE.md", "AGENTS.md"]:
+        rule_path = os.path.join(project_root, rule_file)
+        if os.path.exists(rule_path):
+            print(f"✅ Rules file exists: {rule_file}")
+        else:
+            print(f"❌ Missing Rules file: {rule_file}")
+            sys.exit(1)
 
-    # CLAUDE.md and GEMINI.md must carry identical rules (only the Layout paths differ)
+    # CLAUDE.md, GEMINI.md, and AGENTS.md must carry identical rules (only the Layout paths differ)
     def rules_section(name):
         with open(os.path.join(project_root, name), "r") as f:
             text = f.read()
         return text[text.find("## Rules"):]
 
-    if rules_section("CLAUDE.md") == rules_section("GEMINI.md"):
-        print(f"✅ CLAUDE.md and GEMINI.md rules are in sync")
+    claude_rules = rules_section("CLAUDE.md")
+    gemini_rules = rules_section("GEMINI.md")
+    agents_rules = rules_section("AGENTS.md")
+
+    if claude_rules == gemini_rules == agents_rules:
+        print(f"✅ CLAUDE.md, GEMINI.md, and AGENTS.md rules are in sync")
     else:
-        print(f"❌ CLAUDE.md and GEMINI.md rules differ (from '## Rules' onward)")
+        if claude_rules != gemini_rules:
+            print(f"❌ CLAUDE.md and GEMINI.md rules differ (from '## Rules' onward)")
+        if claude_rules != agents_rules:
+            print(f"❌ CLAUDE.md and AGENTS.md rules differ (from '## Rules' onward)")
         sys.exit(1)
 
     # 2. Verify Workflows (global_workflows/)
@@ -84,8 +92,8 @@ def test_integration():
 
     print("\n🎉 INTEGRATION TEST PASSED!")
     print("All 3 component types validated:")
-    print("  1. Rules     → GEMINI.md ✅")
-    print("  2. Workflows → workflows/*.md ✅")
+    print("  1. Rules     → GEMINI.md / CLAUDE.md / AGENTS.md ✅")
+    print("  2. Workflows → global_workflows/*.md ✅")
     print("  3. Skills    → skills/*/SKILL.md ✅")
 
 if __name__ == "__main__":

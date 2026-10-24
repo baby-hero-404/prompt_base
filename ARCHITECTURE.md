@@ -2,11 +2,11 @@
 
 ## 📋 Overview
 
-Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It consists of **3 component types** and supporting infrastructure:
+Prompt Base is a **global-only** modular framework installed in `~/.gemini`, `~/.claude`, and `~/.codex`. It consists of **3 component types** and supporting infrastructure:
 
 | Component | Count | Purpose |
 |-----------|-------|---------|
-| **Rules** | 1 file | Persistent behavior (`GEMINI.md`) |
+| **Rules** | 1 file | Persistent behavior (`GEMINI.md`, `CLAUDE.md`, or `AGENTS.md`) |
 | **Workflows** | 14 | On-demand slash command procedures |
 | **Skills** | 50+ | Auto-triggered knowledge modules |
 | **Agents** | 14 | Specialist AI personas |
@@ -17,7 +17,7 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It 
 
 ### 1. Rules (Always Active)
 
-- **File**: `~/.gemini/GEMINI.md`
+- **File**: `~/.gemini/GEMINI.md`, `~/.claude/CLAUDE.md`, or `~/.codex/AGENTS.md`
 - **Purpose**: Define how the agent always behaves — coding style, safety constraints, architecture patterns.
 - **Scope**: Applied to ALL projects automatically.
 
@@ -39,11 +39,11 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`. It 
 
 ## 📁 Directory Structure
 
-All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.gemini` (or `~/.claude`).
+All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.gemini`, `~/.claude`, or `~/.codex`.
 
 ```
-{FRAMEWORK_ROOT}/                          (~/.gemini or ~/.claude)
-├── GEMINI.md / CLAUDE.md                  ← Rules (always active, all projects — persona, classifier, memory rules folded in)
+{FRAMEWORK_ROOT}/                          (~/.gemini, ~/.claude, or ~/.codex)
+├── GEMINI.md / CLAUDE.md / AGENTS.md      ← Rules (always active, all projects — persona, classifier, memory rules folded in)
 ├── ARCHITECTURE.md                        ← This file
 ├── registry.min.json                      ← Unified metadata index
 │
@@ -83,11 +83,12 @@ All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.
 
 ## 📦 Installation & Distribution (Manifest Flow)
 
-Prompt Base is installed globally to `~/.gemini` and `~/.claude` using a strict, manifest-driven flow to prevent workspace clutter:
+Prompt Base is installed globally to `~/.gemini`, `~/.claude`, and `~/.codex` using a strict, manifest-driven flow, with shared runtime centralized in `~/.agents/`:
 
-1. **`install.manifest.json`**: Defines the targets, inclusion globs (`*`), and strict exclusions (`docs/`, `scripts/`, `.git*`, `Makefile`, etc.).
-2. **`scripts/install_manifest.py`**: A zero-dependency Python script that reads the manifest and performs a filtered file copy. It safely overwrites read-only destinations and prunes excluded files during traversal.
-3. **`make install`**: Triggers the python script for all targets and runs post-install assertions to guarantee `registry.min.json` and core directories were copied successfully.
+1. **`~/.agents/`**: Canonical shared home for tools (`~/.agents/tools/`), global memory (`~/.agents/prompt_base_memory/`), trust list (`~/.agents/prompt_base_trusted.txt`), and heavy virtualenv (`~/.agents/venv/`).
+2. **`install.manifest.json`**: Defines the targets, inclusion globs (`*`), and strict exclusions (`docs/`, `scripts/`, `.git*`, `Makefile`, etc.).
+3. **`scripts/install_manifest.py`**: A zero-dependency Python script that reads the manifest and performs a filtered file copy. It safely overwrites read-only destinations and prunes excluded files during traversal.
+4. **`make install`**: Sets up `~/.agents/` first, installs manifest files to all targets, symlinks `tools/` to `~/.agents/tools/`, and runs post-install assertions to guarantee `registry.min.json` and core directories were copied successfully.
 
 ---
 

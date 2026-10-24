@@ -1,0 +1,22 @@
+# Tasks: Support Codex CLI in Prompt Base
+
+- [x] **T1: Create `AGENTS.md`**
+  - [x] Write `AGENTS.md` in repository root matching `GEMINI.md` / `CLAUDE.md` rules structure (R1 - R11).
+  - [x] Configure Layout table specifically for `~/.codex`.
+- [x] **T2: Update `install.manifest.json` and Manifest Copy Script**
+  - [x] Add `"~/.codex"` to `targets` array in `install.manifest.json`.
+  - [x] Ensure `scripts/install_manifest.py` handles paths cleanly for `~/.codex`.
+- [x] **T3: Update `Makefile`**
+  - [x] Add `install-codex` target to `Makefile`.
+  - [x] Clean irrelevant rule files per target (`rm -f ~/.gemini/AGENTS.md`, `rm -f ~/.claude/AGENTS.md`, `rm -f ~/.codex/GEMINI.md ~/.codex/CLAUDE.md`).
+  - [x] Update `install: install-gemini install-claude install-codex`.
+- [x] **T4: Update Test & Audit Scripts**
+  - [x] Update `scripts/test_integration.py` to verify `AGENTS.md` and check rule synchronization with `CLAUDE.md` and `GEMINI.md`.
+  - [x] Update `scripts/cleanup.sh` to recognize `AGENTS.md`.
+  - [x] Update `scripts/checklist.py` to allow `AGENTS.md`.
+- [x] **T5: Update Documentation**
+  - [x] Update `ARCHITECTURE.md` to document Codex CLI support, layout, and manifest flow.
+  - [x] Update `README.md` with instructions on installing and using global skills with Codex CLI (`$skill-name`).
+- [x] **T6: Verification & Execution**
+  - [x] Run `make test` and `make verify`.
+  - [x] Execute `make install-codex` and verify files in `~/.codex/skills/` and `~/.codex/AGENTS.md`.

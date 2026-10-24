@@ -21,23 +21,24 @@ def _trust_files() -> list:
     override = os.environ.get("PB_TRUST_FILE")
     if override:
         return [Path(override).expanduser()]
+    agents = Path("~/.agents/prompt_base_trusted.txt").expanduser()
     claude = Path("~/.claude/prompt_base_trusted.txt").expanduser()
     gemini = Path("~/.gemini/prompt_base_trusted.txt").expanduser()
-    files = []
-    if gemini.parent.exists():
-        files.append(gemini)
-    if claude.parent.exists():
+    files = [agents]
+    if claude.exists():
         files.append(claude)
-    return files or [gemini, claude]
+    if gemini.exists():
+        files.append(gemini)
+    return files
 
 
 def trust_file() -> Path:
-    caller_str = str(Path(__file__).resolve())
-    if ".claude" in caller_str:
-        claude = Path("~/.claude/prompt_base_trusted.txt").expanduser()
-        if claude.parent.exists():
-            return claude
-    return _trust_files()[0]
+    override = os.environ.get("PB_TRUST_FILE")
+    if override:
+        return Path(override).expanduser()
+    agents = Path("~/.agents/prompt_base_trusted.txt").expanduser()
+    agents.parent.mkdir(parents=True, exist_ok=True)
+    return agents
 
 
 def _entries():

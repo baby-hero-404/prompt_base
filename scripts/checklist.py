@@ -34,15 +34,25 @@ def check_structure():
     # 1. Critical Files (Rules + Core)
     critical_files = [
         f"{root_dir}/ARCHITECTURE.md",
-        f"{root_dir}/GEMINI.md",
         f"{root_dir}/registry.min.json",
-        ]
+    ]
 
     for f in critical_files:
         if os.path.exists(f):
             print(f"✅ {f} found.")
         else:
             issues.append(f"❌ Missing critical file: {f}")
+
+    rules_candidates = [
+        f"{root_dir}/GEMINI.md",
+        f"{root_dir}/CLAUDE.md",
+        f"{root_dir}/AGENTS.md",
+    ]
+    found_rules = [f for f in rules_candidates if os.path.exists(f)]
+    if found_rules:
+        print(f"✅ Rules file found: {', '.join(os.path.basename(f) for f in found_rules)}")
+    else:
+        issues.append(f"❌ Missing rules file (GEMINI.md, CLAUDE.md, or AGENTS.md) in {root_dir}")
 
     # 2. Directory Structure — 3 component types
     dirs = [

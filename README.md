@@ -18,13 +18,15 @@ Then remove development-only files (scripts, docs, Makefile, README, .git, etc.)
 bash ~/.gemini/scripts/cleanup.sh
 ```
 
-> If the project is already cloned locally or `~/.gemini` (or `~/.claude`) exists, you can install/update it directly using make:
+> If the project is already cloned locally or `~/.gemini`, `~/.claude`, or `~/.codex` exists, you can install/update it directly using make:
 > ```bash
 > git clone https://github.com/baby-hero-404/prompt_base
 > cd prompt_base
+> make install-agents  # Install shared runtime to ~/.agents
 > make install-gemini  # Install to ~/.gemini
 > make install-claude  # Install to ~/.claude
-> make install         # Install to both
+> make install-codex   # Install to ~/.codex (Codex CLI)
+> make install         # Install shared runtime and all assistants
 > ```
 
 After cleanup, only the runtime essentials remain in `~/.gemini`:
@@ -133,6 +135,20 @@ A high-level design intelligence library for building premium interfaces:
 - **Generate Design Systems**: Ask the AI to `Generate a design system for a [Product Type] [Industry]`.
 - **Design Tools**: The AI searches through styles, palettes, and typography pairs stored in skill assets.
 - **Persistence**: Use the `--persist` flag when generating designs to create a `MASTER.md` file in your `design-system/` folder.
+
+### 5. Codex CLI Support
+
+Codex CLI uses global skills installed at `~/.codex/skills/` and global instructions from `~/.codex/AGENTS.md`.
+
+- **Installation**: Run `make install-codex` to copy all skills, rules, and agents into `~/.codex`.
+- **View Skills**: Inside any project running `codex`, type `/skills` to see or select loaded skills.
+- **Direct Skill Invocation**: Use the `$skill-name` syntax to call any skill directly:
+  ```bash
+  $code-review Review my authentication module.
+  $ux-ui-pro-max Design a dark mode dashboard for an e-commerce platform.
+  $explore-codebase Analyze this repository architecture.
+  ```
+- **Global Rules**: `~/.codex/AGENTS.md` is loaded automatically across all your projects.
 
 ---
 
