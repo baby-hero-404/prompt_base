@@ -315,5 +315,23 @@
     "expect": [
       "golang-best-practices"
     ]
+  },
+  {
+    "prompt": "update antigravity",
+    "expect": [
+      "antigravity-ops"
+    ]
+  },
+  {
+    "prompt": "setup antigravity environment",
+    "expect": [
+      "antigravity-ops"
+    ]
+  },
+  {
+    "prompt": "how to upgrade antigravity ide",
+    "expect": [
+      "antigravity-ops"
+    ]
   }
 ]
