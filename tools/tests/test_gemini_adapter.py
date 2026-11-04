@@ -119,6 +119,19 @@ class GeminiAdapterTests(unittest.TestCase):
         self.assertIn("prompt-base", merged)
         self.assertEqual(len(merged["prompt-base"]["PreInvocation"]), 1)
 
+    def test_hooks_merger_drops_legacy_gemini_twin(self):
+        legacy = 'PY="$HOME/.gemini/venv/bin/python"; "$PY" "$HOME/.gemini/tools/verify_gate.py"'
+        current = 'PY="$HOME/.agents/venv/bin/python"; "$PY" "$HOME/.agents/tools/verify_gate.py"'
+        custom = "$HOME/.gemini/tools/my_own_hook.py"  # legacy path but no ~/.agents twin: keep
+        dest = {"prompt-base": {"Stop": [
+            {"type": "command", "command": legacy},
+            {"type": "command", "command": custom},
+        ]}}
+        source = {"prompt-base": {"Stop": [{"type": "command", "command": current}]}}
+        merged = igh.merge_hooks(dest, source)
+        commands = [h["command"] for h in merged["prompt-base"]["Stop"]]
+        self.assertEqual(commands, [custom, current])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -51,7 +51,9 @@ Official refs: https://antigravity.google/releases | https://antigravity-ide-aut
 - Verify `~/.local/bin` in `$PATH`; propose adding `export PATH="$HOME/.local/bin:$PATH"` to `~/.bashrc` if missing.
 
 #### 4. Desktop Launcher & Icon Integration
+<!-- contract:ignore -->
 - **Icon**: Verify `/usr/share/pixmaps/antigravity.png` or `~/.local/share/icons/hicolor/512x512/apps/antigravity.png`. If missing, copy from `<install-dir>/resources/app/resources/linux/code.png`.
+<!-- /contract:ignore -->
 - **Desktop Entry**: Write/repair `~/.local/share/applications/antigravity.desktop`:
   ```ini
   [Desktop Entry]

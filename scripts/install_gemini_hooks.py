@@ -7,6 +7,8 @@ import json
 import sys
 from pathlib import Path
 
+from legacy_hooks import prune_legacy_duplicates
+
 
 def _load_json(path: Path) -> dict:
     if not path.exists():
@@ -21,7 +23,8 @@ def _load_json(path: Path) -> dict:
 
 
 def merge_hooks(dest: dict, source: dict) -> dict:
-    """Merge source hook groups into dest hook groups, deduping handlers by command."""
+    """Merge source hook groups into dest hook groups, deduping handlers by command and
+    dropping legacy ~/.gemini/tools entries whose ~/.agents twin exists."""
     for group_name, events in source.items():
         dest_group = dest.setdefault(group_name, {})
         for event, handlers in events.items():
@@ -31,6 +34,7 @@ def merge_hooks(dest: dict, source: dict) -> dict:
                 if isinstance(handler, dict) and handler.get("command") not in existing_cmds:
                     dest_handlers.append(handler)
                     existing_cmds.add(handler.get("command"))
+            dest_group[event] = prune_legacy_duplicates(dest_handlers)
     return dest
 
 

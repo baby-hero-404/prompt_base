@@ -180,7 +180,7 @@ Project-specific rules live in the project repo (`AGENTS.md`, `CLAUDE.md`, `.cla
 1. **Memory (opt-in):** `/init-memory` distils the project's rules into ID-tagged invariants in `docs/ai/DOMAIN.md`.
 2. **Convention:** every rule has a stable ID and a tag `[hook] [lint] [test] [review]` (`projects/_template/rules/README.md`).
 3. **Checks:** the `rule-enforcement` skill generates mechanical checks and wires them into the project's `verify` target.
-4. **Gate:** the `Stop` hook (`tools/verify_gate.py`, registered via `settings.json` and merged by `scripts/install_settings.py`) runs `make verify` and blocks completion on failure. It is a no-op without a `verify` target and for any project not trusted by the user (`python3 tools/pb_trust.py --add`, list kept outside the repo, so a cloned repo cannot trust itself); it has a loop guard (`stop_hook_active`) and a timeout (`PB_VERIFY_TIMEOUT`, default 300s).
+4. **Gate:** the `Stop` hook (`tools/verify_gate.py`, registered via `settings.json` and merged by `scripts/install_settings.py`) runs `make verify` and blocks completion on failure. It is a no-op without a `verify` target and for any project not trusted by the user (`python3 tools/pb_trust.py --add`, list kept outside the repo, so a cloned repo cannot trust itself); it has a loop guard (`stop_hook_active`) and a timeout (`PB_VERIFY_TIMEOUT`, default 300s). To keep it fast it prefers a `verify-fast` target when the project defines one (run the full `make verify` before committing), and after a passing run it skips re-running while the git work tree is unchanged (fingerprint cached in `~/.agents/verify_cache/`; `PB_VERIFY_FORCE=1` disables the skip). The hook installers (`scripts/install_settings.py`, `scripts/install_gemini_hooks.py`) also drop legacy `~/.claude/tools` / `~/.gemini/tools` entries when the `~/.agents` twin exists (those paths are symlinks to the same files, so the hook would otherwise run twice).
 
 ---
 
@@ -294,7 +294,7 @@ Create SKILL.md → Register in registry.min.json → make audit
 | `{FRAMEWORK_ROOT}/GEMINI.md` / `CLAUDE.md` | Self-contained | Governance and rule enforcement. |
 | `ARCHITECTURE.md` | `{FRAMEWORK_ROOT}/registry.min.json` | Statistics and module overview. |
 | `README.md` | `ARCHITECTURE.md` | General project overview and setup. |
-| `settings.json` (Stop hook) | `tools/verify_gate.py`, `tools/pb_trust.py`, `scripts/install_settings.py`, `tools/tests/test_verify_gate.py` | Hook command path and merge behavior must stay in sync. |
+| `settings.json` (Stop hook) | `tools/verify_gate.py`, `tools/pb_trust.py`, `scripts/install_settings.py`, `scripts/install_gemini_hooks.py`, `scripts/legacy_hooks.py`, `tools/tests/test_verify_gate.py` | Hook command path and merge behavior must stay in sync. |
 | `skills/rule-enforcement/` | `projects/_template/rules/README.md`, `global_workflows/init-memory.md`, `CLAUDE.md` / `GEMINI.md` | Share the rule ID + enforcement tag convention. |
 | `CLAUDE.md` | `GEMINI.md` | Same rules; only install paths differ. Edit both together. |
 | `docs/ai/manifest.json` | `tools/memory_stale.py`, `global_workflows/init-memory.md`, `global_workflows/init-context.md`, `global_workflows/status.md` | Staleness check reads/writes this file. |

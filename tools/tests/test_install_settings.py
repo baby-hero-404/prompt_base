@@ -53,6 +53,21 @@ class MergeSettingsTests(unittest.TestCase):
                 expected = 2 if event == "UserPromptSubmit" else 1  # recall + invariants
                 self.assertEqual(len(groups[0]["hooks"]), expected)
 
+    def test_legacy_claude_twin_of_agents_hook_is_removed(self):
+        source = json.loads(_tracked_source().read_text())
+        current = source["hooks"]["Stop"][0]["hooks"][0]["command"]
+        legacy = current.replace("$HOME/.agents", "$HOME/.claude")
+        orphan = "$HOME/.claude/tools/not_in_agents.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "settings.json"
+            dest.write_text(json.dumps({"hooks": {"Stop": [{"matcher": "", "hooks": [
+                {"type": "command", "command": legacy},
+                {"type": "command", "command": orphan},
+            ]}]}}))
+            merged = ins.install(_tracked_source(), dest)
+            commands = [h["command"] for h in merged["hooks"]["Stop"][0]["hooks"]]
+            self.assertEqual(commands, [orphan, current])
+
     def test_merging_into_dest_with_same_event_different_matcher_adds_new_group(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / "settings.json"
@@ -90,14 +105,14 @@ class TrackedSettingsShapeTests(unittest.TestCase):
         for event, script in (("PreCompact", "memory_compact.py"), ("UserPromptSubmit", "memory_recall.py")):
             command = data["hooks"][event][0]["hooks"][0]["command"]
             self.assertIn(script, command)
-            self.assertIn("$HOME/.claude/tools", command)
+            self.assertIn("$HOME/.agents/tools", command)
             self.assertNotIn("args", data["hooks"][event][0]["hooks"][0])  # shell form, not exec form
 
     def test_command_falls_back_to_python3_when_venv_missing(self):
         data = json.loads(_tracked_source().read_text())
         command = data["hooks"]["PreCompact"][0]["hooks"][0]["command"]
         with tempfile.TemporaryDirectory() as tmp:
-            script_dir = Path(tmp) / ".claude" / "tools"
+            script_dir = Path(tmp) / ".agents" / "tools"
             script_dir.mkdir(parents=True)
             (script_dir / "memory_compact.py").write_text("import sys; sys.exit(0)")
             result = subprocess.run(

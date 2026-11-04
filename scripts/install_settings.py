@@ -5,12 +5,15 @@ into an installed Claude Code / Gemini settings.json.
 Never overwrites the destination file outright: existing hook entries (and
 any other top-level keys a user has configured) are preserved. New hook
 entries are appended, deduped by (event, matcher, type, command) so running
-the install twice leaves exactly one copy of each.
+the install twice leaves exactly one copy of each. Legacy entries that point at
+~/.claude/tools or ~/.gemini/tools are dropped when their ~/.agents twin exists.
 """
 import argparse
 import json
 import sys
 from pathlib import Path
+
+from legacy_hooks import prune_legacy_duplicates
 
 
 def _load_json(path: Path) -> dict:
@@ -50,6 +53,7 @@ def merge_settings(dest: dict, source: dict) -> dict:
                 if key not in existing:
                     dest_group["hooks"].append(hook)
                     existing.add(key)
+            dest_group["hooks"] = prune_legacy_duplicates(dest_group["hooks"])
     return dest
 
 
