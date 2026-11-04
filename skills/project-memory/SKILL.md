@@ -32,8 +32,8 @@ triggers:
 | Profile | `docs/ai/PROFILE.md` | Identity, stack, repo map | `/init-memory` | Yes (markdown) |
 | Invariants | `docs/ai/DOMAIN.md` | Domain rules with source rule IDs + enforcement tags | `/init-memory` | Yes. Re-injected by `tools/memory_invariants.py` (Claude hook, or `--print` for any agent) |
 | Freshness | `docs/ai/manifest.json` | `autoRefreshTriggers` + `checksums` | `tools/memory_stale.py --update` | Yes (any agent runs the script) |
-| Decisions (why) | `docs/ai/adr/`, `docs/ai/archive/` | ADRs, session rollups | `PreCompact` hook from `<adr>` tags, or by hand | Source files yes; hook capture is Claude-only |
-| Derived index | `~/.agents/prompt_base_memory/<name>-<hash>/` | FTS/vector index of the above | hooks, `make memory-rebuild` | Yes (shared globally) |
+| Decisions (why) | `docs/ai/adr/`, `docs/ai/archive/` | ADRs, session rollups | `PreCompact` hook from `<adr>` tags (Claude), or `/record-decision` (`tools/memory_adr.py`, any agent) | Source files yes; automatic capture is Claude-only, `/record-decision` works everywhere |
+| Derived index | `~/.agents/prompt_base_memory/<name>-<hash>/` | FTS/vector index of the above | hooks; recall auto-indexes new markdown; `make memory-rebuild` only to force a full reset | Yes (shared globally) |
 | Preferences | Claude Code native auto-memory (`~/.claude/projects/.../memory/`) | User/feedback notes | Claude Code itself | No. Never use it as the shared store |
 | Task progress | `docs/openspecs/<task>/tasks.md` | Checkbox state | the agent doing the task | Yes |
 
@@ -53,7 +53,7 @@ There is a separate, **automated long-term tier** for *why past decisions were m
 |-------|----------|------------|
 | Decision records (source of truth, git-tracked) | `docs/ai/adr/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, from `<adr>` tags you emit |
 | Session rollups (source of truth, git-tracked) | `docs/ai/archive/YYYY-MM-DD-HHMMSS-<slug>.md` | `PreCompact` hook, heuristic, every compaction |
-| Derived index (disposable, stored globally) | `~/.agents/prompt_base_memory/{project_name}-{hash}/` (or `.ai-memory/` if `PB_LOCAL_MEMORY=1`) | Both hooks; rebuild anytime with `make memory-rebuild` |
+| Derived index (disposable, stored globally) | `~/.agents/prompt_base_memory/{project_name}-{hash}/` (or `.ai-memory/` if `PB_LOCAL_MEMORY=1`) | Both hooks (recall indexes any markdown not yet indexed); full reset with `make memory-rebuild` |
 
 **To get a decision captured**, emit this exact tag when you make (or the user confirms) an architecturally significant choice — the `PreCompact` hook extracts it by strict regex, not heuristic guessing, so the tag must match verbatim:
 

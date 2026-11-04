@@ -25,6 +25,7 @@ Creates `docs/ai/` in the current project so every agent shares the same profile
     - Automatically activate trust for the project by running: `python3 ~/.agents/tools/pb_trust.py --add .`
     - Verify trust status: `python3 ~/.agents/tools/pb_trust.py --list` (or check via `python3 ~/.agents/tools/memory_status.py --root .`).
     - Note: Trust enables automated decision capture, recall, invariant injection, and the Stop gate (`make verify`).
+4b. Index existing decisions: `python3 ~/.agents/tools/memory_rebuild.py --root .` loads any `docs/ai/adr/` and `docs/ai/archive/` markdown (for example from a fresh clone or another agent) into the shared index. This is a one-time convenience: recall also indexes missing markdown by itself on the first prompt of a session, so it never has to be run by hand later.
 5.  Tell the user what to decide:
     - `docs/ai/archive/` stores session rollups (conversation text). Commit it or add it to `.gitignore`; the `adr/` records are the ones worth committing.
     - `AGENTS.md` exists but `CLAUDE.md` does not: Claude Code will not load it. Propose a `CLAUDE.md` containing `@AGENTS.md`.

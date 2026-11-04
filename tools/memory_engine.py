@@ -379,9 +379,10 @@ def content_sha(text: str) -> str:
 
 # ---- upsert / drop ----
 
-def upsert(conn: sqlite3.Connection, root: str, kind: str, title, body: str, source_path=None):
+def upsert(conn: sqlite3.Connection, root: str, kind: str, title, body: str, source_path=None, with_vectors=True):
     """Insert (kind, title, body, source_path), deduped on content_sha.
-    Returns the row id, or None if the chunk was skipped (secret match)."""
+    Returns the row id, or None if the chunk was skipped (secret match).
+    with_vectors=False skips embedding (keyword-only row) for latency-bound callers."""
     if contains_secret(body):
         _log(root, f"upsert: skipped chunk matching secret pattern (kind={kind}, source={source_path})")
         return None
@@ -391,7 +392,7 @@ def upsert(conn: sqlite3.Connection, root: str, kind: str, title, body: str, sou
     if existing is not None:
         return existing["id"]
 
-    vector, model, dim = embed(body, root=root)
+    vector, model, dim = embed(body, root=root) if with_vectors else (None, None, None)
     if vector is not None:
         # PreCompact (the only caller of upsert()) is non-blocking and may
         # always pay the cold-load cost - piggyback on that to calibrate
@@ -433,6 +434,57 @@ def upsert(conn: sqlite3.Connection, root: str, kind: str, title, body: str, sou
     return row_id
 
 
+def title_from_markdown(text: str) -> str:
+    for line in text.splitlines():
+        line = line.strip()
+        if line.startswith("# "):
+            return line[2:].strip()
+    return "untitled"
+
+
+def markdown_sources(root: str):
+    """(kind, absolute Path) of every git-tracked memory markdown file."""
+    for kind, directory in (("adr", adr_dir(root)), ("summary", archive_dir(root))):
+        for path in sorted(Path(directory).glob("*.md")):
+            yield kind, path
+
+
+def _indexed_sources(conn: sqlite3.Connection) -> set:
+    return {r["source_path"] for r in conn.execute("SELECT source_path FROM memory WHERE source_path IS NOT NULL")}
+
+
+def _source_path(root: str, path: Path) -> str:
+    """Index key for a markdown file: root-relative with forward slashes on every OS."""
+    return path.relative_to(root).as_posix()
+
+
+def markdown_out_of_sync(conn: sqlite3.Connection, root: str) -> bool:
+    """True when some docs/ai markdown file has no row in the index yet."""
+    indexed = _indexed_sources(conn)
+    return any(_source_path(root, path) not in indexed for _, path in markdown_sources(root))
+
+
+def index_markdown(conn: sqlite3.Connection, root: str, with_vectors: bool = True) -> int:
+    """Index docs/ai markdown files that have no row yet (keyed by source_path).
+
+    Keyed by path, not content: ADRs captured by memory_compact/memory_adr are stored
+    as title+decision+rationale while the file on disk has headers, so hashing the file
+    text would not match the existing row and would insert a duplicate.
+    Returns how many files were newly indexed."""
+    indexed = _indexed_sources(conn)
+    count = 0
+    for kind, path in markdown_sources(root):
+        source_path = _source_path(root, path)
+        if source_path in indexed:
+            continue
+        text = path.read_text(encoding="utf-8")
+        row_id = upsert(conn, root, kind, title_from_markdown(text), text, source_path, with_vectors=with_vectors)
+        if row_id is not None:
+            count += 1
+            indexed.add(source_path)
+    return count
+
+
 def drop_row(conn: sqlite3.Connection, root: str, row_id: int) -> None:
     """Remove a row from memory, memory_vec, and memory_fts atomically."""
     try:
@@ -452,7 +504,9 @@ def _fts_query(conn: sqlite3.Connection, text: str, k: int):
     terms = re.findall(r"[A-Za-z0-9_]+", text)
     if not terms:
         return []
-    match_expr = " OR ".join(terms)
+    # Quote every term: bare NOT/AND/OR/NEAR in a user prompt are FTS5 operators and
+    # would raise a syntax error (recall then returned nothing).
+    match_expr = " OR ".join(f'"{term}"' for term in terms)
     rows = conn.execute(
         """
         SELECT m.id, m.kind, m.title, m.body, m.source_path, bm25(memory_fts) AS score

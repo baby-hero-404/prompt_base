@@ -121,6 +121,7 @@ Slash commands are on-demand automation scripts that orchestrate multiple Specia
 | `/status` | Project-wide health check | Checking pending tasks & agent assignments |
 | `/init-context` | Initialize context (MVC), read-only | Start of a conversation in an unfamiliar project |
 | `/init-memory` | Opt-in persistent memory in `docs/ai/` (profile, invariants, decisions) | Only in projects that need memory across sessions |
+| `/record-decision` | Record an architecture decision (ADR) into shared memory, from any agent | After a decision worth remembering, in a project with `/init-memory` |
 | `/deep-solve` | JIT Knowledge workflow | Complex multi-domain problems |
 | `/restructure` | Maintenance & registry update | Framework maintenance |
 | `/orchestrate` | Multi-agent coordination | Tasks requiring multiple perspectives |

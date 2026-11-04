@@ -133,7 +133,7 @@ def _capture(conn, root: str, out_dir: str, timestamp: str, slug: str, title, ki
         return existing["source_path"]
 
     path = _write_markdown(out_dir, timestamp, slug, rendered_content)
-    source_path = os.path.relpath(path, root)
+    source_path = Path(os.path.relpath(path, root)).as_posix()
     me.upsert(conn, root, kind, title, stable_body, source_path)
     return source_path
 

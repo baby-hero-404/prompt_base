@@ -113,6 +113,13 @@ def recall(root: str, payload: dict) -> str:
     budget_ms = int(os.environ.get("PB_RECALL_BUDGET_MS", DEFAULT_BUDGET_MS))
 
     conn = me.init_db(root)
+    # Self-heal: markdown that is in docs/ai (fresh clone, another agent's ADR, a
+    # missing rebuild) but not yet indexed gets indexed now, so nobody has to run
+    # `memory-rebuild` by hand. Embed only when recall itself is allowed to, otherwise
+    # keep the first prompt fast with keyword-only rows.
+    if me.markdown_out_of_sync(conn, root):
+        load_ms = me.get_embed_load_ms(conn)
+        me.index_markdown(conn, root, with_vectors=load_ms is not None and load_ms < budget_ms)
     # Over-fetch so ghost rows pruned by _filter_existing still leave k hits.
     result = me.query(conn, root, prompt, k=max(k * 3, k + 5), budget_ms=budget_ms)
     hits = _filter_existing(conn, root, result["hits"], k)

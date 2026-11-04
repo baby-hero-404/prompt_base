@@ -155,6 +155,83 @@ class OutputBudgetTests(unittest.TestCase):
             self.assertLess(len(output), len(long_body))
 
 
+class FtsOperatorTests(unittest.TestCase):
+    def test_prompt_with_fts_operators_still_recalls(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            _seed(tmp, "Retry policy", "retry with backoff when upstream is not available", "docs/ai/adr/r.md")
+            for prompt in ("why is retry NOT working", "retry AND backoff", "retry OR give up", 'retry "quoted'):
+                with self.subTest(prompt=prompt):
+                    out = mr.recall(tmp, {"session_id": prompt, "prompt": prompt, "cwd": tmp})
+                    self.assertIn("Retry policy", out)
+
+
+class AutoIndexTests(unittest.TestCase):
+    def _write_adr(self, root, name, title, body):
+        path = Path(root) / "docs" / "ai" / "adr" / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"# {title}\n\n{body}\n", encoding="utf-8")
+
+    def test_unindexed_markdown_is_recalled_without_manual_rebuild(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            self._write_adr(tmp, "a.md", "Use grpc layout", "services expose grpc with a ready check")
+            out = mr.recall(tmp, {"session_id": "s1", "prompt": "how do services expose grpc", "cwd": tmp})
+            self.assertIn("Use grpc layout", out)
+
+    def test_adr_added_by_another_agent_is_picked_up_next_session(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            self._write_adr(tmp, "a.md", "First decision", "alpha beta")
+            mr.recall(tmp, {"session_id": "s1", "prompt": "alpha", "cwd": tmp})
+            self._write_adr(tmp, "b.md", "Second decision", "gamma delta")
+            out = mr.recall(tmp, {"session_id": "s2", "prompt": "gamma", "cwd": tmp})
+            self.assertIn("Second decision", out)
+
+    def test_captured_adr_is_not_duplicated_by_auto_index(self):
+        import memory_adr as ma
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            (Path(tmp) / "docs" / "ai").mkdir(parents=True)
+            _, error = ma.record(tmp, "Captured", "decision text", "rationale text")
+            self.assertIsNone(error)
+            self._write_adr(tmp, "manual.md", "Manual", "written by hand")
+            out = mr.recall(tmp, {"session_id": "s1", "prompt": "decision text", "cwd": tmp})
+            conn = me.init_db(tmp)
+            sources = [r["source_path"] for r in conn.execute("SELECT source_path FROM memory")]
+            self.assertEqual(len(sources), len(set(sources)), sources)  # one row per file
+            self.assertEqual(len(sources), 2)
+            self.assertEqual(sum(1 for line in out.splitlines() if "Captured" in line), 1)  # one result line
+
+    def test_source_paths_use_forward_slashes(self):
+        import memory_adr as ma
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            (Path(tmp) / "docs" / "ai").mkdir(parents=True)
+            ma.record(tmp, "Slash", "d", "r")
+            self._write_adr(tmp, "hand.md", "Hand", "x")
+            me.index_markdown(me.init_db(tmp), tmp)
+            for row in me.init_db(tmp).execute("SELECT source_path FROM memory"):
+                self.assertNotIn("\\", row["source_path"])
+
+    def test_in_sync_index_skips_reindex(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            self._write_adr(tmp, "a.md", "Only one", "alpha")
+            mr.recall(tmp, {"session_id": "s1", "prompt": "alpha", "cwd": tmp})
+            with mock.patch.object(me, "index_markdown") as indexer:
+                mr.recall(tmp, {"session_id": "s2", "prompt": "alpha", "cwd": tmp})
+            indexer.assert_not_called()
+
+    def test_keyword_only_rows_when_embedding_not_allowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / ".git").mkdir()
+            self._write_adr(tmp, "a.md", "No model", "alpha")
+            with mock.patch.object(me, "embed") as embed:
+                mr.recall(tmp, {"session_id": "s1", "prompt": "alpha", "cwd": tmp})
+            embed.assert_not_called()  # no embed_load_ms recorded -> recall must not pay for a model load
+
+
 class EmptyStoreTests(unittest.TestCase):
     def test_empty_store_prints_nothing(self):
         with tempfile.TemporaryDirectory() as tmp:

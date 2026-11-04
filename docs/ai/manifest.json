@@ -1,9 +1,9 @@
 {
   "project": "prompt_base",
-  "lastScanned": "2026-11-04T09:35:27+07:00",
+  "lastScanned": "2026-11-04T11:29:11+07:00",
   "checksums": {
-    "ARCHITECTURE.md": "1c8ae1a2901af88dd8653c79696f70398db12ff1ccdc9c7c3fd698ae03ad4976",
-    "README.md": "01ae6bfb7be516d324cabc45b889ac891d7a77962fecb59b77df102716b7f643",
+    "ARCHITECTURE.md": "609a675ac079e7eb0fce5a62a305bbcac53b3367b40cb095a5e9456c38b9aa66",
+    "README.md": "14283081ea0961018f7645d70973d9405181e143c2b5c11284fa71dfbc8f2a86",
     "CLAUDE.md": "773e596f100f70d5c9ee3477b8beee2922e38c58980aecd27ebd820e7d90899c",
     "GEMINI.md": "08e16499a3b08efee1c8a9e97b648056b15ea0bc3c27598d6226c049075d2d4e",
     "AGENTS.md": "b9bd2ddd89553900b06b98efe10e39cc1029f8d9017c9f67032f99aebfe3c750",

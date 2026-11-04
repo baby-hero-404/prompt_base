@@ -15,14 +15,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import memory_engine as me  # noqa: E402
 
 
-def _title_from_markdown(text: str) -> str:
-    for line in text.splitlines():
-        line = line.strip()
-        if line.startswith("# "):
-            return line[2:].strip()
-    return "untitled"
-
-
 def rebuild(root: str) -> int:
     conn = me.init_db(root)  # ensure schema exists even on a fresh clone
 
@@ -32,16 +24,7 @@ def rebuild(root: str) -> int:
         conn.execute("DELETE FROM memory_vec")
     conn.commit()
 
-    count = 0
-    for kind, directory in (("adr", me.adr_dir(root)), ("summary", me.archive_dir(root))):
-        for path in sorted(Path(directory).glob("*.md")):
-            text = path.read_text(encoding="utf-8")
-            title = _title_from_markdown(text)
-            source_path = str(path.relative_to(root))
-            row_id = me.upsert(conn, root, kind, title, text, source_path)
-            if row_id is not None:
-                count += 1
-    return count
+    return me.index_markdown(conn, root)
 
 
 def main() -> None:

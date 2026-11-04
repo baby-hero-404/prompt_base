@@ -7,7 +7,7 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`, `~/
 | Component | Count | Purpose |
 |-----------|-------|---------|
 | **Rules** | 1 file | Persistent behavior (`GEMINI.md`, `CLAUDE.md`, or `AGENTS.md`) |
-| **Workflows** | 14 | On-demand slash command procedures |
+| **Workflows** | 17 | On-demand slash command procedures |
 | **Skills** | 50+ | Auto-triggered knowledge modules |
 | **Agents** | 14 | Specialist AI personas |
 
@@ -63,6 +63,7 @@ All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.
 │   ├── init-context.md
 │   ├── init-memory.md
 │   ├── orchestrate.md
+│   ├── record-decision.md
 │   ├── restructure.md
 │   ├── review.md
 │   ├── status.md
@@ -151,7 +152,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 ---
 
-## 🔄 Workflows (16)
+## 🔄 Workflows (17)
 
 | Command         | Description                   |
 | --------------- | ----------------------------- |
@@ -166,6 +167,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | `/test`         | Run tests                     |
 | `/init-context` | Initialize MVC (read-only)    |
 | `/init-memory`  | Opt-in persistent memory      |
+| `/record-decision` | Record an ADR from any agent |
 | `/deep-solve`   | JIT Knowledge workflow        |
 | `/restructure`  | Maintenance & registry update |
 | `/review`       | Pre-commit audit              |
@@ -195,6 +197,7 @@ Project-specific rules live in the project repo (`AGENTS.md`, `CLAUDE.md`, `.cla
 | `tools/memory_stale.py` | Compares `manifest.json` checksums with `autoRefreshTriggers`; `make memory-stale` |
 | `tools/memory_status.py` | Read-only report; `make memory-status` |
 | `tools/memory_compact.py` / `memory_recall.py` | Claude-only ADR capture and recall into the derived index |
+| `tools/memory_adr.py` (`/record-decision`) | Hook-free ADR recording for agents without PreCompact (Gemini/Antigravity, Codex); reuses `memory_compact.py` helpers |
 
 ---
 
@@ -282,7 +285,7 @@ Create SKILL.md → Register in registry.min.json → make audit
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
 | **Total Skills**    | 56    |
-| **Total Workflows** | 16    |
+| **Total Workflows** | 17    |
 
 ---
 
