@@ -1,6 +1,6 @@
 ---
 name: makefile-standards
-description: "Use when creating, editing, or reviewing a Makefile for any project, to apply a consistent, synced target convention (help, install, clean, lint, test, upgrade, build, deploy, release) across all projects. Triggers on: makefile, make target, make mod, upgrade dependencies."
+description: "Use when creating, editing, or reviewing a Makefile for any project, to apply a consistent, synced target convention (help, install, clean, lint, test, upgrade, verify, verify-fast, build, deploy, release) across all projects. Triggers on: makefile, make target, make mod, upgrade dependencies."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -17,19 +17,23 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 ## Core Principles
 1. **Tên target cố định** — dùng đúng tên: `help`, `install`, `clean`, `lint`, `test`, `upgrade`,
-   và khi áp dụng: `build`, `deploy`, `release`. Không dùng tên tương đương (`tests`, `setup`,
+   `verify`, `verify-fast`, và khi áp dụng: `build`, `deploy`, `release`. Không dùng tên tương đương (`tests`, `setup`,
    `linting`, `update`).
 2. **`upgrade` = nâng toàn bộ dependency lên bản mới nhất** (giống `go get -u ./... && go mod
    tidy` ở Go) rồi **tự chạy `test` ngay sau** để phát hiện breaking change. Khác với `install`
    (chỉ cài đúng theo lock file hiện có, không đổi version).
-2. **`help` là default goal** (`.DEFAULT_GOAL := help`) — `make` không argument chỉ in danh sách
+3. **`help` là default goal** (`.DEFAULT_GOAL := help`) — `make` không argument chỉ in danh sách
    target, không chạy side effect nào khác.
-3. **Mỗi target có dòng `## <mô tả ngắn>` ngay trên nó** để `help` tự parse (xem Reference).
-4. **Không tạo target rỗng/no-op** cho thứ project không có — bỏ qua target đó hoàn toàn.
-5. **Logic dài (>1-2 lệnh) đẩy ra `scripts/<name>.sh`**, Makefile chỉ gọi script.
-6. Mọi target khai báo trong `.PHONY`.
-7. `deploy`/`release` không chạy tự động/ngầm chưa xác nhận — tuân theo nguyên tắc
+4. **Mỗi target có dòng `## <mô tả ngắn>` ngay trên nó** để `help` tự parse (xem Reference).
+5. **Không tạo target rỗng/no-op** cho thứ project không có — bỏ qua target đó hoàn toàn.
+6. **Logic dài (>1-2 lệnh) đẩy ra `scripts/<name>.sh`**, Makefile chỉ gọi script.
+7. Mọi target khai báo trong `.PHONY`.
+8. `deploy`/`release` không chạy tự động/ngầm chưa xác nhận — tuân theo nguyên tắc
    "ask before destructive/irreversible" trong `CLAUDE.md` và 5-phase deployment process.
+9. **Phân tầng `verify-fast` và `verify`**: `verify-fast` là gate siêu nhẹ (< 2-3s, ít RAM, chỉ chạy
+   fast lint + mechanical rule checks) cho Stop hook (`verify_gate.py`), giúp nhiều agent CLI chạy
+   đồng thời không bị nghẽn hay tràn RAM. `verify` là gate đầy đủ (chạy full test suite, e2e, integration)
+   chạy trước khi commit hoặc hoàn thành task.
 
 Xem bảng target đầy đủ, mẫu `help` tự document, và checklist trong
 `references/makefile-standards.md`.

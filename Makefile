@@ -9,7 +9,10 @@ audit:
 test:
 	@python3 scripts/test_integration.py
 
-# Full gate used by the Stop hook (R11): structure audit, tests, skill gates, memory freshness
+# Fast gate used by the Stop hook (R11): structure audit & memory freshness (< 2s, low RAM)
+verify-fast: audit memory-stale
+
+# Full gate used for pre-commit / final checks: structure audit, tests, skill gates, memory freshness
 verify: audit test skill-check memory-stale
 
 # Regenerate registry.min.json from all SKILL.md files

@@ -1,14 +1,14 @@
 {
   "project": "prompt_base",
-  "lastScanned": "2026-11-04T11:29:11+07:00",
+  "lastScanned": "2026-11-12T17:36:22+07:00",
   "checksums": {
     "ARCHITECTURE.md": "609a675ac079e7eb0fce5a62a305bbcac53b3367b40cb095a5e9456c38b9aa66",
     "README.md": "14283081ea0961018f7645d70973d9405181e143c2b5c11284fa71dfbc8f2a86",
     "CLAUDE.md": "773e596f100f70d5c9ee3477b8beee2922e38c58980aecd27ebd820e7d90899c",
     "GEMINI.md": "08e16499a3b08efee1c8a9e97b648056b15ea0bc3c27598d6226c049075d2d4e",
     "AGENTS.md": "b9bd2ddd89553900b06b98efe10e39cc1029f8d9017c9f67032f99aebfe3c750",
-    "registry.min.json": "5728d8ab3637e41176ede4115d71550abc58f96a0592eecaf59b21469024243c",
-    "Makefile": "dd66c0613565cfc7a8aa028c2499b45967d2bc1868c467e0dc44cf2aec44ed75",
+    "registry.min.json": "852d605eea4ee70ea57372d25161361acd63e4f9e1f80f448d733a5be28783ee",
+    "Makefile": "16e530d614b96ca69392dd7619861671c4371fe76770609ae726502f019d805a",
     "install.manifest.json": "168ec418c896cbaeb35442223e02146c2f12b336735dc2406f5667fcba0ba0d8",
     "settings.json": "51ddb6d9dfd0c46b6cb4b4913407728875b1da3c4aadf8cf70f0f684cd79d658"
   },

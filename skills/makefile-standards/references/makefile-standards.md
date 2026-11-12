@@ -27,6 +27,8 @@
 | `lint` | Có | Static check (formatter + linter), không sửa file (chế độ check-only). |
 | `test` | Có | Chạy test suite (unit + integration nếu có), exit non-zero khi fail. |
 | `upgrade` | Có | Nâng toàn bộ dependency lên bản mới nhất (giống `go get -u ./... && go mod tidy`), sau đó tự chạy `test` để phát hiện breaking change ngay. |
+| `verify-fast` | Khuyến nghị | Kiểm tra siêu tốc (< 2-3s, nhẹ RAM) cho Stop hook của Agent CLI (`verify_gate.py`). Chỉ chạy fast lint, syntax, rule checks cơ bản. Tránh nghẽn/tràn RAM khi nhiều agent CLI chạy đồng thời. |
+| `verify` | Có | Chạy toàn diện kiểm tra (lint + test + rule checks), dùng cho pre-commit/CI hoặc khi hoàn thành task. |
 | `build` | Nếu áp dụng | Compile/bundle ra artifact deploy được. |
 | `deploy` | Nếu áp dụng | Theo 5-phase deployment process trong `CLAUDE.md`; không chạy ngầm ngoài giờ xác nhận với user. |
 | `release` | Nếu áp dụng | Tag version + publish artifact/package. Tách khỏi `deploy` (release = đóng gói, deploy = đưa lên môi trường). |
@@ -69,6 +71,15 @@ test: ## Chạy test suite
 upgrade: ## Nâng dependency lên bản mới nhất rồi chạy test
 	@echo "TODO: upgrade deps steps (ví dụ: go get -u ./... && go mod tidy)"
 	@$(MAKE) test
+
+.PHONY: verify-fast
+verify-fast: ## Kiểm tra nhanh cho Agent Stop hook (< 2-3s, nhẹ RAM)
+	@echo "TODO: fast lint + quick rule checks (ví dụ: lint-staged hoặc syntax check)"
+
+.PHONY: verify
+verify: ## Kiểm tra toàn diện trước khi commit/push (lint, test, rule checks)
+	@$(MAKE) lint
+	@$(MAKE) test
 ```
 
 ### Mapping `upgrade` theo stack (ví dụ)
@@ -90,6 +101,7 @@ Mọi target khác (`build`, `deploy`, `release`, `fmt`, `dev`, `audit`...) copy
 
 - [ ] `help` là default goal, chạy `make` không argument in đúng danh sách.
 - [ ] Có đủ 5 target bắt buộc: `install`, `clean`, `lint`, `test`, `upgrade`.
+- [ ] Có target `verify` và khuyến nghị `verify-fast` để tích hợp an toàn với Agent Stop hook (`verify_gate.py`), tránh nghẽn/tràn RAM khi chạy nhiều CLI.
 - [ ] `build`/`deploy`/`release` có mặt nếu stack cần, đặt tên đúng chuẩn (không đồng nghĩa khác).
 - [ ] Mỗi target có `## comment` và nằm trong `.PHONY`.
 - [ ] Logic dài được tách ra `scripts/`, Makefile chỉ gọi.
