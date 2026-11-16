@@ -8,6 +8,7 @@ audit:
 # Run integration tests
 test:
 	@python3 scripts/test_integration.py
+	@python3 scripts/test_golden_eval.py
 
 # Fast gate used by the Stop hook (R11): structure audit & memory freshness (< 2s, low RAM)
 verify-fast: audit memory-stale
@@ -51,6 +52,10 @@ skill-eval:
 	else \
 		python3 scripts/golden_eval.py $(SKILL); \
 	fi
+
+# Which skills have golden tasks (add STRICT=1 to fail when any is missing)
+eval-coverage:
+	@python3 scripts/golden_eval.py --coverage $(if $(STRICT),--strict,)
 
 eval-all:
 	@echo "Running evaluation for all skills in evals/golden/..."

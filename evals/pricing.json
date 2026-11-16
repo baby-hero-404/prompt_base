@@ -1,0 +1,23 @@
+{
+  "version": "2026-11-16",
+  "source": "https://ai.google.dev/pricing",
+  "currency": "USD",
+  "models": {
+    "gemini-3.1-flash-lite": {
+      "input_per_million": null,
+      "cached_input_per_million": null,
+      "output_per_million": null
+    },
+    "gemini-2.5-flash": {
+      "input_per_million": null,
+      "cached_input_per_million": null,
+      "output_per_million": null
+    },
+    "gemini-2.5-pro": {
+      "input_per_million": null,
+      "cached_input_per_million": null,
+      "output_per_million": null
+    }
+  }
+}
+

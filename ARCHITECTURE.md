@@ -77,6 +77,10 @@ All documentation uses `{FRAMEWORK_ROOT}` as a placeholder that resolves to `~/.
 │   ├── process/                           ← Process skills (24+)
 │   └── custom/                            ← Custom/user skills
 │
+├── evals/                                 ← Evaluation suites & pricing
+│   ├── golden/                            ← Golden tasks and judge template
+│   └── pricing.json                       ← Model pricing configuration (user-maintained)
+│
 └── projects/                               ← Project templates
 ```
 
@@ -325,7 +329,7 @@ Prompt Base implements a 5-Tier Verification Pipeline for skills:
 1. **Tier 1 (Linter)**: Syntax and metadata validation (`scripts/skill_lint.py`)
 2. **Tier 2 (Trigger)**: Precision/Recall testing for keyword triggers (`scripts/trigger_test.py`)
 3. **Tier 0 (Contract)**: Static analysis for path/tool/skill references (`scripts/skill_contract.py`)
-4. **Tier 3 (Golden Eval)**: LLM-as-judge regression testing (`scripts/golden_eval.py`)
+4. **Tier 3 (Golden Eval)**: LLM-as-judge regression testing (`scripts/golden_eval.py`, offline tests in `scripts/test_golden_eval.py`)
 5. **Tier 4 (Journal)**: Human-in-the-loop rollback tracking (`docs/reports/skill-feedback.md`)
 
 Workflow: Edit -> `make skill-check` -> `make skill-eval` -> Merge -> Journal.

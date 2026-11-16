@@ -24,6 +24,7 @@ Thumbs.db
 references/*
 
 .tmp/*
+docs/reports/
 .tokensave
 .claude/*
 
