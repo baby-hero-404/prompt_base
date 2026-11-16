@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Use when self-reviewing the final git diff of a task before commit or pull request, with a cleanup lens: unintended changes, duplicated utilities, orphans, leftovers, secrets, scope creep. Not a bug hunt and not for handling feedback from others. Triggers on review diff, review my changes, self-review, final diff."
+description: "Use when self-reviewing your final git diff for unintended changes, leftovers, or orphans. Triggers on review diff, review my changes, self-review, final diff."
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

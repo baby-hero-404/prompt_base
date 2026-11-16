@@ -8,7 +8,7 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`, `~/
 |-----------|-------|---------|
 | **Rules** | 1 file | Persistent behavior (`GEMINI.md`, `CLAUDE.md`, or `AGENTS.md`) |
 | **Workflows** | 18 | On-demand slash command procedures |
-| **Skills** | 65 | Auto-triggered knowledge modules |
+| **Skills** | 63 | Auto-triggered knowledge modules |
 | **Agents** | 14 | Specialist AI personas |
 
 ---
@@ -116,7 +116,7 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 ---
 
-## 🧠 Skills (65)
+## 🧠 Skills (63)
 
 ### Core
 
@@ -126,8 +126,6 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | `brainstorming`      | Socratic discovery        |
 | `plan-writing`       | Task breakdown            |
 | `architecture`       | System design             |
-| `skill-loading`      | JIT Knowledge discovery   |
-| `context-management` | Context efficiency (MVC)  |
 | `behavioral-modes`   | Operational personas      |
 | `parallel-agents`    | Multi-perspective analysis|
 | `explore-codebase`   | Learn from an unfamiliar codebase |
@@ -289,7 +287,7 @@ Create SKILL.md → Register in registry.min.json → make audit
 | Metric              | Value |
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
-| **Total Skills**    | 65    |
+| **Total Skills**    | 63    |
 | **Total Workflows** | 18    |
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: code-cleanup
-description: "Use when a task is finished and the code you just wrote or changed needs a cleanup pass before it is reported done: narrating comments, debug output, defensive boilerplate, leftover drafts, stale comments. Covers only the change set; for a whole-repository sweep use codebase-cleanup. Triggers on ai slop, deslop, clean up my changes, post-task cleanup, leftover code."
+description: "Use when cleaning AI slop and leftovers from your change set after a task. Triggers on ai slop, deslop, clean up my changes, post-task cleanup, leftover code."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

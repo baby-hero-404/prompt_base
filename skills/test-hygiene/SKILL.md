@@ -1,6 +1,6 @@
 ---
 name: test-hygiene
-description: "Use when judging whether existing tests are worth keeping: tests with no real assertion, tests that mock the code they claim to cover, redundant, flaky, or obsolete tests. For how to write new tests use testing-patterns. Triggers on test hygiene, flaky test, over-mocking, redundant tests, test quality."
+description: "Use when auditing test quality: redundant, flaky, or over-mocked tests. Triggers on test hygiene, flaky test, over-mocking, redundant tests, test quality."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

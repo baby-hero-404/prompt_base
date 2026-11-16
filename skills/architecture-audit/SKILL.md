@@ -1,6 +1,6 @@
 ---
 name: architecture-audit
-description: "Use when a change adds a module or cross-module dependency, moves files between modules, or the user asks whether the structure is still sound: boundaries, circular dependencies, layering, duplicated logic across modules. Diagnoses and proposes; does not rewrite. Triggers on architecture audit, circular dependency, module boundaries, layering violation."
+description: "Use when auditing boundaries, circular deps, or layering violations. Triggers on architecture audit, circular dependency, module boundaries, layering violation."
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

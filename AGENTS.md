@@ -87,6 +87,17 @@ Rules specific to one project live in that project's repo (`AGENTS.md`, `CLAUDE.
 - Long-term decisions (architecture calls, rejected alternatives) belong in an ADR, captured automatically by the context memory engine's hooks when installed (`make memory-setup`; see the `project-memory` skill). Without hooks, capture them manually under `docs/ai/adr/`.
 - Project invariants live in `docs/ai/DOMAIN.md`, shared by every agent. Claude Code re-injects them by hook (first prompt, then every 10th) for trusted projects. Agents without that hook: run `python3 tools/memory_invariants.py --print` at session start and about every 10 turns `[review]`. Check freshness with `python3 tools/memory_stale.py --root .`.
 
+### Skill loading protocol (JIT v2)
+- Always read frontmatter + Core Principles when activating a skill.
+- Match headings by grep first; read only the matching section. Escalate to the full file only when that section is insufficient.
+- If the YAML `skills:` list exists, load dependencies recursively with the same protocol.
+- Multi-file skill directories: read SKILL.md first to decide which sub-files are required.
+- Never load more than 3–4 skills at once unless orchestrating.
+
+### Token-efficient output
+- Compression at session boundaries and recall at session start are handled by hooks when installed (see `project-memory`).
+- Do not abbreviate technical words (e.g. `impl`, `cfg`); modern BPE tokenizers split unrecognized abbreviations into more fragments than the full word. Write the full word.
+
 ## Final checklist
 
 When the user says "run final checks" or similar:

@@ -216,7 +216,6 @@ If context files don't exist:
 
 | Skill | Integration Point |
 |-------|-------------------|
-| `context-management` | Project memory files are the primary MVC (Minimal Viable Context) source |
 | `openspec-authoring` | Active task progress tracked in `docs/openspecs/<task>/tasks.md` |
 | `architecture` | Project memory feeds architectural decisions; capture via `<adr>` tags |
 | `coding-standards` | Invariant rules in `docs/ai/DOMAIN.md` enforce coding consistency |

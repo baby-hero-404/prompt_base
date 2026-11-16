@@ -1,6 +1,6 @@
 ---
 name: code-simplifier
-description: "Use when changed code is more complicated than the problem: single-use interfaces, wrappers, factories, needless generics or options, deep nesting, premature abstraction. Simplifies without changing behavior. Triggers on simplify code, over-engineering, over-engineered, unnecessary abstraction, reduce complexity."
+description: "Use when code is over-engineered or over-abstracted. Triggers on simplify code, over-engineering, over-engineered, unnecessary abstraction, reduce complexity."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

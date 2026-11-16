@@ -1,6 +1,6 @@
 ---
 name: codebase-cleanup
-description: "Use when the user asks for a cleanup of the whole repository or a named area, beyond the current task: unused code, duplicates, needless complexity, weak tests, structural drift. Routes to the focused cleanup skills and keeps business logic unchanged. For cleaning only what you just changed use code-cleanup. Triggers on codebase cleanup, repo cleanup, clean up the codebase, tech debt sweep."
+description: "Use when performing a repo-wide sweep for dead code, debt, and duplicates. Triggers on codebase cleanup, repo cleanup, clean up the codebase, tech debt sweep."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

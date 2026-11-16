@@ -1,6 +1,6 @@
 ---
 name: dead-code-removal
-description: "Use when finding or deleting code that is no longer used: functions, files, imports, types, dependencies, feature flags, obsolete tests. Requires evidence before every deletion and lists analysis tools per ecosystem. Triggers on dead code, unused code, unused imports, unused dependencies, obsolete code."
+description: "Use when finding or removing unused code, imports, or dependencies. Triggers on dead code, unused code, unused imports, unused dependencies, obsolete code."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 references: [tools.md]
 ---

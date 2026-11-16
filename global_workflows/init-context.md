@@ -17,4 +17,4 @@ Read-only: writes no files in the project and creates no memory. Persistent proj
     - If `docs/ai/` exists, read its `PROFILE.md` and `DOMAIN.md` and run `python3 ~/.agents/tools/memory_stale.py --root .`; report staleness; if stale, suggest `/init-memory` to refresh. Also run `python3 ~/.agents/tools/memory_status.py --root .` if helpful to report recall/index status.
     - If it does not exist, do nothing about memory. Mention `/init-memory` once, only if the project looks long-lived; never create `docs/ai/` from this command.
 5.  Suggest essential Core and Tech skills.
-6.  Load the suggested Core and Tech skills and `context-management` to keep the context lean. Load `project-memory` only when `docs/ai/` exists.
+6.  Load the suggested Core and Tech skills. Load `project-memory` only when `docs/ai/` exists.
