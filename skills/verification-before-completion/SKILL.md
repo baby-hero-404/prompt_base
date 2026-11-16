@@ -18,6 +18,7 @@ Claiming work is complete without verification is dishonesty, not efficiency.
 This skill encompasses both personal verification and formal code reviews:
 - If you are conducting or requesting a formal peer/subagent review, refer to `references/two-stage-review.md`.
 - If you are performing a final pre-commit check on staged changes, refer to `references/pre-commit-template.md` for the mandatory OK/Not-OK structure.
+- For what to look for in your own final diff (scope creep, duplicates, orphans, leftovers), use `code-review`.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 

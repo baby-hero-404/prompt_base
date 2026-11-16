@@ -6,7 +6,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 # Testing Patterns
 
-> Principles for reliable test suites.
+> Principles for reliable test suites. To judge or remove existing tests (flaky, redundant, over-mocked, obsolete), use `test-hygiene`.
 
 ---
 

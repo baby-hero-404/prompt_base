@@ -333,5 +333,142 @@
     "expect": [
       "antigravity-ops"
     ]
+  },
+  {
+    "prompt": "remove the ai slop from what you just wrote",
+    "expect": [
+      "code-cleanup"
+    ]
+  },
+  {
+    "prompt": "this looks over-engineered, inline the wrapper",
+    "expect": [
+      "code-simplifier"
+    ]
+  },
+  {
+    "prompt": "find dead code in the billing module",
+    "expect": [
+      "dead-code-removal"
+    ]
+  },
+  {
+    "prompt": "review my changes before I commit",
+    "expect": [
+      "code-review"
+    ]
+  },
+  {
+    "prompt": "is there a circular dependency between these packages",
+    "expect": [
+      "architecture-audit"
+    ]
+  },
+  {
+    "prompt": "this flaky test fails one run in five",
+    "expect": [
+      "test-hygiene"
+    ]
+  },
+  {
+    "prompt": "deslop this branch",
+    "expect": [
+      "code-cleanup"
+    ]
+  },
+  {
+    "prompt": "there is leftover code from the experiment, clean up my changes",
+    "expect": [
+      "code-cleanup"
+    ]
+  },
+  {
+    "prompt": "do a codebase cleanup",
+    "expect": [
+      "codebase-cleanup"
+    ]
+  },
+  {
+    "prompt": "tech debt sweep before the release",
+    "expect": [
+      "codebase-cleanup"
+    ]
+  },
+  {
+    "prompt": "repo cleanup of the whole project",
+    "expect": [
+      "codebase-cleanup"
+    ]
+  },
+  {
+    "prompt": "simplify code in the parser",
+    "expect": [
+      "code-simplifier"
+    ]
+  },
+  {
+    "prompt": "remove this unnecessary abstraction",
+    "expect": [
+      "code-simplifier"
+    ]
+  },
+  {
+    "prompt": "find unused imports in this file",
+    "expect": [
+      "dead-code-removal"
+    ]
+  },
+  {
+    "prompt": "delete unused code and unused dependencies",
+    "expect": [
+      "dead-code-removal"
+    ]
+  },
+  {
+    "prompt": "do a self-review of the final diff",
+    "expect": [
+      "code-review"
+    ]
+  },
+  {
+    "prompt": "address the feedback the reviewer left on my pull request",
+    "expect": []
+  },
+  {
+    "prompt": "run an architecture audit on the services folder",
+    "expect": [
+      "architecture-audit",
+      "architecture"
+    ]
+  },
+  {
+    "prompt": "the module boundaries are leaking",
+    "expect": [
+      "architecture-audit"
+    ]
+  },
+  {
+    "prompt": "document this decision as an adr",
+    "expect": [
+      "architecture"
+    ]
+  },
+  {
+    "prompt": "improve test quality, there is too much over-mocking",
+    "expect": [
+      "test-hygiene"
+    ]
+  },
+  {
+    "prompt": "delete the redundant tests",
+    "expect": [
+      "test-hygiene"
+    ]
+  },
+  {
+    "prompt": "write an e2e playwright scenario for login",
+    "expect": [
+      "webapp-testing"
+    ]
   }
 ]

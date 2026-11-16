@@ -183,6 +183,8 @@ Run a staleness check **during implementation** whenever the task:
 
 ### Cleanup procedure
 
+Summary below; the full verification protocol (dynamic references, evidence record, tools) is in the `dead-code-removal` skill.
+
 | Step | Action | Detail |
 |------|--------|--------|
 | 1 | **Identify replaced code** | Before writing new code, grep for the old function/class/route/config that the new implementation replaces. |

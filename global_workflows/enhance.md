@@ -14,3 +14,4 @@ $ARGUMENTS
 2. Formulate minimal invasive change set.
 3. Apply changes ensuring backward compatibility.
 4. Verify tests pass.
+5. Run `/cleanup` on the change set before reporting done.

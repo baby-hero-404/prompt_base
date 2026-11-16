@@ -7,8 +7,8 @@ Prompt Base is a **global-only** modular framework installed in `~/.gemini`, `~/
 | Component | Count | Purpose |
 |-----------|-------|---------|
 | **Rules** | 1 file | Persistent behavior (`GEMINI.md`, `CLAUDE.md`, or `AGENTS.md`) |
-| **Workflows** | 17 | On-demand slash command procedures |
-| **Skills** | 50+ | Auto-triggered knowledge modules |
+| **Workflows** | 18 | On-demand slash command procedures |
+| **Skills** | 65 | Auto-triggered knowledge modules |
 | **Agents** | 14 | Specialist AI personas |
 
 ---
@@ -116,9 +116,9 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 
 ---
 
-## 🧠 Skills (40+)
+## 🧠 Skills (65)
 
-### Core (8)
+### Core
 
 | Skill                | Description               |
 | -------------------- | ------------------------- |
@@ -130,29 +130,32 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | `context-management` | Context efficiency (MVC)  |
 | `behavioral-modes`   | Operational personas      |
 | `parallel-agents`    | Multi-perspective analysis|
+| `explore-codebase`   | Learn from an unfamiliar codebase |
+| `project-memory`     | Persistent project memory and ADRs |
 
-### Technology (17)
+### Technology
 
 | Category    | Skills                                                                              |
 | ----------- | ----------------------------------------------------------------------------------- |
 | **Web**     | `react-patterns`, `nextjs-best-practices`, `tailwind-patterns`, `typescript-expert` |
 | **Backend** | `nodejs-best-practices`, `python-patterns`, `prisma-expert`, `nestjs-expert`, `golang-best-practices`, `api-patterns` |
 | **Mobile**  | `mobile-design`, `flutter-best-practices`, `flutter-flame-games`                    |
-| **Other**   | `database-design`, `docker-expert`, `game-development`, `ux-ui-pro-max`, `mcp-builder`, `jupyter-notebooks` |
+| **Other**   | `database-design`, `docker-expert`, `game-development`, `ux-ui-pro-max`, `mcp-builder`, `jupyter-notebooks`, `app-builder`, `stitch-prompt-gen` |
 
-### Process (27)
+### Process
 
 | Category    | Skills                                                                              |
 | ----------- | ----------------------------------------------------------------------------------- |
 | **Testing** | `testing-patterns`, `tdd-workflow`, `webapp-testing`, `lint-and-validate`, `verification-before-completion`, `rule-enforcement` |
-| **Security**| `vulnerability-scanner`, `red-team-tactics`, `red-teaming`                           |
+| **Security**| `vulnerability-scanner`, `red-team-operations`                           |
 | **Growth**  | `seo-fundamentals`, `geo-fundamentals`                                              |
 | **Ops**     | `deployment-procedures`, `server-management`, `bash-linux`, `powershell-windows`    |
-| **Meta & Dev**| `code-review-checklist`, `documentation-templates`, `review-pre-commit-git`, `i18n-localization`, `openspec-authoring`, `subagent-driven-development`, `receiving-code-review`, `codebase-cleanup`, `readme-generator`, `code-graph-analysis`, `performance-profiling`, `frontend-design`, `systematic-debugging` |
+| **Meta & Dev**| `documentation-templates`, `i18n-localization`, `openspec-authoring`, `subagent-driven-development`, `receiving-code-review`, `readme-generator`, `code-graph-analysis`, `performance-profiling`, `systematic-debugging`, `makefile-standards`, `rtk-token-killer`, `tech-research-framework`, `antigravity-ops` |
+| **Cleanup**   | `codebase-cleanup` (repo-wide sweep), `code-cleanup`, `code-simplifier`, `dead-code-removal`, `code-review` (final diff), `architecture-audit`, `test-hygiene` |
 
 ---
 
-## 🔄 Workflows (17)
+## 🔄 Workflows (18)
 
 | Command         | Description                   |
 | --------------- | ----------------------------- |
@@ -171,6 +174,8 @@ Prompt Base uses **Progressive Disclosure** to manage complexity. Skills remain 
 | `/deep-solve`   | JIT Knowledge workflow        |
 | `/restructure`  | Maintenance & registry update |
 | `/review`       | Pre-commit audit              |
+| `/cleanup`      | Post-task cleanup or repo sweep |
+| `/create-skill` | Scaffold a new skill          |
 | `/ux-ui-pro`    | Design intelligence           |
 
 ---
@@ -263,7 +268,7 @@ No plan or spec needed. The agent applies the Socratic Gate lightly (confirms un
 /review
 ```
 
-Runs the `review-pre-commit-git` skill to audit staged changes against coding standards, test coverage, and security checklist.
+Runs `verification-before-completion` and the `code-review` skill to audit changes against coding standards, test coverage, and security checklist. Own-change leftovers go to `/cleanup`.
 
 ### Extending Prompt Base Itself
 
@@ -284,8 +289,8 @@ Create SKILL.md → Register in registry.min.json → make audit
 | Metric              | Value |
 | ------------------- | ----- |
 | **Total Agents**    | 14    |
-| **Total Skills**    | 56    |
-| **Total Workflows** | 17    |
+| **Total Skills**    | 65    |
+| **Total Workflows** | 18    |
 
 ---
 
@@ -301,6 +306,7 @@ Create SKILL.md → Register in registry.min.json → make audit
 | `skills/rule-enforcement/` | `projects/_template/rules/README.md`, `global_workflows/init-memory.md`, `CLAUDE.md` / `GEMINI.md` | Share the rule ID + enforcement tag convention. |
 | `CLAUDE.md` | `GEMINI.md` | Same rules; only install paths differ. Edit both together. |
 | `docs/ai/manifest.json` | `tools/memory_stale.py`, `global_workflows/init-memory.md`, `global_workflows/init-context.md`, `global_workflows/status.md` | Staleness check reads/writes this file. |
+| `skills/code-cleanup/`, `code-simplifier/`, `dead-code-removal/`, `code-review/`, `architecture-audit/`, `test-hygiene/`, `codebase-cleanup/` | `global_workflows/cleanup.md`, `skills/coding-standards/SKILL.md` | One owner per topic and the shared change-set definition; change them together. |
 | `settings.json` (UserPromptSubmit) | `tools/memory_invariants.py`, `tools/memory_recall.py`, `tools/pb_trust.py` | Two hooks share the event; keep paths in sync. |
 
 ---

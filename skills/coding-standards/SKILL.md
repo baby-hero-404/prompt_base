@@ -20,10 +20,17 @@ priority: CRITICAL
 | **DRY** | Don't Repeat Yourself - extract duplicates, reuse. |
 | **KISS** | Keep It Simple - the simplest solution is always better. Reduce complexity. |
 | **YAGNI** | You Aren't Gonna Need It - don't build unused features. |
-| **Boy Scout** | Leave the campground cleaner than you found it. |
+| **Boy Scout** | Leave the code you touch cleaner than you found it; report mess outside your change instead of fixing it unasked. |
 | **Root Cause** | Always look for and fix the root cause, not just the symptom. |
 | **Conventions** | Follow standard team/language conventions consistently. |
 | **Fail Fast** | Validate early, throw early, recover gracefully. |
+
+### Before You Write
+
+- **Search before create**: look for an existing function, type, utility, or file that already does it. Name what you searched for.
+- **Reuse before duplicate**: extend or call existing code instead of writing a parallel version.
+- **Minimize dependencies**: standard library first, then what the project already uses; ask before adding a package.
+- **Clean up after**: when the task works, run `code-cleanup`, `code-simplifier`, and `dead-code-removal` on what you changed, then `code-review` on the diff.
 
 ---
 

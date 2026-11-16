@@ -1,53 +1,60 @@
 ---
 name: codebase-cleanup
-description: Use when analyzing the codebase to perform a comprehensive cleanup, removing unused code, dead code, and duplicates without changing business logic.
+description: "Use when the user asks for a cleanup of the whole repository or a named area, beyond the current task: unused code, duplicates, needless complexity, weak tests, structural drift. Routes to the focused cleanup skills and keeps business logic unchanged. For cleaning only what you just changed use code-cleanup. Triggers on codebase cleanup, repo cleanup, clean up the codebase, tech debt sweep."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
-# Codebase Cleanup & Refactoring
+# Codebase Cleanup (repository-wide sweep)
 
-## Methodology
+> A sweep is the one time cleanup may go beyond the current change. It runs only because the user asked, and it changes nothing before the user has seen the list.
 
-When invoked to perform a codebase cleanup or comprehensive refactor, follow these objectives and rules strictly to ensure safety, readability, and maintainability.
+## When to use
 
-### 1. Detect and Remove
-Analyze the project to detect and safely remove:
-- Unused functions and dead code
-- Unused variables and imports
-- Unused classes, interfaces, or types
-- Duplicate logic
-- Obsolete helper utilities
-- Legacy files that are no longer referenced
-- Commented-out code that is no longer needed
+- The user asks to clean up the repository, a directory, or a module.
+- A periodic pass before a release.
 
-### 2. Improve Readability
-- Simplify complex functions
-- Split large functions into smaller reusable functions
-- Improve naming consistency
-- Remove unnecessary nesting
-- Reduce code duplication (DRY)
-- Group related logic together
+**Not this skill:** after an ordinary task, clean only your own change with `code-cleanup`.
 
-### 3. Improve Project Structure
-- Reorganize folders if necessary
-- Remove redundant files
-- Consolidate duplicate utilities
-- Ensure consistent architecture and conventions
-- **File Responsibility Rule:** A file should answer the question: *"What is this file responsible for?"* If the answer takes more than one sentence, the file should be split.
+## Routing
 
-### 4. Safety Requirements
-- **Do NOT change business logic.**
-- **Do NOT modify API contracts unless absolutely necessary.**
-- **Do NOT remove code that is dynamically referenced without verifying usage.**
-- If uncertain whether something is used, mark it as "potentially unused" instead of removing it.
-- Explain why each file/function is removed in your reasoning.
-- **Always adhere to the `coding-standards` skill during all refactoring and cleanup actions.**
+This skill holds the order and the safety rules. The knowledge lives in the focused skills; load each one when its step starts.
 
-### 5. Output Format
-At the end of your process, provide a structured report containing:
-- **Summary of issues found:** High-level overview of tech debt and unused code.
-- **Files/Functions removed:** List of safely removed components.
-- **Duplicate logic detected:** Where and how it was resolved.
-- **Refactoring recommendations:** Any further architectural suggestions.
-- **Final status:** Confirmation that all modifications preserve the existing behavior.
+| Step | Skill | Finds |
+|---|---|---|
+| 1 | `architecture-audit` | Boundary leaks, cycles, layering, duplicated logic across modules |
+| 2 | `dead-code-removal` | Unused code, files, dependencies, flags, obsolete tests |
+| 3 | `code-simplifier` | Single-use abstractions, pass-through layers, needless options |
+| 4 | `test-hygiene` | Tests that prove nothing, over-mocked, redundant, flaky |
+| 5 | `code-cleanup` | Stale comments, commented-out code, debug output, leftover drafts |
+| 6 | `code-review` | Review of the resulting diff |
 
-> **Note:** Assume this is a production codebase. Prioritize maintainability, readability, and long-term scalability. Apply SOLID, DRY, KISS principles where appropriate while preserving behavior.
+Structure comes first because a structural move changes what counts as unused or duplicated.
+
+## Procedure
+
+1. **Agree on scope.** Whole repository or a named area. Exclude generated, vendored, and third-party code.
+2. **Survey, read-only.** Run steps 1 to 5 as analysis only. Go breadth first; inspect the riskiest areas in depth and list what was only surveyed.
+3. **Propose.** Show the list of changes grouped by step, each with evidence and risk. Wait for the user to choose.
+4. **Apply in small groups.** One kind of change per group. Run tests, linter, and build after each group. If a group fails, undo it and report.
+5. **Review the diff** with `code-review`, then finish with `verification-before-completion`.
+
+## Safety requirements
+
+- **Do not change business logic.**
+- **Do not change public interfaces or stored data** unless the user approves that specific change.
+- **Do not remove code that may be referenced dynamically** without the verification in `dead-code-removal`. If unsure, mark it "potentially unused" and leave it.
+- **No test coverage, no change.** Pin the behavior with a test first, or report the item only.
+- Explain why each file or function is removed.
+- Never touch uncommitted work that is not part of the sweep.
+- Follow `coding-standards` for everything you rewrite.
+
+## Report
+
+- **Summary of issues found:** overview of unused code and technical debt, by step.
+- **Files and functions removed:** each with its evidence in one line.
+- **Duplicate logic resolved:** where, and what it became.
+- **Simplified:** what, and why.
+- **Potentially unused:** items left in place and the check that could not be completed.
+- **Recommendations:** structural moves not applied, ranked.
+- **Surveyed but not inspected:** areas for a later pass.
+- **Final status:** verification commands and their results, confirming behavior is preserved.

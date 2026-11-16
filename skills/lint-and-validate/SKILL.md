@@ -30,6 +30,7 @@ allowed-tools: Read, Glob, Grep, Bash
 - If `lint` fails: Fix the style or syntax issues immediately.
 - If `tsc` fails: Correct type mismatches before proceeding.
 - If no tool is configured: Check the project root for `.eslintrc`, `tsconfig.json`, `pyproject.toml` and suggest creating one.
+- For unused code, files, and dependencies, see the tool table in `dead-code-removal`.
 
 ---
 **Strict Rule:** No code should be committed or reported as "done" without passing these checks.
